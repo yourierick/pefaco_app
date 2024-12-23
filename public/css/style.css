@@ -1,0 +1,62 @@
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+* {
+    font-size: 10pt;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10pt;
+    background: #fafafa;
+}
+
+p, span, li{
+    font-family: 'Poppins', sans-serif;
+    font-size: 10pt;
+    font-weight: 400;
+    color: #3b3b3b;
+}
+
+a,
+a:hover,
+a:focus {
+    color: inherit;
+    text-decoration: none!important;
+    transition: all 0.3s;
+    font-size: 10pt!important;
+}
+
+input, textarea{
+    font-family: 'Poppins', sans-serif;
+    font-size: 11pt!important;
+}
+
+label{
+    font-family: 'Poppins', sans-serif;
+    font-size: 10pt!important;
+}
+
+select {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11pt!important;
+    padding: 6px!important;
+}
+
+th{
+    font-family: 'Poppins', sans-serif;
+    font-size: 9pt;
+}
+
+td{
+    font-family: 'Poppins', sans-serif;
+    font-size: 10pt!important;
+    padding: 10px!important;
+}
+
+
+button {
+    font-size: 10pt!important;
+}
+
+option {
+    font-size: 11pt!important;
+}

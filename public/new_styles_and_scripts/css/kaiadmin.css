@@ -1,0 +1,489 @@
+.form-group-kaiadmin,
+.form-check-kaiadmin {
+    margin-bottom: 0;
+    padding: 10px; }
+
+.form-group-kaiadmin label,
+.form-check-kaiadmin label {
+    margin-bottom: 0.5rem;
+    color: #495057;
+    font-size: 1rem;
+    white-space: nowrap; }
+
+.form-group-default-kaiadmin {
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-radius: 4px;
+    padding-top: 7px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 4px;
+    overflow: hidden;
+    width: 100%;
+    -webkit-transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease;
+    margin-bottom: 15px; }
+.form-group-default-kaiadmin label {
+    opacity: 1;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+    margin: 0;
+    display: block;
+    -webkit-transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease; }
+.form-group-default-kaiadmin label:not(.error) {
+    font-size: 10.5px !important;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 400; }
+.form-group-default-kaiadmin .form-control {
+    background: unset !important; }
+.form-group-default-kaiadmin .form-control, .form-group-default-kaiadmin .form-select {
+    border: 0;
+    min-height: 25px;
+    padding: 0;
+    margin-top: 6px;
+    font-size: 1rem; }
+.form-group-default-kaiadmin select.form-control:not([size]):not([multiple]), .form-group-default-kaiadmin select.form-select:not([size]):not([multiple]) {
+    height: unset !important; }
+.form-group-default-kaiadmin.active {
+    border-color: rgba(0, 0, 0, 0.1) !important;
+    background-color: #f0f0f0; }
+.form-group-default-kaiadmin.active label {
+    opacity: 0.5; }
+
+.alert {
+    border: 0px;
+    position: relative;
+    padding: .95rem 1.25rem;
+    border-radius: 1px;
+    color: inherit;
+    background-color: #ffffff;
+    -webkit-box-shadow: 1px 1px 14px 0px rgba(18, 38, 63, 0.26);
+    -moz-box-shadow: 1px 1px 14px 0px rgba(18, 38, 63, 0.26);
+    box-shadow: 1px 1px 14px 0px rgba(18, 38, 63, 0.26); }
+.alert [data-notify="icon"] {
+    display: block; }
+.alert [data-notify="icon"]::before {
+    line-height: 35px;
+    font-size: 22px;
+    display: block;
+    left: 15px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 35px;
+    height: 35px;
+    border-radius: 30px;
+    text-align: center;
+    color: #fff; }
+.alert [data-notify="title"] {
+    display: block;
+    color: #2b2b2b;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 5px; }
+.alert [data-notify="message"] {
+    font-size: 13px;
+    color: #908e8e; }
+.alert .close {
+    background: rgba(255, 255, 255, 0.8);
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    top: 12px !important;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+
+/*    Alert States    */
+.alert-black {
+    border-left: 4px solid #1a2035; }
+.alert-black [data-notify="icon"]:before {
+    background: #1a2035; }
+
+.alert-primary {
+    border-left: 4px solid #1572E8; }
+.alert-primary [data-notify="icon"]:before {
+    background: #1572E8; }
+
+.alert-secondary {
+    border-left: 4px solid #6861CE; }
+.alert-secondary [data-notify="icon"]:before {
+    background: #6861CE; }
+
+.alert-info {
+    border-left: 4px solid #48ABF7; }
+.alert-info [data-notify="icon"]:before {
+    background: #48ABF7; }
+
+.alert-success {
+    border-left: 4px solid #31CE36; }
+.alert-success [data-notify="icon"]:before {
+    background: #31CE36; }
+
+.alert-warning {
+    border-left: 4px solid #FFAD46; }
+.alert-warning [data-notify="icon"]:before {
+    background: #FFAD46; }
+
+.alert-danger {
+    border-left: 4px solid #F25961; }
+.alert-danger [data-notify="icon"]:before {
+    background: #F25961; }
+
+
+.list-timeline {
+    margin: 0;
+    padding: 5px 0;
+    position: relative
+}
+
+.list-timeline:before {
+    width: 2px;
+    background: #ccc;
+    position: absolute;
+    left: 6px;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    content: ''
+}
+
+.list-timeline .list-timeline-item {
+    margin: 0;
+    padding: 0;
+    padding-left: 24px !important;
+    position: relative
+}
+
+.list-timeline .list-timeline-item:before {
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border: 2px solid #ccc;
+    position: absolute;
+    left: 0;
+    top: 4px;
+    content: '';
+    border-radius: 100%;
+    -webkit-transition: all .3 ease-in-out;
+    transition: all .3 ease-in-out;
+}
+
+.list-timeline .list-timeline-item[data-toggle=collapse] {
+    cursor: pointer
+}
+
+.list-timeline .list-timeline-item.active:before,
+.list-timeline .list-timeline-item.show:before {
+    background: #ccc
+}
+
+.list-timeline.list-timeline-light .list-timeline-item.active:before,
+.list-timeline.list-timeline-light .list-timeline-item.show:before,
+.list-timeline.list-timeline-light:before {
+    background: #f8f9fa
+}
+
+.list-timeline .list-timeline-item.list-timeline-item-marker-middle:before {
+    top: 50%;
+    margin-top: -6px
+}
+
+.list-timeline.list-timeline-light .list-timeline-item:before {
+    border-color: #f8f9fa
+}
+
+.list-timeline.list-timeline-grey .list-timeline-item.active:before,
+.list-timeline.list-timeline-grey .list-timeline-item.show:before,
+.list-timeline.list-timeline-grey:before {
+    background: #e9ecef
+}
+
+.list-timeline.list-timeline-grey .list-timeline-item:before {
+    border-color: #e9ecef
+}
+
+.list-timeline.list-timeline-grey-dark .list-timeline-item.active:before,
+.list-timeline.list-timeline-grey-dark .list-timeline-item.show:before,
+.list-timeline.list-timeline-grey-dark:before {
+    background: #495057
+}
+
+.list-timeline.list-timeline-grey-dark .list-timeline-item:before {
+    border-color: #495057
+}
+
+.list-timeline.list-timeline-primary .list-timeline-item.active:before,
+.list-timeline.list-timeline-primary .list-timeline-item.show:before,
+.list-timeline.list-timeline-primary:before {
+    background: #55A79A
+}
+
+.list-timeline.list-timeline-primary .list-timeline-item:before {
+    border-color: #55A79A
+}
+
+.list-timeline.list-timeline-primary-dark .list-timeline-item.active:before,
+.list-timeline.list-timeline-primary-dark .list-timeline-item.show:before,
+.list-timeline.list-timeline-primary-dark:before {
+    background: #33635c
+}
+
+.list-timeline.list-timeline-primary-dark .list-timeline-item:before {
+    border-color: #33635c
+}
+
+.list-timeline.list-timeline-primary-faded .list-timeline-item.active:before,
+.list-timeline.list-timeline-primary-faded .list-timeline-item.show:before,
+.list-timeline.list-timeline-primary-faded:before {
+    background: rgba(85, 167, 154, .3)
+}
+
+.list-timeline.list-timeline-primary-faded .list-timeline-item:before {
+    border-color: rgba(85, 167, 154, .3)
+}
+
+.list-timeline.list-timeline-info .list-timeline-item.active:before,
+.list-timeline.list-timeline-info .list-timeline-item.show:before,
+.list-timeline.list-timeline-info:before {
+    background: #17a2b8
+}
+
+.list-timeline.list-timeline-info .list-timeline-item:before {
+    border-color: #17a2b8
+}
+
+.list-timeline.list-timeline-success .list-timeline-item.active:before,
+.list-timeline.list-timeline-success .list-timeline-item.show:before,
+.list-timeline.list-timeline-success:before {
+    background: #28a745
+}
+
+.list-timeline.list-timeline-success .list-timeline-item:before {
+    border-color: #28a745
+}
+
+.list-timeline.list-timeline-warning .list-timeline-item.active:before,
+.list-timeline.list-timeline-warning .list-timeline-item.show:before,
+.list-timeline.list-timeline-warning:before {
+    background: #ffc107
+}
+
+.list-timeline.list-timeline-warning .list-timeline-item:before {
+    border-color: #ffc107
+}
+
+.list-timeline.list-timeline-danger .list-timeline-item.active:before,
+.list-timeline.list-timeline-danger .list-timeline-item.show:before,
+.list-timeline.list-timeline-danger:before {
+    background: #dc3545
+}
+
+.list-timeline.list-timeline-danger .list-timeline-item:before {
+    border-color: #dc3545
+}
+
+.list-timeline.list-timeline-dark .list-timeline-item.active:before,
+.list-timeline.list-timeline-dark .list-timeline-item.show:before,
+.list-timeline.list-timeline-dark:before {
+    background: #343a40
+}
+
+.list-timeline.list-timeline-dark .list-timeline-item:before {
+    border-color: #343a40
+}
+
+.list-timeline.list-timeline-secondary .list-timeline-item.active:before,
+.list-timeline.list-timeline-secondary .list-timeline-item.show:before,
+.list-timeline.list-timeline-secondary:before {
+    background: #6c757d
+}
+
+.list-timeline.list-timeline-secondary .list-timeline-item:before {
+    border-color: #6c757d
+}
+
+.list-timeline.list-timeline-black .list-timeline-item.active:before,
+.list-timeline.list-timeline-black .list-timeline-item.show:before,
+.list-timeline.list-timeline-black:before {
+    background: #000
+}
+
+.list-timeline.list-timeline-black .list-timeline-item:before {
+    border-color: #000
+}
+
+.list-timeline.list-timeline-white .list-timeline-item.active:before,
+.list-timeline.list-timeline-white .list-timeline-item.show:before,
+.list-timeline.list-timeline-white:before {
+    background: #fff
+}
+
+.list-timeline.list-timeline-white .list-timeline-item:before {
+    border-color: #fff
+}
+
+.list-timeline.list-timeline-green .list-timeline-item.active:before,
+.list-timeline.list-timeline-green .list-timeline-item.show:before,
+.list-timeline.list-timeline-green:before {
+    background: #55A79A
+}
+
+.list-timeline.list-timeline-green .list-timeline-item:before {
+    border-color: #55A79A
+}
+
+.list-timeline.list-timeline-red .list-timeline-item.active:before,
+.list-timeline.list-timeline-red .list-timeline-item.show:before,
+.list-timeline.list-timeline-red:before {
+    background: #BE3E1D
+}
+
+.list-timeline.list-timeline-red .list-timeline-item:before {
+    border-color: #BE3E1D
+}
+
+.list-timeline.list-timeline-blue .list-timeline-item.active:before,
+.list-timeline.list-timeline-blue .list-timeline-item.show:before,
+.list-timeline.list-timeline-blue:before {
+    background: #00ADBB
+}
+
+.list-timeline.list-timeline-blue .list-timeline-item:before {
+    border-color: #00ADBB
+}
+
+.list-timeline.list-timeline-purple .list-timeline-item.active:before,
+.list-timeline.list-timeline-purple .list-timeline-item.show:before,
+.list-timeline.list-timeline-purple:before {
+    background: #b771b0
+}
+
+.list-timeline.list-timeline-purple .list-timeline-item:before {
+    border-color: #b771b0
+}
+
+.list-timeline.list-timeline-pink .list-timeline-item.active:before,
+.list-timeline.list-timeline-pink .list-timeline-item.show:before,
+.list-timeline.list-timeline-pink:before {
+    background: #CC164D
+}
+
+.list-timeline.list-timeline-pink .list-timeline-item:before {
+    border-color: #CC164D
+}
+
+.list-timeline.list-timeline-orange .list-timeline-item.active:before,
+.list-timeline.list-timeline-orange .list-timeline-item.show:before,
+.list-timeline.list-timeline-orange:before {
+    background: #e67e22
+}
+
+.list-timeline.list-timeline-orange .list-timeline-item:before {
+    border-color: #e67e22
+}
+
+.list-timeline.list-timeline-lime .list-timeline-item.active:before,
+.list-timeline.list-timeline-lime .list-timeline-item.show:before,
+.list-timeline.list-timeline-lime:before {
+    background: #b1dc44
+}
+
+.list-timeline.list-timeline-lime .list-timeline-item:before {
+    border-color: #b1dc44
+}
+
+.list-timeline.list-timeline-blue-dark .list-timeline-item.active:before,
+.list-timeline.list-timeline-blue-dark .list-timeline-item.show:before,
+.list-timeline.list-timeline-blue-dark:before {
+    background: #34495e
+}
+
+.list-timeline.list-timeline-blue-dark .list-timeline-item:before {
+    border-color: #34495e
+}
+
+.list-timeline.list-timeline-red-dark .list-timeline-item.active:before,
+.list-timeline.list-timeline-red-dark .list-timeline-item.show:before,
+.list-timeline.list-timeline-red-dark:before {
+    background: #a10f2b
+}
+
+.list-timeline.list-timeline-red-dark .list-timeline-item:before {
+    border-color: #a10f2b
+}
+
+.list-timeline.list-timeline-brown .list-timeline-item.active:before,
+.list-timeline.list-timeline-brown .list-timeline-item.show:before,
+.list-timeline.list-timeline-brown:before {
+    background: #91633c
+}
+
+.list-timeline.list-timeline-brown .list-timeline-item:before {
+    border-color: #91633c
+}
+
+.list-timeline.list-timeline-cyan-dark .list-timeline-item.active:before,
+.list-timeline.list-timeline-cyan-dark .list-timeline-item.show:before,
+.list-timeline.list-timeline-cyan-dark:before {
+    background: #008b8b
+}
+
+.list-timeline.list-timeline-cyan-dark .list-timeline-item:before {
+    border-color: #008b8b
+}
+
+.list-timeline.list-timeline-yellow .list-timeline-item.active:before,
+.list-timeline.list-timeline-yellow .list-timeline-item.show:before,
+.list-timeline.list-timeline-yellow:before {
+    background: #D4AC0D
+}
+
+.list-timeline.list-timeline-yellow .list-timeline-item:before {
+    border-color: #D4AC0D
+}
+
+.list-timeline.list-timeline-slate .list-timeline-item.active:before,
+.list-timeline.list-timeline-slate .list-timeline-item.show:before,
+.list-timeline.list-timeline-slate:before {
+    background: #5D6D7E
+}
+
+.list-timeline.list-timeline-slate .list-timeline-item:before {
+    border-color: #5D6D7E
+}
+
+.list-timeline.list-timeline-olive .list-timeline-item.active:before,
+.list-timeline.list-timeline-olive .list-timeline-item.show:before,
+.list-timeline.list-timeline-olive:before {
+    background: olive
+}
+
+.list-timeline.list-timeline-olive .list-timeline-item:before {
+    border-color: olive
+}
+
+.list-timeline.list-timeline-teal .list-timeline-item.active:before,
+.list-timeline.list-timeline-teal .list-timeline-item.show:before,
+.list-timeline.list-timeline-teal:before {
+    background: teal
+}
+
+.list-timeline.list-timeline-teal .list-timeline-item:before {
+    border-color: teal
+}
+
+.list-timeline.list-timeline-green-bright .list-timeline-item.active:before,
+.list-timeline.list-timeline-green-bright .list-timeline-item.show:before,
+.list-timeline.list-timeline-green-bright:before {
+    background: #2ECC71
+}
+
+.list-timeline.list-timeline-green-bright .list-timeline-item:before {
+    border-color: #2ECC71
+}
+

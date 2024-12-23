@@ -1,0 +1,93 @@
+/*.card {*/
+/*    border: none;*/
+/*    padding: 20px;*/
+/*    transition: box-shadow 0.3s ease;*/
+/*}*/
+
+/*.card:hover {*/
+/*    box-shadow: 0 4px 15px rgba(0,0,0,0.2);*/
+/*}*/
+
+/*.icon-circle {*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    width: 60px;*/
+/*    height: 60px;*/
+/*    background-color: #ffffff;*/
+/*    border: 2px solid dodgerblue;*/
+/*    border-radius: 50%;*/
+/*    font-size: 20px;*/
+/*    flex-shrink: 0;*/
+/*}*/
+
+/*.icon-title {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    gap: 0;*/
+/*}*/
+/*.card-title {*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+
+/*}*/
+/*.card-text {*/
+/*    border-left: 4px solid orangered;*/
+/*    padding-left: 10px*/
+/*}*/
+
+/*.icon-title + .card-title {*/
+/*    margin-left: 0.5rem;*/
+/*}*/
+
+.custom-card {
+    padding: 10px 20px;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.icon-circle {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    width: 55px;
+    height: 55px;
+    background: #fff;
+    border: 2px solid #457ebe;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    z-index: 2;
+}
+
+.card-content {
+    flex-grow: 1;
+    color: white;
+    padding: 5px 5px 10px 10px;
+    clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 0% 100%);
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.card-content h5 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.custom-card-text {
+    margin-left: 45px;
+    border-left: 4px solid #457ebe;
+    padding-left: 20px;
+    transition: box-shadow 0.3s ease
+}
+
+.custom-card-text:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
