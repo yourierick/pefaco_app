@@ -131,7 +131,7 @@ class UserController extends Controller
             'job_batches', 'migrations', 'password_reset_tokens', 'sessions', 'qualites', 'permissions',
             'livre_grande_caisses', 'groupes_utilisateurs', 'departements', 'paroisses', 'caisse_accounts', 'autorisations',
             'serviteurs', 'zones', 'users', 'cotisations', 'inventaires', 'message_et_commentaires',
-            'don_specials', 'caisses', 'bulletin_infos', 'autorisation_speciales', 'agendas'];
+            'don_specials', 'caisses', 'bulletin_infos', 'autorisation_speciales', 'agendas', 'programmes'];
 
         foreach ($tableNames as $tableName) {
             if (!in_array($tableName, $tablesAIgnorer)) {

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->unsignedBigInteger('departement_id');
-            $table->foreign('departement_id')->references('id')->on('departements');
+            $table->unsignedBigInteger('departement_id')->nullable();
+            $table->foreign('departement_id')->references('id')->on('departements')->onDelete("set null");
             $table->unsignedBigInteger('rapporteur_id');
             $table->foreign('rapporteur_id')->references('id')->on('users');
             $table->string('rapporteur');

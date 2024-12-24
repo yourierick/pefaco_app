@@ -28,16 +28,43 @@
                             <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                 <label for="id_photo" style="color: #818183">Photo Affiche</label>
                                 <input class="form-control" accept=".jpeg, .jpg, .png, .jfif" type="file" onchange="validateImageFileType(this)" name="affiche_photo" id="id_photo">
+                                @if($enseignement->affiche_photo)
+                                    <div>
+                                        <span>Actuellement: {{ $enseignement->affiche_photo }}</span>
+                                        <div class="d-flex">
+                                            <input type="checkbox" class="mr-2" name="delete_affiche_photo" id="id_delete_affiche_photo">
+                                            <label for="id_delete_affiche_photo" class="text-danger">Supprimer la photo</label>
+                                        </div>
+                                    </div>
+                                @endif
                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('affiche_photo')"/>
                             </div>
                             <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                 <label for="id_audio" style="color: #818183">fichier audio</label>
                                 <input class="form-control" type="file" onchange="validateAudioFileType(this)" name="audio" id="id_audio">
+                                @if($enseignement->audio)
+                                    <div>
+                                        <span>Actuellement: {{ $enseignement->audio }}</span>
+                                        <div class="d-flex">
+                                            <input type="checkbox" class="mr-2" name="delete_audio" id="id_delete_audio">
+                                            <label for="id_delete_audio" class="text-danger">Supprimer l'audio</label>
+                                        </div>
+                                    </div>
+                                @endif
                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('audio')"/>
                             </div>
                             <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                 <label for="id_video" style="color: #818183">fichier vidéo</label>
                                 <input class="form-control" type="file" onchange="validateVideoFileType(this)" name="video" id="id_video">
+                                @if($enseignement->video)
+                                    <div>
+                                        <span>Actuellement: {{ $enseignement->video }}</span>
+                                        <div class="d-flex">
+                                            <input type="checkbox" class="mr-2" name="delete_video" id="id_delete_video">
+                                            <label for="id_delete_video" class="text-danger">Supprimer la vidéo</label>
+                                        </div>
+                                    </div>
+                                @endif
                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('video')"/>
                             </div>
                             <hr>

@@ -28,6 +28,7 @@ class RapportDeCulte extends Model
         'don_special',
         'autres_faits_a_renseigner',
         'audience',
+        'statut',
     ];
 
     protected function casts(): array

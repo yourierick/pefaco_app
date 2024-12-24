@@ -2,19 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Autorisations;
-use App\Models\AutorisationSpeciale;
-use App\Models\Caisse;
-use App\Models\CaisseAccount;
-use App\Models\Departements;
-use App\Models\RapportDeCulte;
-use App\Models\RapportMensuel;
-use App\Models\Transactions;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
-class RapportMensuelController extends Controller
+class RapportDistrictController extends Controller
 {
     public function list_des_rapports(Request $request):View
     {
@@ -251,12 +241,7 @@ class RapportMensuelController extends Controller
         $mois = $rapport->mois_de_rapportage->month;
         $annee = $rapport->mois_de_rapportage->year;
 
-        $releve_des_transactions_mensuelles = [];
-
-        if (!is_null($caisse)) {
-            $releve_des_transactions_mensuelles = Transactions::where("caisse_id", $caisse->id)->whereYear('date_de_la_transaction', $annee)->whereMonth('date_de_la_transaction', $mois)->get();
-        }
-        
+        $releve_des_transactions_mensuelles = Transactions::where("caisse_id", $caisse->id)->whereYear('date_de_la_transaction', $annee)->whereMonth('date_de_la_transaction', $mois)->get();
         $current_user = $request->user();
         return view('private_layouts.rapport_mensuel.afficher_un_rapport', compact("autorisation", "autorisation_speciale",
         "rapport", "caisse", "releve_des_transactions_mensuelles", "current_user"));
@@ -396,5 +381,4 @@ class RapportMensuelController extends Controller
         $rapport->update();
         return redirect()->back()->with('success', $message);
     }
-
 }

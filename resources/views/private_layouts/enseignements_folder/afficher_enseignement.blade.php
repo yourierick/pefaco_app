@@ -80,41 +80,44 @@
                                                     <div class="table-head">
                                                         <div class="p-3">
                                                             <div class="icon">
-                                                                <i class='bx bxs-bible fs-2' ></i>
+                                                                <i class='bx bxs-bible fs-3' ></i><span class="title text-info fs-4">Thème: "{{ $enseignement->titre }}"</span>
                                                             </div>
-                                                            <h4 class="title text-info">Thème: "{{ $enseignement->titre }}"</h4>
-                                                            <div>
-                                                                <p><span style="font-weight: 600">{{ $enseignement->reference }}</span></p>
-                                                            </div>
-                                                            <div>
-                                                                <p id="text" style="text-align: justify">
-                                                                    {{ $enseignement->enseignement }}
-                                                                </p>
-                                                                <a href="#" class="btn text-primary" id="toggleButton">voir plus</a>
-                                                            </div>
-                                                            <div class="mt-2">
-                                                                <video style="width: 100%; height: 300px" controls>
-                                                                    <source src="/storage/{{ $enseignement->video }}" type="video/mp4">
-                                                                    Votre navigateur ne supporte pas la balise audio.
-                                                                </video>
-                                                            </div>
-                                                            <div class="mt-2">
-                                                                <audio style="width: 100%" controls>
-                                                                    <source src="/storage/{{ $enseignement->audio }}" type="audio/mpeg">
-                                                                    Votre navigateur ne supporte pas la balise audio.
-                                                                </audio>
+                                                            <div class="ml-3" style="box-shadow: -2px 0 0 rgb(194, 194, 194); padding-left: 10px">
+                                                                <div class="ml-4">
+                                                                    <div>
+                                                                        <p><span style="font-weight: 600">{{ $enseignement->reference }}</span></p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p id="text" style="text-align: justify">
+                                                                            {{ $enseignement->enseignement }}
+                                                                        </p>
+                                                                        <a href="#" class="btn text-primary" id="toggleButton">voir plus</a>
+                                                                    </div>
+                                                                    @if($enseignement->video)
+                                                                        <div class="mt-2">
+                                                                            <video style="width: 100%; height: 300px" controls>
+                                                                                <source src="/storage/{{ $enseignement->video }}" type="video/mp4">
+                                                                                Votre navigateur ne supporte pas la balise audio.
+                                                                            </video>
+                                                                        </div>
+                                                                    @endif
+                                                                    @if($enseignement->audio)
+                                                                        <div class="mt-2">
+                                                                            <audio style="width: 100%" controls>
+                                                                                <source src="/storage/{{ $enseignement->audio }}" type="audio/mpeg">
+                                                                                Votre navigateur ne supporte pas la balise audio.
+                                                                            </audio>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                                <p class="mt-3" style="font-style: italic">Signé par {{ $enseignement->auteur->nom }} {{ $enseignement->auteur->postnom }} {{ $enseignement->auteur->prenom }}</p>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <hr>
-                                                    <div>
-                                                        
                                                     </div>
                                                 </div>
                                             </div>
                                             <!-- End Single Table-->
                                         </div>
-                                        <hr>
                                     </div><!--//app-card-body-->
                                 </div><!--//app-card-->
                             </div><!--//tab-pane-->

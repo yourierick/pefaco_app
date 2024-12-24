@@ -13,9 +13,6 @@
                             <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                 <label style="color: #818183">Département</label>
                                 <select name="departement_id" class="form-control p-2">
-                                    @php
-                                        $departements = \App\Models\Departements::all()
-                                    @endphp
                                     @foreach($departements as $departement)
                                         <option value="{{ $departement->id }}" @if($article->departement_id === $departement->id) selected @endif>{{ $departement->designation }}</option>
                                     @endforeach
@@ -66,6 +63,15 @@
                             <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                 <label for="id_video" style="color: #818183">vidéo déscriptive</label>
                                 <input class="form-control" type="file" name="video" id="id_video">
+                                @if($article->video)
+                                    <div>
+                                        <span>Actuellement: {{ $article->video }}</span>
+                                        <div class="d-flex">
+                                            <input type="checkbox" class="mr-2" name="delete_article" id="id_delete_article">
+                                            <label for="id_delete_article" class="text-danger">Supprimer la vidéo</label>
+                                        </div>
+                                    </div>
+                                @endif
                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('video')"/>
                             </div>
                             <button type="submit" class="btn btn-primary mt-2 text-light">Soumettre</button>

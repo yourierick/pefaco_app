@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('rapport_de_cultes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('departement_id');
-            $table->foreign('departement_id')->references('id')->on('departements');
+            $table->foreign('departement_id')->references('id')->on('departements')->onDelete("cascade");
             $table->unsignedBigInteger('rapporteur_id');
             $table->foreign('rapporteur_id')->references('id')->on('users');
             $table->string('rapporteur');

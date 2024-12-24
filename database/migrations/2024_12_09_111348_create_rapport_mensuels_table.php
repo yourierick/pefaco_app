@@ -44,7 +44,6 @@ return new class extends Migration
             $table->text('recommandations');
             $table->json('previsions_mois_prochain')->nullable();
             $table->string('statut');
-            $table->boolean('notification')->default(0);
             $table->timestamps();
         });
     }

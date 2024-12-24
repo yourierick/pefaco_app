@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('depenses', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('departement_id');
-            $table->foreign('departement_id')->references('id')->on('departements');
+            $table->foreign('departement_id')->references('id')->on('departements')->onDelete("cascade");
             $table->string('requerant');
-            $table->unsignedBigInteger('source_a_imputer_id');
-            $table->foreign('source_a_imputer_id')->references('id')->on('caisses');
+            $table->unsignedBigInteger('source_a_imputer_id')->nullable();
+            $table->foreign('source_a_imputer_id')->references('id')->on('caisses')->onDelete("set null");
             $table->string('code_de_depense');
             $table->text('context')->nullable();
             $table->string('motif', 255);
@@ -25,7 +25,6 @@ return new class extends Migration
             $table->string('statut')->default('draft');
             $table->boolean('consommation_depense')->default(false);
             $table->date('date_de_traitement')->nullable();
-            $table->boolean('notif')->default(false);
             $table->timestamps();
         });
     }

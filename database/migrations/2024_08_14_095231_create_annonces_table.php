@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('date');
             $table->unsignedBigInteger('annonceur_id')->nullable();
-            $table->foreign('annonceur_id')->references('id')->on('users');
+            $table->foreign('annonceur_id')->references('id')->on('users')->onDelete("set null");
             $table->string('titre');
             $table->text('description');
             $table->string('photo_descriptive', '255');

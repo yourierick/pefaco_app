@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('enseignements', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('auteur_id');
-            $table->foreign('auteur_id')->references('id')->on('users');
+            $table->unsignedBigInteger('auteur_id')->nullable();
+            $table->foreign('auteur_id')->references('id')->on('users')->onDelete("set null");
             $table->string('titre');
             $table->string('reference', '255');
             $table->text('enseignement')->nullable();
-            $table->string('affiche_photo', '255');
+            $table->string('affiche_photo', '255')->nullable();
             $table->string('audio', '255')->nullable();
             $table->string('video', '255')->nullable();
             $table->string('statut')->default('draft');

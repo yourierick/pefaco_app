@@ -46,3 +46,5 @@ require __DIR__.'/enseignement.php';
 require __DIR__.'/communiques.php';
 require __DIR__.'/horairehebdo.php';
 require __DIR__.'/rapportmensuel.php';
+require __DIR__.'/rapportinspection.php';
+require __DIR__.'/rapportdistrict.php';

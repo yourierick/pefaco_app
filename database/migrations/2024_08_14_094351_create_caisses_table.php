@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('caisses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('departement_id')->nullable();
-            $table->foreign('departement_id')->references('id')->on('departements');
+            $table->unsignedBigInteger('departement_id');
+            $table->foreign('departement_id')->references('id')->on('departements')->onDelete("cascade");
             $table->unsignedBigInteger('caissier_id');
             $table->double('montant_total_net')->default(0);
             $table->foreign('caissier_id')->references('id')->on('users');

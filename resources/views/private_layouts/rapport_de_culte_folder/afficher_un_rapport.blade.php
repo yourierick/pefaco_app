@@ -195,11 +195,13 @@
                                 <h5 class="text-white">1. SERVICE DU JOUR</h5>
                             </div>
                         </div>
-                        <p class="custom-card-text mt-2">
-                            En ce jour du <span style="text-transform: capitalize">{{ \Carbon\Carbon::parse($rapport->date)->isoFormat('dddd') }}</span>, {{ $rapport->date->format("d-m-Y") }}
-                            s'est tenu notre assemblée sous l'officience de notre cher(e) bien-aimé(e), Serviteur {{ $rapport->moderateur }}. l'oration a été assuré
-                            par notre cher(e) bien-aimé(e), Serviteur {{ $rapport->orateur }}
-                        </p>
+                        <div style="padding: 0" class="p-3">
+                            <div class="custom-card-text mt-2 p-2">
+                                <p class="ml-2" style="text-align: justify">En ce jour du <span style="text-transform: capitalize">{{ \Carbon\Carbon::parse($rapport->date)->isoFormat('dddd') }}</span>, {{ $rapport->date->format("d-m-Y") }}
+                                s'est tenu notre assemblée sous l'officience de notre cher(e) bien-aimé(e), Serviteur {{ $rapport->moderateur }}. l'oration a été assuré
+                                par notre cher(e) bien-aimé(e), Serviteur {{ $rapport->orateur }}</p>
+                            </div>
+                        </div>
                         <div class="custom-card d-flex align-items-center">
                             <div class="icon-circle text-white">
                                 <i class="fa fa-person-burst text-secondary fs-3"></i>
@@ -208,15 +210,17 @@
                                 <h5 class="text-white">3. STATISTIQUES DU JOUR</h5>
                             </div>
                         </div>
-                        <div class="custom-card-text mt-2">
-                            - <span>Nombre total des personnes présentes dans le culte :</span> {{ $rapport->total_pers_dans_le_culte }} personnes<br>
-                            <hr style="width: 100%">
-                            <div style="margin-left: 15px">
-                                <p style="font-weight: bold">Désagrégation par catégorie</p>
-                                - <span>Nombre total des papas présents dans le culte :</span> <span style="font-weight: 500">{{ $rapport->total_papas }} papas</span><br>
-                                - <span>Nombre total des mamans présentes dans le culte :</span> <span style="font-weight: 500">{{ $rapport->total_mamans }} mamans</span><br>
-                                - <span>Nombre total des jeunes présents dans le culte :</span> <span style="font-weight: 500">{{ $rapport->total_jeunes }} jeunes</span><br>
-                                - <span>Nombre total d'enfants présents dans le culte :</span> <span style="font-weight: 500">{{ $rapport->total_enfants }} enfants</span><br>
+                        <div style="padding: 0" class="p-3">
+                            <div class="custom-card-text mt-2 p-2">
+                                - <span>Nombre total des personnes présentes dans le culte :</span> {{ $rapport->total_pers_dans_le_culte }} personnes<br>
+                                <hr style="width: 100%">
+                                <div style="margin-left: 15px">
+                                    <p style="font-weight: bold">Désagrégation par catégorie</p>
+                                    - <span>Nombre total des papas présents dans le culte :</span> <span style="font-weight: 500">{{ $rapport->total_papas }} papas</span><br>
+                                    - <span>Nombre total des mamans présentes dans le culte :</span> <span style="font-weight: 500">{{ $rapport->total_mamans }} mamans</span><br>
+                                    - <span>Nombre total des jeunes présents dans le culte :</span> <span style="font-weight: 500">{{ $rapport->total_jeunes }} jeunes</span><br>
+                                    - <span>Nombre total d'enfants présents dans le culte :</span> <span style="font-weight: 500">{{ $rapport->total_enfants }} enfants</span><br>
+                                </div>
                             </div>
                         </div>
                         <div class="custom-card d-flex align-items-center">
@@ -227,14 +231,17 @@
                                 <h5 class="text-white">2. PREDICATION/ENSEIGNEMENT DU JOUR</h5>
                             </div>
                         </div>
-                        <div class="custom-card-text mt-2">
-                            <div>
-                                Référence:
-                                @foreach(json_decode($rapport->reference, true) as $value)
-                                    <span>{{ $value }}</span><br>
-                                @endforeach
+                        <div style="padding: 0" class="p-3">
+                            <div class="custom-card-text mt-2 p-2">
+                                <div>
+                                    <span class="ml-2" style="font-weight: 600">Référence:</span>
+                                    @foreach(json_decode($rapport->reference, true) as $value)
+                                        <span>{{ $value }}</span><br>
+                                    @endforeach
+                                </div>
+                                <hr>
+                                <p class="ml-2" style="text-align: justify">{{ $rapport->synthese }}</p>
                             </div>
-                            <p>{{ $rapport->synthese }}</p>
                         </div>
                         <div class="custom-card d-flex align-items-center">
                             <div class="icon-circle text-white">
@@ -244,10 +251,12 @@
                                 <h5 class="text-white">4. AUTRES FAITS A RAPPORTER</h5>
                             </div>
                         </div>
-                        <div class="custom-card-text mt-2">
-                            @foreach(json_decode($rapport->autres_faits_a_renseigner, true) as $value)
-                                - <span>{{ $value }}</span><br>
-                            @endforeach
+                        <div style="padding: 0" class="p-3">
+                            <div class="custom-card-text mt-2 p-2">
+                                @foreach(json_decode($rapport->autres_faits_a_renseigner, true) as $value)
+                                    - <p class="ml-2" style="text-align: justify">{{ $value }}</p>
+                                @endforeach
+                            </div>
                         </div>
                         <div class="custom-card d-flex align-items-center">
                             <div class="icon-circle text-white">
@@ -257,21 +266,23 @@
                                 <h5 class="text-white">5. OFFRANDES DU JOUR</h5>
                             </div>
                         </div>
-                        <div class="custom-card-text mt-2">
-                            @if($autorisation_speciale)
-                                @if($autorisation_speciale->autorisation_speciale)
-                                    @if(in_array('peux voir la partie financiere du rapport', json_decode($autorisation_speciale->autorisation_speciale, true)))
-                                        - <span>Offrandes totales :</span> <span style="font-weight: 500">{{ $rapport->total_offrande }} FC</span><br>
+                        <div style="padding: 0" class="p-3">
+                            <div class="custom-card-text mt-2 p-2">
+                                @if($autorisation_speciale)
+                                    @if($autorisation_speciale->autorisation_speciale)
+                                        @if(in_array('peux voir la partie financiere du rapport', json_decode($autorisation_speciale->autorisation_speciale, true)))
+                                            <ul><li><span>Offrandes totales :</span> <span style="font-weight: 500">{{ $rapport->total_offrande }} FC</span><br></li></ul>
+                                        @endif
                                     @endif
                                 @endif
-                            @endif
-                            - <span>Offrandes spéciales :</span>
-                            <div style="margin-left: 10%">
-                                <ul>
-                                    @foreach(json_decode($rapport->don_special, true) as $value)
-                                        <li>{{ $value }}</li>
-                                    @endforeach
-                                </ul>
+                                <span style="font-weight: 600; font-style: italic" class="ml-4">OFFRANDES SPECIALES :</span>
+                                <div class="ml-1">
+                                    <ul>
+                                        @foreach(json_decode($rapport->don_special, true) as $value)
+                                            <li><span>{{ $value }}</span></li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>

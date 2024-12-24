@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('date');
             $table->unsignedBigInteger('communiquant_id')->nullable();
-            $table->foreign('communiquant_id')->references('id')->on('users');
+            $table->foreign('communiquant_id')->references('id')->on('users')->onDelete("set null");
             $table->string('titre', '255');
             $table->json('contenu');
             $table->json('accuse_de_reception')->nullable();

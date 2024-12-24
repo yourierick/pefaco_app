@@ -45,7 +45,7 @@
                         <form method="post" action="{{ route('rapportculte.sauvegarder_le_rapport') }}" class="mt-6 space-y-6">
                             @csrf
                             <div class="mb-3">
-                                <div class="form-group form-group-default">
+                                <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                     <label>Département</label>
                                     <select name="departement_id" class="form-control p-2">
                                         <option value="{{ $current_user->departement->id }}" @if(old('departement_id') === $current_user->departement->id) selected @endif>{{ $current_user->departement->designation }}</option>
@@ -54,35 +54,35 @@
                                 <x-input-error :messages="$errors->get('departement_id')" class="mt-2 text-danger"/>
                             </div>
                             <div class="mb-3">
-                                <div class="form-group form-group-default">
+                                <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                     <label for="id_date" style="color: #818183">Date</label>
                                     <input class="form-control" type="date" name="date" id="id_date" value="{{ old('date') }}">
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('date')"/>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <div class="form-group form-group-default">
+                                <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                     <label for="id_moderateur" style="color: #818183">Modérateur</label>
                                     <input class="form-control" type="text" name="moderateur" id="id_moderateur" value="{{ old('moderateur') }}">
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('moderateur')"/>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <div class="form-group form-group-default">
+                                <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                     <label for="id_orateur" style="color: #818183">Orateur</label>
                                     <input class="form-control" type="text" name="orateur" id="id_orateur" value="{{ old('orateur') }}">
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('orateur')"/>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <div class="form-group form-group-default">
+                                <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                     <label for="id_theme" style="color: #818183">Thème</label>
                                     <input class="form-control" type="text" name="theme" id="id_theme" value="{{ old('theme') }}">
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('theme')"/>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <div class="form-group form-group-default">
+                                <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                     <label for="id_synthese" style="color: #818183">Référence</label>
                                     <div>
                                         <div id="container_reference"></div>
@@ -92,14 +92,14 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <div class="form-group form-group-default">
+                                <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                     <label for="id_synthese" style="color: #818183">Synthèse de la prédication</label>
                                     <textarea class="form-control" placeholder="synthèse de la prédication" name="synthese" id="id_synthese">{{ old('synthese') }}</textarea>
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('synthese')"/>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <div class="form-group form-group-default">
+                                <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                     <label for="id_tot_pers" style="color: #818183">Nombre total des personnes présentes dans le culte</label>
                                     <input class="form-control" type="number" name="total_pers_dans_le_culte" id="id_tot_pers" value="{{ old('total_pers_dans_le_culte', 0) }}">
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('total_pers_dans_le_culte')"/>
@@ -107,28 +107,28 @@
                             </div>
                             @if($current_user->departement->designation === "comité provincial")
                                 <div class="mb-3">
-                                    <div class="form-group form-group-default">
+                                    <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                         <label for="id_tot_papa" style="color: #818183">Nombre total des papas présents dans le culte</label>
                                         <input class="form-control" type="number" name="total_papas" id="id_tot_papa" value="{{ old('total_papas', 0) }}">
                                         <x-input-error class="mt-2 text-danger" :messages="$errors->get('total_papas')"/>
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <div class="form-group form-group-default">
+                                    <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                         <label for="id_tot_maman" style="color: #818183">Nombre total des mamans présentes dans le culte</label>
                                         <input class="form-control" type="number" name="total_mamans" id="id_tot_maman" value="{{ old('total_mamans', 0) }}">
                                         <x-input-error class="mt-2 text-danger" :messages="$errors->get('total_mamans')"/>
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <div class="form-group form-group-default">
+                                    <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                         <label for="id_tot_jeune" style="color: #818183">Nombre total des jeunes présents dans le culte</label>
                                         <input class="form-control" type="number" name="total_jeunes" id="id_tot_jeune" value="{{ old('total_jeunes', 0) }}">
                                         <x-input-error class="mt-2 text-danger" :messages="$errors->get('total_jeunes')"/>
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <div class="form-group form-group-default">
+                                    <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                         <label for="id_tot_enfant" style="color: #818183">Nombre total des enfants présents dans le culte</label>
                                         <input class="form-control" type="number" name="total_enfants" id="id_tot_enfant" value="{{ old('total_enfants', 0) }}">
                                         <x-input-error class="mt-2 text-danger" :messages="$errors->get('total_enfants')"/>
@@ -149,7 +149,7 @@
                                 @endif
                             @endif
                             <div class="mb-3">
-                                <div class="form-group form-group-default">
+                                <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                     <label for="id_don" style="color: #818183">Offrandes spéciales</label>
                                     <div>
                                         <div id="container_offrande_speciale"></div>
@@ -158,7 +158,7 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <div class="form-group form-group-default">
+                                <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                     <label style="color: #818183">Autres faits à renseigner</label>
                                     <div>
                                         <div id="container_autres_faits"></div>

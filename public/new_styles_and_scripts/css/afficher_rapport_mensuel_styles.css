@@ -82,12 +82,18 @@
 
 .custom-card-text {
     margin-left: 45px;
-    border-left: 4px solid #457ebe;
-    padding-left: 20px;
-    transition: box-shadow 0.3s ease
+    border-left: 2px solid #457ebe;
+    text-wrap: true;
+    transition: box-shadow 0.3s ease;
+    max-width: 100%!important;
 }
+
 
 .custom-card-text:hover {
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.container {
+    padding: 10px!important;
 }
 

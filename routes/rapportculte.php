@@ -25,8 +25,6 @@ Route::middleware('auth')->name('rapportculte.')->group(function () {
         'les_attentes_en_completion'])->name('les_attentes_en_completion');
     Route::get('/rapportculte/les_attentes_en_validation', [RapportCulteController::class,
         'les_attentes_en_validation'])->name('les_attentes_en_validation');
-    Route::get('/rapportculte/afficher_rapport_culte_en_attente_de_competion/{rapport_id}', [RapportCulteController::class,
-        'afficher_rapport_culte_en_attente_de_competion'])->name('afficher_rapport_culte_en_attente_de_competion');
     Route::put('/rapportculte/save_completion/{rapport_id}', [RapportCulteController::class,
         'save_completion'])->name('save_completion');
     Route::put('/rapportculte/traitement_du_rapport/{rapport_id}', [RapportCulteController::class,

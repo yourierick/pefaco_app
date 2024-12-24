@@ -10,6 +10,7 @@ class HoraireHebdo extends Model
     use HasFactory;
 
     protected $fillable = [
+        'departement_id',
         'date_debut',
         'date_fin',
     ];

@@ -107,28 +107,27 @@
                                  aria-labelledby="orders-all-tab">
                                 <div class="app-card app-card-orders-table shadow-sm mb-5">
                                     <div class="app-card-body">
-                                        <div class="row p-4">
-                                            <div class="col col-xs-12 col-md-6">
-                                                <div>
-                                                    @php
-                                                        $bibliotheque = json_decode($article->bibliotheque, true);
-                                                        $firstelement = isset($bibliotheque[0]) ? $bibliotheque[0]: '#';
-                                                    @endphp
-                                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($firstelement) }}" alt="#" style="max-height: 500px; width: 100%">
-                                                    @php
-                                                        $bibliotheques = json_decode($article->bibliotheque, true);
-                                                    @endphp
-                                                    <div class="row mt-3 p-2 shadow">
-                                                        @foreach($bibliotheques as $bibliotheque)
-                                                            <div class="col-4">    
-                                                                <img src="{{ \Illuminate\Support\Facades\Storage::url($bibliotheque) }}" alt="#" style="max-width: 100%; min-height: 100%">
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-12 col-md-6 mt-2">
+                                        <h3 class="ml-3 text-muted" style="text-transform: capitalize">{{ $article->titre }} Date de rapportage: {{ $article->date->format("d-m-Y") }}</h3>
+                                        <div class="p-4">
+                                            @php
+                                                $bibliotheque = json_decode($article->bibliotheque, true);
+                                                $firstelement = isset($bibliotheque[0]) ? $bibliotheque[0]: '#';
+                                            @endphp
+                                            <img src="{{ \Illuminate\Support\Facades\Storage::url($firstelement) }}" alt="#" style="max-height: 500px; width: 100%">
+                                            <div class="mt-4">
                                                 <p style="color: darkgray; text-align: justify">{{ $article->description }}</p>
+                                            </div>
+                                            <div>
+                                                @php
+                                                    $bibliotheques = json_decode($article->bibliotheque, true);
+                                                @endphp
+                                                <div class="row mt-3 p-2 shadow">
+                                                    @foreach($bibliotheques as $bibliotheque)
+                                                        <div class="col-4">    
+                                                            <img src="{{ \Illuminate\Support\Facades\Storage::url($bibliotheque) }}" alt="#" style="max-width: 100%; min-height: 100%">
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             </div>
                                         </div>
                                         @if($article->video)
@@ -144,7 +143,7 @@
                                         @endif
                                     </div><!--//app-card-body-->
                                 </div><!--//app-card-->
-                                <p>Signé par {{ $article->rapporteur }}</p>
+                                <p style="font-style: italic">Signé par {{ $article->rapporteur }}</p>
                             </div><!--//tab-pane-->
                         </div><!--//tab-content-->
                     </section>

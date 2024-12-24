@@ -181,6 +181,11 @@ class EnseignementController extends Controller
                 Storage::disk('public')->delete($enseignement->affiche_photo);
             }
             $enseignement->affiche_photo = $path;
+        }else {
+            if ($request->has("delete_affiche_photo")) {
+                Storage::disk('public')->delete($enseignement->affiche_photo);
+                $enseignement->affiche_photo = null;
+            }
         }
 
 
@@ -190,6 +195,11 @@ class EnseignementController extends Controller
                 Storage::disk('public')->delete($enseignement->audio);
             }
             $enseignement->audio = $path;
+        }else {
+            if ($request->has("delete_audio")) {
+                Storage::disk('public')->delete($enseignement->audio);
+                $enseignement->audio = null;
+            }
         }
 
         if ($request->hasFile('video')) {
@@ -198,6 +208,11 @@ class EnseignementController extends Controller
                 Storage::disk('public')->delete($enseignement->video);
             }
             $enseignement->video = $path;
+        }else {
+            if ($request->has("delete_video")) {
+                Storage::disk('public')->delete($enseignement->video);
+                $enseignement->video = null;
+            }
         }
 
 

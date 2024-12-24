@@ -1,5 +1,6 @@
 @extends('base_dashboard')
 @section('page_title', 'Pefaco Universelle')
+@section('titre', '#Vue du rapport de culte')
 @section('other_content')
     <div class="d-flex" style="gap: 3px; float: right">
         <div class="btn-group dropdown" style="float: right;">
@@ -183,13 +184,9 @@
                                     <h5 class="text-white">1. OBJECTIFS</h5>
                                 </div>
                             </div>
-                            <div style="padding: 0" class="p-3">
-                                <div class="custom-card-text mt-2 p-2">
-                                    <p class="ml-2" style="text-align: justify">
-                                        {{ $rapport->objectifs }}
-                                    </p>
-                                </div>
-                            </div>
+                            <p class="custom-card-text mt-2">
+                                {{ $rapport->objectifs }}
+                            </p>
 
                             <div class="custom-card d-flex align-items-center">
                                 <div class="icon-circle text-white">
@@ -199,12 +196,8 @@
                                     <h5 class="text-white">2. VISION</h5>
                                 </div>
                             </div>
-                            <div style="padding: 0" class="p-3">
-                                <div class="custom-card-text mt-2 p-2">
-                                    <p class="ml-2" style="text-align: justify">
-                                        {{ $rapport->vision }}
-                                    </p>
-                                </div>
+                            <div class="custom-card-text mt-2">
+                                <p>{{ $rapport->vision }}</p>
                             </div>
 
                             <div class="custom-card d-flex align-items-center">
@@ -215,12 +208,8 @@
                                     <h5 class="text-white">3. MISSION</h5>
                                 </div>
                             </div>
-                            <div style="padding: 0" class="p-3">
-                                <div class="custom-card-text mt-2 p-2">
-                                    <p class="ml-2" style="text-align: justify">
-                                        {{ $rapport->mission }}
-                                    </p>
-                                </div>
+                            <div class="custom-card-text mt-2">
+                                <p>{{ $rapport->mission }}</p>
                             </div>
 
                             <div class="custom-card d-flex align-items-center">
@@ -231,31 +220,29 @@
                                     <h5 class="text-white">4. SITUATION</h5>
                                 </div>
                             </div>
-                            <div style="padding: 0" class="p-3">
-                                <div class="custom-card-text mt-2 p-2">
-                                    <h6 class="ml-2">4.1. Prévisions de ce mois</h6>
-                                    <div class="ml-3">
-                                        @foreach(json_decode($rapport->previsions_pour_ce_mois, true) as $value)
-                                            <p>- {{ $value }}</p>
-                                        @endforeach
-                                    </div>
+                            <div class="custom-card-text mt-2">
+                                <h6 class="ml-2">4.1. Prévisions de ce mois</h6>
+                                <div class="ml-3">
+                                    @foreach(json_decode($rapport->previsions_pour_ce_mois, true) as $value)
+                                        <p>- {{ $value }}</p>
+                                    @endforeach
+                                </div>
 
-                                    <h6 class="ml-2 mt-3">4.2. Réalisations de ce mois</h6>
-                                    <div class="ml-3">
-                                        @foreach(json_decode($rapport->realisations_de_ce_mois, true) as $value)
-                                            <p>- {{ $value }}</p>
-                                        @endforeach
-                                    </div>
+                                <h6 class="ml-2 mt-3">4.2. Réalisations de ce mois</h6>
+                                <div class="ml-3">
+                                    @foreach(json_decode($rapport->realisations_de_ce_mois, true) as $value)
+                                        <p>- {{ $value }}</p>
+                                    @endforeach
+                                </div>
 
-                                    <h6 class="ml-2 mt-3">4.3. Situation actuelle</h6>
-                                    <div class="ml-3">
-                                        <p>{{ $rapport->situation_actuelle }}</p>
-                                    </div>
+                                <h6 class="ml-2 mt-3">4.3. Situation actuelle</h6>
+                                <div class="ml-3">
+                                    <p>{{ $rapport->situation_actuelle }}</p>
+                                </div>
 
-                                    <h6 class="ml-2 mt-3">4.4. Autres à rapporter</h6>
-                                    <div class="ml-3">
-                                        <p>{{ $rapport->autres_a_rapporter }}</p>
-                                    </div>
+                                <h6 class="ml-2 mt-3">4.4. Autres à rapporter</h6>
+                                <div class="ml-3">
+                                    <p>{{ $rapport->autres_a_rapporter }}</p>
                                 </div>
                             </div>
 
@@ -267,12 +254,8 @@
                                     <h5 class="text-white">5. VUE SUR LA LOGISTIQUE</h5>
                                 </div>
                             </div>
-                            <div style="padding: 0" class="p-3">
-                                <div class="custom-card-text mt-2 p-2">
-                                    <p class="ml-2" style="text-align: justify">
-                                        {{ $rapport->situation_de_la_logistique }}
-                                    </p>
-                                </div>
+                            <div class="custom-card-text mt-2">
+                                <p>{{ $rapport->situation_de_la_logistique }}</p>
                             </div>
 
                             <div class="custom-card d-flex align-items-center">
@@ -283,33 +266,31 @@
                                     <h5 class="text-white">6. STATISTIQUES</h5>
                                 </div>
                             </div>
-                            <div style="padding: 0" class="p-3">
-                                <div class="custom-card-text mt-2 p-2">
-                                    @if($rapport->departement->designation === "comité provincial")
-                                        <ul><li style="font-weight: bold">Effectifs généraux de l'église</li></ul>
-                                        <p>Le rapport indique que l'église compte à ce jour un effectif total de <span style="font-weight: bold; color: blue">{{ $rapport->effectif_total }} Personnes</span> tel que détaillé par le graphique ci-dessous:</p>
-                                        <div class="chart-container">
-                                            <canvas id="statutChart"></canvas>
-                                        </div>
-                                        <br>
-                                        <ul><li style="font-weight: bold">Moyennes mensuelles de fréquentation</li></ul>
-                                        <p>Le rapport indique que la moyenne générale de fréquentation aux cultes est de <span style="font-weight: bold; color: blue">{{ $rapport->moyenne_mensuel_total }} Personnes.</span> Ceci est détaillé dans le graphique ci-dessous par catégorie d'individus:</p>
-                                        <div class="chart-container">
-                                            <canvas id="barChart"></canvas>
-                                        </div>
-                                        <br>
-                                        <ul><li style="font-weight: bold">Total mensuel des personnes baptisées</li></ul>
-                                        <p>Le rapport indique que le nombre des personnes baptisées au courant de ce mois est de <span style="font-weight: bold; color: blue">{{ $rapport->nombre_des_personnes_baptises }} Personnes.</span></p>
-                                    @elseif($rapport->departement->designation === "ecodim" || $rapport->departement->designation === "comité des mamans" || $rapport->departement->designation === "comité des jeunes")
-                                        <ul><li style="font-weight: bold">Nombre total actuel des membres dans le département</li></ul>
-                                        <p>Le rapport indique que le département compte à ce jour un effectif total de <span style="font-weight: bold; color: blue">{{ $rapport->effectif_total }} Personnes</span></p>
-                                        <ul><li style="font-weight: bold">Moyenne mensuelle de participation dans les cultes</li></ul>
-                                        <p>Le rapport indique que la moyenne mensuelle de participation aux cultes est de <span style="font-weight: bold; color: blue">{{ $rapport->moyenne_mensuel_total }} Personnes</span></p>
-                                    @else
-                                        <ul><li style="font-weight: bold">Nombre total actuel des membres dans le département</li></ul>
-                                        <p>Le rapport indique que le département compte à ce jour un effectif total de <span style="font-weight: bold; color: blue">{{ $rapport->effectif_total }} Personnes</span></p>
-                                    @endif
-                                </div>
+                            <div class="custom-card-text mt-2">
+                                @if($rapport->departement->designation === "comité provincial")
+                                    <ul><li style="font-weight: bold">Effectifs généraux de l'église</li></ul>
+                                    <p>Le rapport indique que l'église compte à ce jour un effectif total de <span style="font-weight: bold; color: blue">{{ $rapport->effectif_total }} Personnes</span> tel que détaillé par le graphique ci-dessous:</p>
+                                    <div class="chart-container">
+                                        <canvas id="statutChart"></canvas>
+                                    </div>
+                                    <br>
+                                    <ul><li style="font-weight: bold">Moyennes mensuelles de fréquentation</li></ul>
+                                    <p>Le rapport indique que la moyenne générale de fréquentation aux cultes est de <span style="font-weight: bold; color: blue">{{ $rapport->moyenne_mensuel_total }} Personnes.</span> Ceci est détaillé dans le graphique ci-dessous par catégorie d'individus:</p>
+                                    <div class="chart-container">
+                                        <canvas id="barChart"></canvas>
+                                    </div>
+                                    <br>
+                                    <ul><li style="font-weight: bold">Total mensuel des personnes baptisées</li></ul>
+                                    <p>Le rapport indique que le nombre des personnes baptisées au courant de ce mois est de <span style="font-weight: bold; color: blue">{{ $rapport->nombre_des_personnes_baptises }} Personnes.</span></p>
+                                @elseif($rapport->departement->designation === "ecodim" || $rapport->departement->designation === "comité des mamans" || $rapport->departement->designation === "comité des jeunes")
+                                    <ul><li style="font-weight: bold">Nombre total actuel des membres dans le département</li></ul>
+                                    <p>Le rapport indique que le département compte à ce jour un effectif total de <span style="font-weight: bold; color: blue">{{ $rapport->effectif_total }} Personnes</span></p>
+                                    <ul><li style="font-weight: bold">Moyenne mensuelle de participation dans les cultes</li></ul>
+                                    <p>Le rapport indique que la moyenne mensuelle de participation aux cultes est de <span style="font-weight: bold; color: blue">{{ $rapport->moyenne_mensuel_total }} Personnes</span></p>
+                                @else
+                                    <ul><li style="font-weight: bold">Nombre total actuel des membres dans le département</li></ul>
+                                    <p>Le rapport indique que le département compte à ce jour un effectif total de <span style="font-weight: bold; color: blue">{{ $rapport->effectif_total }} Personnes</span></p>
+                                @endif
                             </div>
                             @if(!is_null($autorisation_speciale))
                                 @if($autorisation_speciale->autorisation_speciale)
@@ -322,66 +303,64 @@
                                                 <h5 class="text-white">7. FINANCES</h5>
                                             </div>
                                         </div>
-                                        <div style="padding: 0" class="p-3">
-                                            <div class="custom-card-text mt-2 p-2">
-                                                <ul><li style="font-weight: bold">Situation actuelle de la caisse</li></ul>
-                                                <p>Le montant actuellement dans la caisse est <span style="font-weight: bold; color: blue">{{ $rapport->situation_caisse }} FC</span></p>
-                                                <br>
-                                                <h5>Rélevé des transactions de ce mois</h5>
-                                                <div>
-                                                    <table class="table-sm table-striped w-100 text-left" id="multi-filter-select">
-                                                        <thead style="text-transform: uppercase; background-color: #0a5a97; color: whitesmoke">
+                                        <div class="custom-card-text mt-2">
+                                            <ul><li style="font-weight: bold">Situation actuelle de la caisse</li></ul>
+                                            <p>Le montant actuellement dans la caisse est <span style="font-weight: bold; color: blue">{{ $rapport->situation_caisse }} FC</span></p>
+                                            <br>
+                                            <h5>Rélevé des transactions de ce mois</h5>
+                                            <div>
+                                                <table class="table-sm table-striped w-100 text-left" id="multi-filter-select">
+                                                    <thead style="text-transform: uppercase; background-color: #0a5a97; color: whitesmoke">
+                                                    <tr>
+                                                        <th class="cell">N°</th>
+                                                        <th class="cell">date de la transaction</th>
+                                                        <th class="cell">type de transaction</th>
+                                                        <th class="cell">code de la dépense</th>
+                                                        <th class="cell">montant</th>
+                                                        <th class="cell">motif</th>
+                                                        <th class="cell">source</th>
+                                                        @if($rapport->departement->id !== 1)
+                                                            <th class="cell">% de l'église</th>
+                                                        @endif
+                                                        <th class="cell">montant net restant</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <th class="cell">N°</th>
+                                                        <th class="cell">date de la transaction</th>
+                                                        <th class="cell">transaction</th>
+                                                        <th class="cell">code de la dépense</th>
+                                                        <th class="cell">montant</th>
+                                                        <th class="cell">motif</th>
+                                                        <th class="cell">source</th>
+                                                        @if($rapport->departement->id !== 1)
+                                                            <th class="cell">% de l'église</th>
+                                                        @endif
+                                                        <th class="cell">montant net restant</th>
+                                                    </tr>
+                                                    </tfoot>
+                                                    <tbody>
+                                                    @foreach($releve_des_transactions_mensuelles as $transaction)
                                                         <tr>
-                                                            <th class="cell">N°</th>
-                                                            <th class="cell">date de la transaction</th>
-                                                            <th class="cell">type de transaction</th>
-                                                            <th class="cell">code de la dépense</th>
-                                                            <th class="cell">montant</th>
-                                                            <th class="cell">motif</th>
-                                                            <th class="cell">source</th>
+                                                            <td class="cell">{{ $loop->iteration }}</td>
+                                                            <td class="cell">{{ $transaction->date_de_la_transaction->format('d-m-Y') }}</td>
+                                                            <td class="cell">{{ $transaction->type_de_transaction }}</td>
+                                                            <td class="cell">{{ $transaction->code_de_depense }}</td>
+                                                            <td class="cell">{{ $transaction->montant }} FC</td>
+                                                            <td class="cell">{{ $transaction->motif }} FC</td>
+                                                            <td class="cell">{{ $transaction->source }}</td>
                                                             @if($rapport->departement->id !== 1)
-                                                                <th class="cell">% de l'église</th>
+                                                                <td class="cell">{{ $transaction->pourcentage_eglise }} %</td>
                                                             @endif
-                                                            <th class="cell">montant net restant</th>
+                                                            <td class="cell">{{ $transaction->montant_net_restant }} FC</td>
                                                         </tr>
-                                                        </thead>
-                                                        <tfoot>
-                                                        <tr>
-                                                            <th class="cell">N°</th>
-                                                            <th class="cell">date de la transaction</th>
-                                                            <th class="cell">transaction</th>
-                                                            <th class="cell">code de la dépense</th>
-                                                            <th class="cell">montant</th>
-                                                            <th class="cell">motif</th>
-                                                            <th class="cell">source</th>
-                                                            @if($rapport->departement->id !== 1)
-                                                                <th class="cell">% de l'église</th>
-                                                            @endif
-                                                            <th class="cell">montant net restant</th>
-                                                        </tr>
-                                                        </tfoot>
-                                                        <tbody>
-                                                        @foreach($releve_des_transactions_mensuelles as $transaction)
-                                                            <tr>
-                                                                <td class="cell">{{ $loop->iteration }}</td>
-                                                                <td class="cell">{{ $transaction->date_de_la_transaction->format('d-m-Y') }}</td>
-                                                                <td class="cell">{{ $transaction->type_de_transaction }}</td>
-                                                                <td class="cell">{{ $transaction->code_de_depense }}</td>
-                                                                <td class="cell">{{ $transaction->montant }} FC</td>
-                                                                <td class="cell">{{ $transaction->motif }} FC</td>
-                                                                <td class="cell">{{ $transaction->source }}</td>
-                                                                @if($rapport->departement->id !== 1)
-                                                                    <td class="cell">{{ $transaction->pourcentage_eglise }} %</td>
-                                                                @endif
-                                                                <td class="cell">{{ $transaction->montant_net_restant }} FC</td>
-                                                            </tr>
-                                                        @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <ul><li style="font-weight: bold">Autres contributions ou dons à renseigner</li></ul>
-                                                <p>{{ $rapport->autres_contributions_a_renseigner ? : 'Rien à signaler' }}</p>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
                                             </div>
+                                            <ul><li style="font-weight: bold">Autres contributions ou dons à renseigner</li></ul>
+                                            <p>{{ $rapport->autres_contributions_a_renseigner ? : 'Rien à signaler' }}</p>
                                         </div>
                                     @endif
                                 @endif
@@ -403,19 +382,17 @@
                                     @endif
                                 </div>
                             </div>
-                            <div style="padding: 0" class="p-3">
-                                <div class="custom-card-text mt-2 p-2">
-                                    <ul><li style="font-weight: bold">Difficultés et défis</li></ul>
-                                    <p class="ml-2" style="text-align: justify">{{ $rapport->difficultes_defis ? : "Rien à signaler" }}</p>
-                                    <br>
-                                    <ul><li style="font-weight: bold">Récommandations</li></ul>
-                                    <p class="ml-2" style="text-align: justify">{{ $rapport->recommandations ? : 'Rien à signaler' }}</p>
-                                    <ul><li style="font-weight: bold">Prévisions pour le mois prochain</li></ul>
-                                    <div class="ml-3">
-                                        @foreach(json_decode($rapport->previsions_mois_prochain, true) as $value)
-                                            <p class="ml-2" style="text-align: justify">- {{ $value }}</p>
-                                        @endforeach
-                                    </div>
+                            <div class="custom-card-text mt-2">
+                                <ul><li style="font-weight: bold">Difficultés et défis</li></ul>
+                                <p>{{ $rapport->difficultes_defis ? : "Rien à signaler" }}</p>
+                                <br>
+                                <ul><li style="font-weight: bold">Récommandations</li></ul>
+                                <p>{{ $rapport->recommandations ? : 'Rien à signaler' }}</p>
+                                <ul><li style="font-weight: bold">Prévisions pour le mois prochain</li></ul>
+                                <div class="ml-3">
+                                    @foreach(json_decode($rapport->previsions_mois_prochain, true) as $value)
+                                        <p>- {{ $value }}</p>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>

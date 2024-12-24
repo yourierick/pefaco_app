@@ -41,15 +41,15 @@
                                                                     <i class='bx bxs-bible fs-2 text-info' ></i><span class="fs-3">Eglise Pefaco Universelle| Communiqué du {{ $communique->date->format('d/m/Y') }}</span>
                                                                 </div>
                                                                 <hr>
-                                                                <h5 class="title mb-4">Objet: "{{ $communique->titre }}" pour le {{ $communique->date->format('d/m/Y')  }}</h4>
-                                                                <div>
-                                                                    <div id="text">
+                                                                <div class="ml-2" style="box-shadow: -2px 0 0 rgb(194, 194, 194); padding-left: 10px">
+                                                                    <div id="text" class="ml-3">
+                                                                        <h5 class="title mb-4">Objet: "{{ $communique->titre }}" pour le {{ $communique->date->format('d/m/Y')  }}</h5>
                                                                         @foreach(json_decode($communique->contenu, true) as $value)
-                                                                            <p><span style="font-weight: 600">{{ $loop->iteration }}.</span>  {{ $value }}</p>
+                                                                            <p style="text-align: justify"><span style="font-weight: 600">{{ $loop->iteration }}.</span>  {{ $value }}</p>
                                                                         @endforeach
                                                                     </div>
                                                                 </div>
-                                                                <p style="text-decoration: underline">Signé par {{ $communique->communiquant->nom }} {{ $communique->communiquant->postnom }} {{ $communique->communiquant->prenom }}</p>
+                                                                <p style="font-style: italic">Signé par {{ $communique->communiquant->nom }} {{ $communique->communiquant->postnom }} {{ $communique->communiquant->prenom }}</p>
                                                             </div>
                                                         </div>
                                                     </div> 

@@ -167,7 +167,8 @@ class ArticlesController extends Controller
     {
         $autorisation = Autorisations::where('table_name', 'articles')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $article = Articles::find($article_id);
-        return view('private_layouts.articles_folder.editer_un_article', ['article'=>$article, 'current_user'=>$request->user(), 'autorisation'=>$autorisation]);
+        $departements = Departements::all();
+        return view('private_layouts.articles_folder.editer_un_article', ['article'=>$article, 'current_user'=>$request->user(), 'autorisation'=>$autorisation, 'departements'=>$departements]);
     }
 
     public function save_edition_article($article_id, Request $request)
@@ -214,6 +215,11 @@ class ArticlesController extends Controller
                 Storage::disk('public')->delete($article->video);
             }
             $article->video = $path;
+        }else {
+            if ($request->has("delete_video")) {
+                Storage::disk('public')->delete($enseignement->video);
+                $enseignement->affiche_video = null;
+            }
         }
 
         $all_photos = array_merge($updated_photos, $bibliotheque);

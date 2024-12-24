@@ -46,7 +46,7 @@ class ParametresController extends Controller
         $tablesAIgnorer = ['cache', 'jobs', 'failed_jobs', 'cache_locks', 'contenu_agendas', 'cotisation_accounts',
             'job_batches', 'migrations', 'password_reset_tokens', 'sessions', 'qualites', 'permissions',
         'livre_grande_caisses', 'groupes_utilisateurs', 'departements', 'paroisses', 'caisse_accounts', 'autorisations',
-            'serviteurs', 'zones', 'communiques', 'users', 'autorisation_speciales'];
+            'serviteurs', 'zones', 'communiques', 'users', 'autorisation_speciales', 'custom_notifications'];
 
         Autorisations::create([
             'groupe_id' => $groupe_id,

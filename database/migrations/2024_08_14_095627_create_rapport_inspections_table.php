@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('rapport_inspections', function (Blueprint $table) {
             $table->id();
-            $table->string('rapporteur');
-            $table->string('mois');
-            $table->string('annee');
+            $table->unsignedBigInteger('rapporteur_id')->nullable();
+            $table->foreign('rapporteur_id')->references("id")->on('users')->onDelete('set null');
+            $table->date('mois');
             $table->string('paroisses_concernees', 255);
             $table->text('contexte');
             $table->text('constats');
+            $table->text('difficultes_rencontrees');
             $table->text('recommandations');
             $table->string('statut');
-            $table->string('notification');
             $table->timestamps();
         });
     }

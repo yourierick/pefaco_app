@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('qualites', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('departement_id')->nullable();
-            $table->foreign('departement_id')->references('id')->on('departements');
+            $table->unsignedBigInteger('departement_id');
+            $table->foreign('departement_id')->references('id')->on('departements')->cascadeOnDelete();
             $table->string('designation', 100);
         });
     }

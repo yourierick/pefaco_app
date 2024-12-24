@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cotisations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('departement_id');
-            $table->foreign('departement_id')->references('id')->on('departements');
+            $table->foreign('departement_id')->references('id')->on('departements')->onDelete("cascade");
             $table->string('motif');
             $table->dateTime('date_debut');
             $table->dateTime('date_fin');

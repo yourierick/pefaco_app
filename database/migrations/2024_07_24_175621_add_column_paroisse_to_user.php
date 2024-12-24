@@ -12,11 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Paroisses::class)->constrained()->onDelete("set null");
+            $table->unsignedBigInteger('paroisse_id')->nullable();
+            $table->foreign('paroisse_id')->references('id')->on('paroisses')->onDelete("set null");
             $table->unsignedBigInteger('departement_id')->nullable();
-            $table->foreign('departement_id')->references('id')->on('departements');
+            $table->foreign('departement_id')->references('id')->on('departements')->onDelete("set null");
             $table->unsignedBigInteger('qualite_id')->nullable();
-            $table->foreign('qualite_id')->references('id')->on('qualites');
+            $table->foreign('qualite_id')->references('id')->on('qualites')->onDelete("set null");
         });
     }
 

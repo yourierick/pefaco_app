@@ -47,6 +47,8 @@
     $autorisationspeciales_communiques = \App\Models\AutorisationSpeciale::where('table_name', 'communiques')->where('user_id', $current_user->id)->first();
     $autorisation_horaire = \App\Models\Autorisations::where('groupe_id', $current_user->groupe_utilisateur_id)->where('table_name', 'horaire_hebdos')->first();
     $autorisation_rapport_mensuel = \App\Models\Autorisations::where('groupe_id', $current_user->groupe_utilisateur_id)->where('table_name', 'rapport_mensuels')->first();
+    $autorisation_rapport_inspection = \App\Models\Autorisations::where('groupe_id', $current_user->groupe_utilisateur_id)->where('table_name', 'rapport_inspections')->first();
+    $autorisation_rapport_district = \App\Models\Autorisations::where('groupe_id', $current_user->groupe_utilisateur_id)->where('table_name', 'rapport_de_districts')->first();
 @endphp
 <header class="app-header fixed-top">
     <div class="app-header-inner">
@@ -278,8 +280,20 @@
                                             <a @class(['submenu-link', 'active'=>str_starts_with($routename, 'rapportmensuel.')]) class="submenu-link" href="{{ route('rapportmensuel.list_des_rapports') }}">Rapport mensuel</a>
                                         </li>
                                     @endif
-                                @else
-                                    <a @class(['submenu-link', 'active'=>str_starts_with($routename, 'rapportmensuel.')]) class="submenu-link" href="{{ route('rapportmensuel.list_des_rapports') }}">Rapport mensuel</a>
+                                @endif
+                                @if(!is_null($autorisation_rapport_inspection))
+                                    @if($autorisation_rapport_inspection->lecture === 1)
+                                        <li class="submenu-item">
+                                            <a @class(['submenu-link', 'active'=>str_starts_with($routename, 'rapportinspection.')]) class="submenu-link" href="{{ route('rapportinspection.list_des_rapports') }}">Rapport d'inspection</a>
+                                        </li>
+                                    @endif
+                                @endif
+                                @if(!is_null($autorisation_rapport_district))
+                                    @if($autorisation_rapport_district->lecture === 1)
+                                        <li class="submenu-item">
+                                            <a @class(['submenu-link', 'active'=>str_starts_with($routename, 'rapportdistrict.')]) class="submenu-link" href="{{ route('rapportdistrict.list_des_rapports') }}">Rapport de district</a>
+                                        </li>
+                                    @endif
                                 @endif
                             </ul>
                         </div>

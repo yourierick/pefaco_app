@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('horaire_hebdos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('departement_id');
+            $table->foreign('departement_id')->references('id')->on('departements')->cascadeOndelete();
             $table->dateTime('date_debut');
             $table->dateTime('date_fin');
             $table->timestamps();

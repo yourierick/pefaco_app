@@ -383,7 +383,7 @@
                                                 </div>
                                             </div><!--//app-card-->
                                         </div>
-                                    @elseif ($autorisation->table_name === 'rapport_mensuels')
+                                    @elseif ($autorisation->table_name === 'rapport_mensuels' || $autorisation->table_name === "rapport_de_districts")
                                         <div class="col-12 col-md-8">
                                             <div class="app-card app-card-settings p-4">
                                                 <div class="app-card-body">
@@ -461,6 +461,22 @@
                                                 </div>
                                             </div><!--//app-card-->
                                         </div>
+                                    @elseif($autorisation->table_name === 'rapport_inspections')
+                                    <div class="col-12 col-md-8">
+                                        <div class="app-card app-card-settings p-4">
+                                            <div class="app-card-body">
+                                                <div class="form-check">
+                                                    <input type="checkbox" value="peux valider" name="autorisation_speciale[]" id="rpt_checkbox-1-{{ $autorisation->id }}" @if($autorisation->autorisation_speciale !== null) @if(in_array('peux valider', json_decode($autorisation->autorisation_speciale, true))) checked @endif @endif>
+                                                    <label class="form-check-label" for="rpt_checkbox-1-{{ $autorisation->id }}">
+                                                        peux valider
+                                                    </label>
+                                                </div><!--//form-check-->
+                                            </div><!--//app-card-body-->
+                                            <div class="mt-3">
+                                                <button type="submit" class="btn btn-primary text-light" >Enregistrer</button>
+                                            </div>
+                                        </div><!--//app-card-->
+                                    </div>
                                     @else
                                         <div class="col-12 col-md-8">
                                             <div class="app-card app-card-settings p-4">

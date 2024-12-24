@@ -67,12 +67,12 @@ class RapportCulteController extends Controller
     public function sauvegarder_le_rapport(Request $request)
     {
         $request->validate([
-           'date'=>['required'],
-           'moderateur'=>['required'],
-           'orateur'=>['required'],
-           'theme'=>['required'],
-           'reference'=>['required'],
-           'total_pers_dans_le_culte'=>['required', 'numeric'],
+            'date'=>['required'],
+            'moderateur'=>['required'],
+            'orateur'=>['required'],
+            'theme'=>['required'],
+            'reference'=>['required'],
+            'total_pers_dans_le_culte'=>['required', 'numeric'],
             'total_papas'=>['required', 'numeric'],
             'total_mamans'=>['required', 'numeric'],
             'total_jeunes'=>['required', 'numeric'],
@@ -129,10 +129,8 @@ class RapportCulteController extends Controller
 
         $action = $request->input('action');
         $message = '';
-        $statut = 'draft';
 
-        if ($action == 'soumission_validation') {
-            $statut = 'en attente de validation';
+        if ($action === 'soumission_validation') {
 
             $offrande = $request->offrande;
             $rapport = RapportDeCulte::create([
@@ -153,38 +151,57 @@ class RapportCulteController extends Controller
                 'don_special'=>json_encode($don_special),
                 'autres_faits_a_renseigner'=>json_encode($autres_faits),
                 'total_offrande'=>$offrande,
-                'statut'=>$statut,
+                'statut'=>"en attente de validation",
             ]);
             $message = 'Le rapport a été soumis et est en attente de validation';
         }else {
-            if ($action == 'soumission_completion') {
-                $statut = 'en attente de complétion';
+            if ($action === 'soumission_completion') {
                 $message = 'Le rapport a été soumis à la caisse pour sa complétion';
-            }
-            if ($action == 'draft') {
-                $statut = 'draft';
-                $message = 'Le rapport a été enregistré en tant que draft';
-            }
 
-            $rapport = RapportDeCulte::create([
-                'date'=>$request->get('date'),
-                'rapporteur_id'=>$request->user()->id,
-                'rapporteur'=>$request->user()->nom.' '.$request->user()->postnom.' '.$request->user()->prenom,
-                'departement_id'=>$request->get('departement_id'),
-                'moderateur'=>$request->get('moderateur'),
-                'orateur'=>$request->get('orateur'),
-                'theme'=>$request->get('theme'),
-                'reference'=>json_encode($references),
-                'synthese'=>$request->get('synthese'),
-                'total_pers_dans_le_culte'=>$request->get('total_pers_dans_le_culte'),
-                'total_papas'=>$request->get('total_papas'),
-                'total_mamans'=>$request->get('total_mamans'),
-                'total_jeunes'=>$request->get('total_jeunes'),
-                'total_enfants'=>$request->get('total_enfants'),
-                'don_special'=>json_encode($don_special),
-                'autres_faits_a_renseigner'=>json_encode($autres_faits),
-                'statut'=>$statut,
-            ]);
+                $rapport = RapportDeCulte::create([
+                    'date'=>$request->get('date'),
+                    'rapporteur_id'=>$request->user()->id,
+                    'rapporteur'=>$request->user()->nom.' '.$request->user()->postnom.' '.$request->user()->prenom,
+                    'departement_id'=>$request->get('departement_id'),
+                    'moderateur'=>$request->get('moderateur'),
+                    'orateur'=>$request->get('orateur'),
+                    'theme'=>$request->get('theme'),
+                    'reference'=>json_encode($references),
+                    'synthese'=>$request->get('synthese'),
+                    'total_pers_dans_le_culte'=>$request->get('total_pers_dans_le_culte'),
+                    'total_papas'=>$request->get('total_papas'),
+                    'total_mamans'=>$request->get('total_mamans'),
+                    'total_jeunes'=>$request->get('total_jeunes'),
+                    'total_enfants'=>$request->get('total_enfants'),
+                    'don_special'=>json_encode($don_special),
+                    'autres_faits_a_renseigner'=>json_encode($autres_faits),
+                    'statut'=>"en attente de complétion",
+                ]);
+
+                $message = 'Le rapport a été soumis et est en attente de complétion';
+            }else {
+                $rapport = RapportDeCulte::create([
+                    'date'=>$request->get('date'),
+                    'rapporteur_id'=>$request->user()->id,
+                    'rapporteur'=>$request->user()->nom.' '.$request->user()->postnom.' '.$request->user()->prenom,
+                    'departement_id'=>$request->get('departement_id'),
+                    'moderateur'=>$request->get('moderateur'),
+                    'orateur'=>$request->get('orateur'),
+                    'theme'=>$request->get('theme'),
+                    'reference'=>json_encode($references),
+                    'synthese'=>$request->get('synthese'),
+                    'total_pers_dans_le_culte'=>$request->get('total_pers_dans_le_culte'),
+                    'total_papas'=>$request->get('total_papas'),
+                    'total_mamans'=>$request->get('total_mamans'),
+                    'total_jeunes'=>$request->get('total_jeunes'),
+                    'total_enfants'=>$request->get('total_enfants'),
+                    'don_special'=>json_encode($don_special),
+                    'autres_faits_a_renseigner'=>json_encode($autres_faits),
+                    'statut'=>"draft",
+                ]);
+
+                $message = 'Le rapport a été enregistré comme draft';
+            }
         }
 
         return redirect()->route('rapportculte.list_des_rapports')->with('success', $message);
