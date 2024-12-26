@@ -50,10 +50,10 @@
                     <li>
                         <p class="text-center">MENU</p>
                         <div class="dropdown-divider"></div>
+                        <a href="{{ route('rapportmensuel.voir_mes_drafts') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-eye-fill text-secondary"> voir mes drafts</span></a>
                         @if(!is_null($autorisation))
                             @if($autorisation->autorisation_en_ecriture)
                                 @if(in_array('peux ajouter un rapport', json_decode($autorisation->autorisation_en_ecriture, true)))
-                                    <a href="{{ route('rapportmensuel.voir_mes_drafts') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-eye-fill text-secondary"> voir mes drafts</span></a>
                                     <a href="{{ route('rapportmensuel.ajouter_nouveau_rapport') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-plus-circle-fill text-info"> faire un rapport</span></a>
                                 @endif
                             @endif

@@ -73,6 +73,13 @@
                             </div>
                             <div class="mb-3">
                                 <div class="form-group-kaiadmin form-group-default-kaiadmin">
+                                    <label for="id_conclusions">Conclusions</label>
+                                    <textarea name="conclusions" class="form-control" placeholder="vos conclusions" id="id_conclusions" rows="3">{{ old('conclusions', $rapport->conclusions) }}</textarea>
+                                    <x-input-error class="mt-2 text-danger" :messages="$errors->get('conclusions')"/>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                     <label for="id_difficultes_rencontrees">Difficultés rencontrées</label>
                                     <textarea name="difficultes_rencontrees" placeholder="difficultés rencontrées" class="form-control" id="id_difficultes_rencontrees" rows="3">{{ old('difficultes_rencontrees', $rapport->difficultes_rencontrees) }}</textarea>
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('difficultes_rencontrees')"/>

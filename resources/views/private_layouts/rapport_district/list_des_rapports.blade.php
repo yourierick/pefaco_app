@@ -1,6 +1,6 @@
 @extends('base_dashboard')
 @section('page_title', 'Pefaco Universelle')
-@section('titre', '#Rapport mensuel/liste des rapports')
+@section('titre', '#Rapport de district/liste des rapports')
 @section("style")
     <style>
         .perso:hover{
@@ -22,20 +22,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <p class="mb-3">Voulez-vous vraiment supprimer ce rapport ?</p>
                     <div class="w-100 fw-normal">
-                        <p>Voulez-vous vraiment supprimer ce rapport ?</p>
+                        <form method="post" action="{{ route('rapportdistrict.supprimer_rapport') }}">
+                            @csrf
+                            @method('delete')
+                            <input type="hidden" value="" name="rapport_id" id="rapport_id">
+                            <button type="submit" class="btn btn-danger text-light" style="font-weight: normal" title="supprimer ce rapport">
+                                Oui je le veux
+                            </button>
+                            <button class="btn btn-primary text-light" style="font-weight: normal" type="button" data-bs-dismiss="modal">Fermer</button>
+                        </form>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <form method="post" action="{{ route('rapportmensuel.supprimer_rapport') }}">
-                        @csrf
-                        @method('delete')
-                        <input type="hidden" value="" name="rapport_id" id="rapport_id">
-                        <button type="submit" class="btn btn-danger text-light" style="font-weight: normal" title="supprimer ce rapport">
-                            Oui je le veux
-                        </button>
-                        <button class="btn btn-primary text-light" style="font-weight: normal" type="button" data-bs-dismiss="modal">Fermer</button>
-                    </form>
                 </div>
             </div>
         </div>
@@ -50,21 +48,24 @@
                     <li>
                         <p class="text-center">MENU</p>
                         <div class="dropdown-divider"></div>
+                        <a style="font-weight: normal" href="{{ route('rapportdistrict.voir_mes_drafts') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-eye-fill text-secondary"></span> voir mes drafts</a>
                         @if(!is_null($autorisation))
                             @if($autorisation->autorisation_en_ecriture)
                                 @if(in_array('peux ajouter un rapport', json_decode($autorisation->autorisation_en_ecriture, true)))
-                                    <a href="{{ route('rapportmensuel.voir_mes_drafts') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-eye-fill text-secondary"> voir mes drafts</span></a>
-                                    <a href="{{ route('rapportmensuel.ajouter_nouveau_rapport') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-plus-circle-fill text-info"> faire un rapport</span></a>
+                                    <a style="font-weight: normal" href="{{ route('rapportdistrict.ajouter_nouveau_rapport') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-plus-circle-fill text-info"></span> faire un rapport</a>
                                 @endif
                             @endif
                         @endif
                         @if(!is_null($autorisation_speciale))
                             @if($autorisation_speciale->autorisation_speciale)
-                                @if(in_array('peux valider', json_decode($autorisation_speciale->autorisation_speciale, true)))
-                                    <a href="{{ route('rapportmensuel.les_attentes_en_validation') }}" class="dropdown-item btn btn-outline-secondary perso"><span  class="bi-file-word-fill"> rapports en attente de validation</span></a>
+                                @if(in_array('peux approuver un rapport', json_decode($autorisation_speciale->autorisation_speciale, true)))
+                                    <a style="font-weight: normal" href="{{ route('rapportdistrict.les_attentes_en_approbation') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-file-word-fill text-info"></span> rapports en attente d'approbation</a>
                                 @endif
-                                @if(in_array('peux completer', json_decode($autorisation_speciale->autorisation_speciale, true)))
-                                    <a href="{{ route('rapportmensuel.les_attentes_en_completion') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-file-word-fill text-primary"> rapports en attente de complétion</span></a>
+                                @if(in_array('peux valider un rapport', json_decode($autorisation_speciale->autorisation_speciale, true)))
+                                    <a style="font-weight: normal" href="{{ route('rapportdistrict.les_attentes_en_validation') }}" class="dropdown-item btn btn-outline-secondary perso"><span  class="bi-file-word-fill text-secondary"></span> rapports en attente de validation</a>
+                                @endif
+                                @if(in_array('peux confirmer un rapport', json_decode($autorisation_speciale->autorisation_speciale, true)))
+                                    <a style="font-weight: normal" href="{{ route('rapportdistrict.les_attentes_en_confirmation') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-file-word-fill text-primary"></span> rapports en attente de confirmation</a>
                                 @endif
                             @endif
                         @endif
@@ -90,9 +91,10 @@
                                                 <thead style="text-transform: uppercase; background-color: #0a5a97; color: whitesmoke">
                                                     <tr>
                                                         <th class="cell" style="font-weight: normal; color: whitesmoke">N°</th>
-                                                        <th class="cell" style="font-weight: normal; color: whitesmoke">Département</th>
-                                                        <th class="cell" style="font-weight: normal; color: whitesmoke">Mois de rapportage</th>
                                                         <th class="cell" style="font-weight: normal; color: whitesmoke">Rapporteur</th>
+                                                        <th class="cell" style="font-weight: normal; color: whitesmoke">Mois de rapportage</th>
+                                                        <th class="cell" style="font-weight: normal; color: whitesmoke">Zone</th>
+                                                        <th class="cell" style="font-weight: normal; color: whitesmoke">Paroisses Concernées</th>
                                                         <th class="cell" style="font-weight: normal; color: whitesmoke">Statut</th>
                                                         <th class="cell"></th>
                                                     </tr>
@@ -100,9 +102,10 @@
                                                 <tfoot>
                                                     <tr>
                                                         <th class="cell">N°</th>
-                                                        <th class="cell">Département</th>
-                                                        <th class="cell">Mois de rapportage</th>
                                                         <th class="cell">Rapporteur</th>
+                                                        <th class="cell">Mois de rapportage</th>
+                                                        <th class="cell">Zone</th>
+                                                        <th class="cell">Paroisses Concernées</th>
                                                         <th class="cell">Statut</th>
                                                     </tr>
                                                 </tfoot>
@@ -110,16 +113,17 @@
                                                 @foreach($rapports as $rapport)
                                                     <tr>
                                                         <td class="cell" style="font-size: 10pt">{{ $loop->iteration }}</td>
-                                                        <td class="cell" style="font-size: 10pt">{{ $rapport->departement->designation }}</td>
-                                                        <td class="cell" style="font-size: 10pt">{{ $rapport->mois_de_rapportage->translatedFormat('F Y') }}</td>
-                                                        <td class="cell" style="font-size: 10pt">{{ $rapport->user->nom }} {{ $rapport->user->postnom }} {{ $rapport->user->prenom }}</td>
+                                                        <td class="cell" style="font-size: 10pt">{{ $rapport->rapporteur->nom }} {{ $rapport->rapporteur->postnom }} {{ $rapport->rapporteur->prenom }}</td>
+                                                        <td class="cell" style="font-size: 10pt">{{ $rapport->mois->translatedFormat('F Y') }}</td>
+                                                        <td class="cell" style="font-size: 10pt">{{ $rapport->zone }}</td>
+                                                        <td class="cell" style="font-size: 10pt">{{ $rapport->paroisses_concernees }}</td>
                                                         <td class="cell" style="font-size: 10pt">{{ $rapport->statut }}</td>
                                                         <td class="cell">
-                                                            <a class="btn-sm app-btn-secondary" href="{{ route('rapportmensuel.afficher_rapport_mensuel', $rapport->id) }}"><span class="bi-pencil-square text-primary"></span></a>
+                                                            <a class="btn-sm app-btn-secondary" href="{{ route('rapportdistrict.afficher_rapport', $rapport->id) }}"><span class="bi-pencil-square text-primary"></span></a>
                                                             @if($autorisation)
                                                                 @if($autorisation->autorisation_en_ecriture)
                                                                     @if(in_array('peux supprimer un rapport', json_decode($autorisation->autorisation_en_ecriture, true)) || $rapport->statut === 'draft')
-                                                                        <button class="btn-sm app-btn-secondary" data-bs-toggle="modal" data-bs-target='#modal' onchange="loadidrapport(this)" value="{{ $rapport->id }}"><span class="bi-trash-fill text-danger"></span></button>
+                                                                        <button class="btn-sm app-btn-secondary" data-bs-toggle="modal" data-bs-target='#modal' onclick="loadidrapport(this)" value="{{ $rapport->id }}"><span class="bi-trash-fill text-danger"></span></button>
                                                                     @endif
                                                                 @endif
                                                             @endif

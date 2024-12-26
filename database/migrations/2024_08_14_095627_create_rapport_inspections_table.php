@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('paroisses_concernees', 255);
             $table->text('contexte');
             $table->text('constats');
+            $table->text('conclusions')->nullable();
             $table->text('difficultes_rencontrees');
             $table->text('recommandations');
             $table->string('statut');

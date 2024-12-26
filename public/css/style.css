@@ -30,6 +30,11 @@ input, textarea{
     font-size: 10pt!important;
 }
 
+div {
+    font-family: 'Poppins', sans-serif;
+    font-size: 9pt!important;
+}
+
 label{
     font-family: 'Poppins', sans-serif;
     font-size: 10pt!important;
@@ -37,7 +42,7 @@ label{
 
 select {
     font-family: 'Poppins', sans-serif;
-    font-size: 11pt!important;
+    font-size: 10pt!important;
     padding: 6px!important;
 }
 

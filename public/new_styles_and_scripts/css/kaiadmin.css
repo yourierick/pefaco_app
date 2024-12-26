@@ -6,8 +6,9 @@
 .form-group-kaiadmin label,
 .form-check-kaiadmin label {
     margin-bottom: 0.5rem;
-    color: #495057;
+    color: #2f3031!important;
     font-size: 1rem;
+    font-family: "Poppins", sans-serif!important;
     white-space: nowrap; }
 
 .form-group-default-kaiadmin {

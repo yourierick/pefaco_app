@@ -52,6 +52,7 @@ class RapportInspectionController extends Controller
             'contexte'=>['required'],
             'paroisses_concernees'=>['required'],
             'constats'=>['required'],
+            'conclusions'=>['required'],
             'difficultes_rencontrees'=>['required'],
             'recommandations'=>['required'],
         ], [
@@ -59,6 +60,7 @@ class RapportInspectionController extends Controller
             'contexte.required'=>'ce champs est obligatoire',
             'paroisses_concernees.required'=>'ce champs est obligatoire',
             'constats.required'=>'ce champs est obligatoire',
+            'conclusions.required'=>'ce champs est obligatoire',
             'difficultes_rencontrees.required'=>"Aucune référence n'a été renseigné",
             'recommandations.required'=>'ce champs est obligatoire',
         ]);
@@ -81,6 +83,7 @@ class RapportInspectionController extends Controller
             'contexte'=>$request->get('contexte'),
             'paroisses_concernees'=>$request->get('paroisses_concernees'),
             'constats'=>$request->get('constats'),
+            'conclusions'=>$request->get('conclusions'),
             'difficultes_rencontrees'=>$request->get('difficultes_rencontrees'),
             'recommandations'=>$request->get('recommandations'),
             'statut'=>$statut,
@@ -138,6 +141,7 @@ class RapportInspectionController extends Controller
             'contexte'=>['required'],
             'paroisses_concernees'=>['required'],
             'constats'=>['required'],
+            'conclusions'=>['required'],
             'difficultes_rencontrees'=>['required'],
             'recommandations'=>['required'],
         ], [
@@ -145,6 +149,7 @@ class RapportInspectionController extends Controller
             'contexte.required'=>'ce champs est obligatoire',
             'paroisses_concernees.required'=>'ce champs est obligatoire',
             'constats.required'=>'ce champs est obligatoire',
+            'conclusions.required'=>'ce champs est obligatoire',
             'difficultes_rencontrees.required'=>"Aucune référence n'a été renseigné",
             'recommandations.required'=>'ce champs est obligatoire',
         ]);
@@ -155,6 +160,7 @@ class RapportInspectionController extends Controller
         $rapport->contexte = $request->get('contexte');
         $rapport->paroisses_concernees = $request->get('paroisses_concernees');
         $rapport->constats = $request->get('constats');
+        $rapport->conclusions = $request->get('conclusions');
         $rapport->difficultes_rencontrees = $request->get('difficultes_rencontrees');
         $rapport->recommandations = $request->get('recommandations');
         $rapport->update();

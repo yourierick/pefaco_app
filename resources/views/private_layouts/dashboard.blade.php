@@ -2,21 +2,16 @@
 @section('page_title', 'Dashboard')
 @section('titre', '#EGLISE PEFACO')
 @section('content')
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
     <div class="app-card alert alert-dismissible shadow-sm mb-4 border-left-decoration" style="background: linear-gradient(70deg, #dadaf5, #f6f6f6);" role="alert">
         <div class="inner">
             <div class="app-card-body p-3 p-lg-4">
                 <div>
                     <p style="float: right"> <span style="color: #98981b">#{{ $current_user->nom }}-{{ $current_user->postnom }}-{{ $current_user->prenom }}</span></p>
                 </div>
-                <h4 class="mb-3" style="color: #15a262; font-family: 'Times New Roman'">EGLISE PEFACO UNIVERSELLE BUKAVU</h4>
+                <h4 class="mb-3" style="color: #15a262;">EGLISE PEFACO UNIVERSELLE BUKAVU</h4>
                 <div class="row gx-5 gy-3">
                     <div class="col-xs-12 col-sm-9">
-                        <div>L'église PEFACO Universelle Bukavu vous souhaite la bienvenue sur son portail de gestion et vous souhaite d'avoir une meilleur expérience utilisateur, si vous rencontrez un problème, veuillez consultez l'onglet "Aide" pour votre renseignement</div>
+                        <div><p>L' église PEFACO Universelle Bukavu vous souhaite la bienvenue sur son portail de gestion et vous souhaite d'avoir une meilleur expérience utilisateur, si vous rencontrez un problème, veuillez consultez l'onglet "Aide" pour votre renseignement</p></div>
                     </div><!--//col-->
                 </div><!--//row-->
 {{--                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>--}}

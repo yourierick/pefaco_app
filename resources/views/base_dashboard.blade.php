@@ -199,15 +199,17 @@
                                      class="rounded-circle">
                             </a>
 
-                            <ul class="dropdown-menu" aria-labelledby="user-dropdown-toggle">
-                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Mon compte</a></li>
+                            <ul class="dropdown-menu text-center" aria-labelledby="user-dropdown-toggle">
+                                <p class="text-center">MENU</p>
+                                <div class="dropdown-divider"></div>
+                                <li><a class="dropdown-item text-primary bi-person" href="{{ route('profile.edit') }}">Mon compte</a></li>
                                 <li>
-                                    <hr class="dropdown-divider">
+                                    <div class="dropdown-divider"></div>
                                 </li>
                                 <li>
                                     <form action="{{ route('logout') }}" method="post">
                                         @csrf
-                                        <button class="dropdown-item">
+                                        <button class="dropdown-item text-danger bi-arrow-down-right-square-fill">
                                             Se déconnecter
                                         </button>
                                     </form>

@@ -3,379 +3,320 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\RapportDeDistrict;
+use App\Models\Autorisations;
+use App\Models\AutorisationSpeciale;
+use App\Models\Caisse;
+use App\Models\Transactions;
+use App\Models\User;
+use Illuminate\View\View;
+use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 
 class RapportDistrictController extends Controller
 {
     public function list_des_rapports(Request $request):View
     {
-        $autorisation = Autorisations::where('table_name', 'rapport_mensuels')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
-        $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-        $rapports = [];
+        $autorisation = Autorisations::where('table_name', 'rapport_de_districts')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
+        $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_districts')->where('user_id', $request->user()->id)->first();
         $current_user = User::with("groupe_utilisateur")->find($request->user()->id);
-        if ($autorisation){
-            if ($autorisation->autorisation_en_lecture){
-                if (in_array('peux voir tous les rapports', json_decode($autorisation->autorisation_en_lecture, true))) {
-                    $rapports = RapportMensuel::with("user", "departement")->where('statut', 'validé')->get();
-                }else {
-                    $rapports = RapportMensuel::with("user", "departement")->where('statut', 'validé')->where("departement_id", $current_user->departement_id)->get();
-                }
-            }
-        }
-        return view('private_layouts.rapport_mensuel.list_des_rapports', compact("autorisation",
+        $rapports = RapportDeDistrict::with("rapporteur")->where('statut', 'validé')->get();
+        return view('private_layouts.rapport_district.list_des_rapports', compact("autorisation",
             "current_user", "autorisation_speciale", "rapports"));
     }
 
     public function voir_mes_drafts(Request $request):View
     {
-        $autorisation = Autorisations::where('table_name', 'rapport_mensuels')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
-        $rapports = RapportMensuel::with("user", "departement")->where('statut', 'draft')->where('rapporteur_principal_id', $request->user()->id)->get();
+        $autorisation = Autorisations::where('table_name', 'rapport_de_districts')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
+        $rapports = RapportDeDistrict::with("rapporteur")->where('statut', 'draft')->where('rapporteur_id', $request->user()->id)->get();
         $current_user = $request->user();
-        $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_mensuel.list_des_rapports', compact("autorisation", "rapports", "current_user", "autorisation_speciale"));
-    }
-
-    public function les_attentes_en_completion(Request $request):View
-    {
-        $autorisation = Autorisations::where('table_name', 'rapport_mensuels')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
-        $rapports = RapportMensuel::with("user", "departement")->where('statut', 'en attente de completion')->where('departement_id', $request->user()->departement_id)->get();
-        $current_user = $request->user();
-        $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_mensuel.list_des_rapports', compact("rapports", "autorisation", "current_user", "autorisation_speciale"));
+        $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_districts')->where('user_id', $request->user()->id)->first();
+        return view('private_layouts.rapport_district.list_des_rapports', compact("autorisation", "rapports", "current_user", "autorisation_speciale"));
     }
 
     public function les_attentes_en_validation(Request $request):View
     {
-        $autorisation = Autorisations::where('table_name', 'rapport_mensuels')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
-        $rapports = RapportMensuel::where('statut', 'en attente de validation')->where('departement_id', $request->user()->departement_id)->get();
+        $autorisation = Autorisations::where('table_name', 'rapport_de_districts')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
+        $rapports = RapportDeDistrict::with('rapporteur')->where('statut', 'en attente de validation')->get();
         $current_user = $request->user();
-        $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_mensuel.list_des_rapports', compact("autorisation_speciale", "autorisation", "current_user", "rapports"));
+        $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_districts')->where('user_id', $request->user()->id)->first();
+        return view('private_layouts.rapport_district.list_des_rapports', compact("autorisation_speciale", "autorisation", "current_user", "rapports"));
+    }
+
+    public function les_attentes_en_approbation(Request $request):View
+    {
+        $autorisation = Autorisations::where('table_name', 'rapport_de_districts')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
+        $rapports = RapportDeDistrict::with('rapporteur')->where('statut', "en attente d'approbation")->get();
+        $current_user = $request->user();
+        $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_districts')->where('user_id', $request->user()->id)->first();
+        return view('private_layouts.rapport_district.list_des_rapports', compact("autorisation_speciale", "autorisation", "current_user", "rapports"));
+    }
+
+    public function les_attentes_en_confirmation(Request $request):View
+    {
+        $autorisation = Autorisations::where('table_name', 'rapport_de_districts')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
+        $rapports = RapportDeDistrict::with('rapporteur')->where('statut', 'en attente de confirmation')->get();
+        $current_user = $request->user();
+        $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_districts')->where('user_id', $request->user()->id)->first();
+        return view('private_layouts.rapport_district.list_des_rapports', compact("autorisation_speciale", "autorisation", "current_user", "rapports"));
     }
 
     public function ajouter_nouveau_rapport(Request $request):View
     {
         $current_user = $request->user();
-        $autorisation = Autorisations::where('table_name', 'rapport_mensuels')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
-        $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_mensuel.ajouter_un_rapport', compact("current_user", "autorisation_speciale", 'autorisation'));
-    }
-
-    public function chargement_rapport_semaine_et_caisse($mois, $departement_id) {
-        [$annee, $mois] = explode('-', $mois);
-        $tous_les_cultes = RapportDeCulte::where('departement_id', $departement_id)->where("statut", "validé")->whereYear('date',
-            $annee)->whereMonth('date', $mois)->get();
-        $nombre_total_des_cultes_tenus = $tous_les_cultes->count();
-        $moyenne_mensuelle_des_pers_dans_le_culte = $tous_les_cultes->map(function ($cultes) {
-            return $cultes->total_pers_dans_le_culte;
-        })->average() ?? 0;
-        $moyenne_mensuelle_des_hommes = $tous_les_cultes->map(function ($cultes) {
-            return $cultes->total_papas;
-        })->average() ?? 0;
-        $moyenne_mensuelle_des_mamans = $tous_les_cultes->map(function ($cultes) {
-            return $cultes->total_mamans;
-        })->average() ?? 0;
-        $moyenne_mensuelle_des_jeunes = $tous_les_cultes->map(function ($cultes) {
-            return $cultes->total_jeunes;
-        })->average() ?? 0;
-        $moyenne_mensuelle_des_enfants = $tous_les_cultes->map(function ($cultes) {
-            return $cultes->total_enfants;
-        })->average() ?? 0;
-
-        $caisse = Caisse::where("departement_id", $departement_id)->first();
-        $solde_caisse = $caisse ? $caisse->montant_total_net:0;
-
-
-        return response()->json(compact("nombre_total_des_cultes_tenus",
-            "moyenne_mensuelle_des_pers_dans_le_culte", "moyenne_mensuelle_des_hommes",
-        "moyenne_mensuelle_des_mamans", "moyenne_mensuelle_des_jeunes", "moyenne_mensuelle_des_enfants",
-        "solde_caisse"));
+        $autorisation = Autorisations::where('table_name', 'rapport_de_districts')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
+        $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_districts')->where('user_id', $request->user()->id)->first();
+        return view('private_layouts.rapport_district.ajouter_un_rapport', compact("current_user", "autorisation_speciale", 'autorisation'));
     }
 
     public function sauvegarder_le_rapport(Request $request)
     {
         $validated = $request->validate([
-            'departement_id'=>['required', 'numeric'],
-            'mois_de_rapportage'=>['required', 'date_format:Y-m'],
-            'objectifs'=>['required'],
-            'vision'=>['required'],
-            'mission'=>['required'],
-            'situation_actuelle'=>['required'],
+            'mois'=>['required', 'date_format:Y-m'],
+            'zone'=>['required'],
+            'paroisses_concernees'=>['required'],
+            'contexte'=>['required'],
+            'nombre_des_cultes_tenus'=>['required', 'numeric'],
+            'moyenne_de_frequentation'=>['required', 'numeric'],
+            'nombre_des_personnes_baptises'=>['required', 'numeric'],
+            'autres_evenements_a_rapporter'=>['required'],
+            'dime_des_dimes'=>['required', 'numeric'],
+            'total_offrande'=>['required', 'numeric'],
+            'autres_contributions_a_renseigner'=>['required'],
+            'observation'=>['required'],
             'difficultes_defis'=>['required'],
             'recommandations'=>['required'],
+            'previsions_mois_prochain'=>['required'],
+            'besoins_a_signaler'=>['required'],
         ], [
-            'departement_id.required'=>'ce champs est obligatoire',
-            'mois_de_rapportage.required'=>'ce champs est obligatoire',
-            'objectifs.required'=>'ce champs est obligatoire',
-            'vision.required'=>'ce champs est obligatoire',
-            'mission.required'=>"Aucune référence n'a été renseigné",
-            'situation_actuelle.required'=>'ce champs est obligatoire',
+            'mois.required'=>'ce champs est obligatoire',
+            'zone.required'=>'ce champs est obligatoire',
+            'paroisses_concernees.required'=>'ce champs est obligatoire',
+            'contexte.required'=>"Aucune référence n'a été renseigné",
+            'nombre_des_cultes_tenus.required'=>'ce champs est obligatoire',
+            'moyenne_de_frequentation.required'=>'ce champs est obligatoire',
+            'nombre_des_personnes_baptises.required'=>'ce champs est obligatoire',
+            'autres_evenements_a_rapporter.required'=>'ce champs est obligatoire',
+            'dime_des_dimes.required'=>'ce champs est obligatoire',
+            'total_offrande.required'=>'ce champs est obligatoire',
+            'autres_contributions_a_renseigner.required'=>'ce champs est obligatoire',
+            'observation.required'=>'ce champs est obligatoire',
             'difficultes_defis.required'=>'ce champs est obligatoire',
             'recommandations.required'=>'ce champs est obligatoire',
+            'previsions_mois_prochain.required'=>'ce champs est obligatoire',
+            'besoins_a_signaler.required'=>'ce champs est obligatoire',
+            'nombre_des_cultes_tenus.numeric'=>'seules les valeurs numériques sont acceptées',
+            'moyenne_de_frequentation.numeric'=>'seules les valeurs numériques sont acceptées',
+            'nombre_des_personnes_baptises.numeric'=>'seules les valeurs numériques sont acceptées',
+            'dime_des_dimes.numeric'=>'ce champs est obligatoire',
+            'total_offrande.numeric'=>'seules les valeurs numériques sont acceptées',
         ]);
 
-        $date = $validated['mois_de_rapportage']."-01";
-
-        $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-
-        if(!is_null($autorisation_speciale)) {
-            if($autorisation_speciale->autorisation_speciale) {
-                if(in_array('peux voir la partie financiere du rapport', json_decode($autorisation_speciale->autorisation_speciale, true))) {
-                    $request->validate([
-                        "situation_caisse"=>['required', 'numeric'],
-                    ], [
-                        'situation_caisse.required'=>"ce champs est obligatoire",
-                        'situation_caisse.numeric'=>"seules les valeurs numériques sont acceptées",
-                    ]);
-                }
-            }
-        }
-
-        $data = request()->all();
-        $previsions_mois_de_rapportage = [];
-        $realisations = [];
-        $previsions_mois_prochain = [];
-
-        if (array_key_exists('previsions_pour_ce_mois', $data)) {
-            $previsions_mois_de_rapportage = array_filter($data['previsions_pour_ce_mois']);
-        }
-
-        if (array_key_exists('realisations_de_ce_mois', $data)) {
-            $realisations = array_filter($data['realisations_de_ce_mois']);
-        }
-
-        if (array_key_exists('previsions_mois_prochain', $data)) {
-            $previsions_mois_prochain = array_filter($data['previsions_mois_prochain']);
-        }
+        $date = $validated['mois']."-01";
 
         $action = $request->input('action');
         $message = '';
         $statut = 'draft';
 
-        if ($action == 'soumission_validation') {
-            $statut = 'en attente de validation';
+        if ($action == 'soumettre_pour_approbation') {
+            $statut = "en attente d'approbation";
 
-            $rapport = RapportMensuel::create([
-                'departement_id'=>$request->get('departement_id'),
-                'mois_de_rapportage'=>$date,
-                'rapporteur_principal_id'=>$request->user()->id,
-                'objectifs'=>$request->get('objectifs'),
-                'vision'=>$request->get('vision'),
-                'mission'=>$request->get('mission'),
-                'previsions_pour_ce_mois'=>json_encode($previsions_mois_de_rapportage),
-                'realisations_de_ce_mois'=>json_encode($realisations),
-                'autres_a_rapporter'=>$request->get('autres_a_rapporter'),
-                'situation_actuelle'=>$request->get('situation_actuelle'),
-                'situation_de_la_logistique'=>$request->get('situation_de_la_logistique'),
+            $rapport = RapportDeDistrict::create([
+                'rapporteur_id'=>$request->user()->id,
+                'mois'=>$date,
+                'zone'=>$request->get('zone'),
+                'paroisses_concernees'=>$request->get('paroisses_concernees'),
+                'contexte'=>$request->get('contexte'),
                 'nombre_des_cultes_tenus'=>$request->get('nombre_des_cultes_tenus', 0),
-                'effectif_total'=>$request->get('effectif_total', 0),
-                'effectif_hommes'=>$request->get('effectif_hommes', 0),
-                'effectif_femmes'=>$request->get('effectif_femmes', 0),
-                'effectif_jeunes'=>$request->get('effectif_jeunes', 0),
-                'effectif_enfants'=>$request->get('effectif_enfants', 0),
-                'moyenne_mensuel_total'=>$request->get('moyenne_mensuel_total', 0),
-                'moyenne_mensuel_hommes'=>$request->get('moyenne_mensuel_hommes', 0),
-                'moyenne_mensuel_femmes'=>$request->get('moyenne_mensuel_femmes', 0),
-                'moyenne_mensuel_jeunes'=>$request->get('moyenne_mensuel_jeunes', 0),
-                'moyenne_mensuel_enfants'=>$request->get('moyenne_mensuel_enfants', 0),
+                'moyenne_de_frequentation'=>$request->get('moyenne_de_frequentation', 0),
                 'nombre_des_personnes_baptises'=>$request->get('nombre_des_personnes_baptises', 0),
-                'situation_caisse'=>$request->get('situation_caisse', 0),
+                'autres_evenements_a_rapporter'=>$request->get('autres_evenements_a_rapporter'),
+                'dime_des_dimes'=>$request->get('dime_des_dimes', 0),
+                'total_offrande'=>$request->get('total_offrande', 0),
                 'autres_contributions_a_renseigner'=>$request->get('autres_contributions_a_renseigner'),
+                'observation'=>$request->get('observation'),
                 'difficultes_defis'=>$request->get('difficultes_defis'),
                 'recommandations'=>$request->get('recommandations'),
-                'previsions_mois_prochain'=>json_encode($previsions_mois_prochain),
+                'previsions_mois_prochain'=>$request->get('previsions_mois_prochain'),
+                'besoins_a_signaler'=>$request->get('besoins_a_signaler'),
                 'statut'=>$statut,
             ]);
-            $message = 'Le rapport a été soumis et est en attente de validation';
+            $message = "Le rapport a été soumis et est en attente d'approbation";
         }else {
-            if ($action == 'soumission_completion') {
-                $statut = 'en attente de complétion';
-                $message = 'Le rapport a été soumis à la caisse pour sa complétion';
-            }
-            if ($action == 'draft') {
-                $statut = 'draft';
-                $message = 'Le rapport a été enregistré en tant que draft';
-            }
-
-            $rapport = RapportMensuel::create([
-                'departement_id'=>$request->get('departement_id'),
-                'mois_de_rapportage'=>$date,
-                'rapporteur_principal_id'=>$request->user()->id,
-                'objectifs'=>$request->get('objectifs'),
-                'vision'=>$request->get('vision'),
-                'mission'=>$request->get('mission'),
-                'previsions_pour_ce_mois'=>json_encode($previsions_mois_de_rapportage),
-                'realisations_de_ce_mois'=>json_encode($realisations),
-                'autres_a_rapporter'=>$request->get('autres_a_rapporter'),
-                'situation_actuelle'=>$request->get('situation_actuelle'),
-                'situation_de_la_logistique'=>$request->get('situation_de_la_logistique'),
+            $rapport = RapportDeDistrict::create([
+                'rapporteur_id'=>$request->user()->id,
+                'mois'=>$date,
+                'zone'=>$request->get('zone'),
+                'paroisses_concernees'=>$request->get('paroisses_concernees'),
+                'contexte'=>$request->get('contexte'),
                 'nombre_des_cultes_tenus'=>$request->get('nombre_des_cultes_tenus', 0),
-                'effectif_total'=>$request->get('effectif_total', 0),
-                'effectif_hommes'=>$request->get('effectif_hommes', 0),
-                'effectif_femmes'=>$request->get('effectif_femmes', 0),
-                'effectif_jeunes'=>$request->get('effectif_jeunes', 0),
-                'effectif_enfants'=>$request->get('effectif_enfants', 0),
-                'moyenne_mensuel_total'=>$request->get('moyenne_mensuel_total', 0),
-                'moyenne_mensuel_hommes'=>$request->get('moyenne_mensuel_hommes', 0),
-                'moyenne_mensuel_femmes'=>$request->get('moyenne_mensuel_femmes', 0),
-                'moyenne_mensuel_jeunes'=>$request->get('moyenne_mensuel_jeunes', 0),
-                'moyenne_mensuel_enfants'=>$request->get('moyenne_mensuel_enfants', 0),
+                'moyenne_de_frequentation'=>$request->get('moyenne_de_frequentation', 0),
                 'nombre_des_personnes_baptises'=>$request->get('nombre_des_personnes_baptises', 0),
+                'autres_evenements_a_rapporter'=>$request->get('autres_evenements_a_rapporter'),
+                'dime_des_dimes'=>$request->get('dime_des_dimes', 0),
+                'total_offrande'=>$request->get('total_offrande', 0),
+                'autres_contributions_a_renseigner'=>$request->get('autres_contributions_a_renseigner'),
+                'observation'=>$request->get('observation'),
                 'difficultes_defis'=>$request->get('difficultes_defis'),
                 'recommandations'=>$request->get('recommandations'),
-                'previsions_mois_prochain'=>json_encode($previsions_mois_prochain),
+                'previsions_mois_prochain'=>$request->get('previsions_mois_prochain'),
+                'besoins_a_signaler'=>$request->get('besoins_a_signaler'),
                 'statut'=>$statut,
             ]);
+            $message = "Le rapport a été enregistré en tant que draft";
         }
-        return redirect()->route('rapportmensuel.list_des_rapports')->with('success', $message);
+        return redirect()->route('rapportdistrict.list_des_rapports')->with('success', $message);
     }
 
-    public function afficher_rapport_mensuel($rapport_id, Request $request):View
+    public function afficher_rapport($rapport_id, Request $request):View
     {
-        $autorisation = Autorisations::where('table_name', 'rapport_mensuels')->where('groupe_id',
+        $autorisation = Autorisations::where('table_name', 'rapport_de_districts')->where('groupe_id',
             $request->user()->groupe_utilisateur_id)->first();
         $autorisation_speciale = AutorisationSpeciale::where('table_name',
-            'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-        $rapport = RapportMensuel::with("departement", "user")->find($rapport_id);
+            'rapport_de_districts')->where('user_id', $request->user()->id)->first();
+        $rapport = RapportDeDistrict::with("rapporteur")->find($rapport_id);
 
-        $caisse = Caisse::where("departement_id", $rapport->departement->id)->first();
-        $mois = $rapport->mois_de_rapportage->month;
-        $annee = $rapport->mois_de_rapportage->year;
-
-        $releve_des_transactions_mensuelles = Transactions::where("caisse_id", $caisse->id)->whereYear('date_de_la_transaction', $annee)->whereMonth('date_de_la_transaction', $mois)->get();
         $current_user = $request->user();
-        return view('private_layouts.rapport_mensuel.afficher_un_rapport', compact("autorisation", "autorisation_speciale",
-        "rapport", "caisse", "releve_des_transactions_mensuelles", "current_user"));
+        return view('private_layouts.rapport_district.afficher_un_rapport', compact("autorisation", "autorisation_speciale",
+        "rapport", "current_user"));
     }
 
     public function edit_le_rapport($rapport_id, Request $request):View
     {
-        $autorisation = Autorisations::where('table_name', 'rapport_mensuels')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
-        $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-        $rapport = RapportMensuel::find($rapport_id);
+        $autorisation = Autorisations::where('table_name', 'rapport_districts')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
+        $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_districts')->where('user_id', $request->user()->id)->first();
+        $rapport = RapportDeDistrict::find($rapport_id);
         $current_user = $request->user();
-        return view('private_layouts.rapport_mensuel.editer_un_rapport', compact("rapport", "autorisation", "autorisation_speciale", "current_user"));
+        return view('private_layouts.rapport_district.editer_un_rapport', compact("rapport", "autorisation", "autorisation_speciale", "current_user"));
     }
 
 
     public function save_edition_rapport($rapport_id, Request $request)
     {
-        $rapport = RapportMensuel::find($rapport_id);
+        $rapport = RapportDeDistrict::find($rapport_id);
         $validated = $request->validate([
-            'departement_id'=>['required', 'numeric'],
-            'mois_de_rapportage'=>['required', 'date_format:Y-m'],
-            'objectifs'=>['required'],
-            'vision'=>['required'],
-            'mission'=>['required'],
-            'situation_actuelle'=>['required'],
+            'mois'=>['required', 'date_format:Y-m'],
+            'zone'=>['required'],
+            'paroisses_concernees'=>['required'],
+            'contexte'=>['required'],
+            'nombre_des_cultes_tenus'=>['required', 'numeric'],
+            'moyenne_de_frequentation'=>['required', 'numeric'],
+            'nombre_des_personnes_baptises'=>['required', 'numeric'],
+            'autres_evenements_a_rapporter'=>['required'],
+            'dime_des_dimes'=>['required', 'numeric'],
+            'total_offrande'=>['required', 'numeric'],
+            'autres_contributions_a_renseigner'=>['required'],
+            'observation'=>['required'],
             'difficultes_defis'=>['required'],
             'recommandations'=>['required'],
+            'previsions_mois_prochain'=>['required'],
+            'besoins_a_signaler'=>['required'],
         ], [
-            'departement_id.required'=>'ce champs est obligatoire',
-            'mois_de_rapportage.required'=>'ce champs est obligatoire',
-            'objectifs.required'=>'ce champs est obligatoire',
-            'vision.required'=>'ce champs est obligatoire',
-            'mission.required'=>"Aucune référence n'a été renseigné",
-            'situation_actuelle.required'=>'ce champs est obligatoire',
+            'mois.required'=>'ce champs est obligatoire',
+            'zone.required'=>'ce champs est obligatoire',
+            'paroisses_concernees.required'=>'ce champs est obligatoire',
+            'contexte.required'=>"Aucune référence n'a été renseigné",
+            'nombre_des_cultes_tenus.required'=>'ce champs est obligatoire',
+            'moyenne_de_frequentation.required'=>'ce champs est obligatoire',
+            'nombre_des_personnes_baptises.required'=>'ce champs est obligatoire',
+            'autres_evenements_a_rapporter.required'=>'ce champs est obligatoire',
+            'dime_des_dimes.required'=>'ce champs est obligatoire',
+            'total_offrande.required'=>'ce champs est obligatoire',
+            'autres_contributions_a_renseigner.required'=>'ce champs est obligatoire',
+            'observation.required'=>'ce champs est obligatoire',
             'difficultes_defis.required'=>'ce champs est obligatoire',
             'recommandations.required'=>'ce champs est obligatoire',
+            'previsions_mois_prochain.required'=>'ce champs est obligatoire',
+            'besoins_a_signaler.required'=>'ce champs est obligatoire',
+            'nombre_des_cultes_tenus.numeric'=>'seules les valeurs numériques sont acceptées',
+            'moyenne_de_frequentation.numeric'=>'seules les valeurs numériques sont acceptées',
+            'nombre_des_personnes_baptises.numeric'=>'seules les valeurs numériques sont acceptées',
+            'dime_des_dimes.numeric'=>'ce champs est obligatoire',
+            'total_offrande.numeric'=>'seules les valeurs numériques sont acceptées',
         ]);
 
-        $date = $validated['mois_de_rapportage']."-01";
+        $date = $validated['mois']."-01";
 
-        $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-
-        if(!is_null($autorisation_speciale)) {
-            if($autorisation_speciale->autorisation_speciale) {
-                if(in_array('peux voir la partie financiere du rapport', json_decode($autorisation_speciale->autorisation_speciale, true))) {
-                    $request->validate([
-                        "situation_caisse"=>['required', 'numeric'],
-                    ], [
-                        'situation_caisse.required'=>"ce champs est obligatoire",
-                        'situation_caisse.numeric'=>"seules les valeurs numériques sont acceptées",
-                    ]);
-
-                    $rapport->situation_caisse=$request->get('situation_caisse', 0);
-                    $rapport->autres_contributions_a_renseigner=$request->get('autres_contributions_a_renseigner');
-                }
-            }
-        }
-
-        $data = request()->all();
-        $previsions_mois_de_rapportage = [];
-        $realisations = [];
-        $previsions_mois_prochain = [];
-
-        if (array_key_exists('previsions_pour_ce_mois', $data)) {
-            $previsions_mois_de_rapportage = array_filter($data['previsions_pour_ce_mois']);
-        }
-
-        if (array_key_exists('realisations_de_ce_mois', $data)) {
-            $realisations = array_filter($data['realisations_de_ce_mois']);
-        }
-
-        if (array_key_exists('previsions_mois_prochain', $data)) {
-            $previsions_mois_prochain = array_filter($data['previsions_mois_prochain']);
-        }
-
-        $rapport->departement_id=$request->get('departement_id');
-        $rapport->mois_de_rapportage=$date;
-        $rapport->rapporteur_principal_id=$request->user()->id;
-        $rapport->objectifs=$request->get('objectifs');
-        $rapport->vision=$request->get('vision');
-        $rapport->mission=$request->get('mission');
-        $rapport->previsions_pour_ce_mois=json_encode($previsions_mois_de_rapportage);
-        $rapport->realisations_de_ce_mois=json_encode($realisations);
-        $rapport->autres_a_rapporter=$request->get('autres_a_rapporter');
-        $rapport->situation_actuelle=$request->get('situation_actuelle');
-        $rapport->situation_de_la_logistique=$request->get('situation_de_la_logistique');
-        $rapport->nombre_des_cultes_tenus=$request->get('nombre_des_cultes_tenus', 0);
-        $rapport->effectif_total=$request->get('effectif_total', 0);
-        $rapport->effectif_hommes=$request->get('effectif_hommes', 0);
-        $rapport->effectif_femmes=$request->get('effectif_femmes', 0);
-        $rapport->effectif_jeunes=$request->get('effectif_jeunes', 0);
-        $rapport->effectif_enfants=$request->get('effectif_enfants', 0);
-        $rapport->moyenne_mensuel_total=$request->get('moyenne_mensuel_total', 0);
-        $rapport->moyenne_mensuel_hommes=$request->get('moyenne_mensuel_hommes', 0);
-        $rapport->moyenne_mensuel_femmes=$request->get('moyenne_mensuel_femmes', 0);
-        $rapport->moyenne_mensuel_jeunes=$request->get('moyenne_mensuel_jeunes', 0);
-        $rapport->moyenne_mensuel_enfants=$request->get('moyenne_mensuel_enfants', 0);
-        $rapport->nombre_des_personnes_baptises=$request->get('nombre_des_personnes_baptises', 0);
+        $rapport->mois=$date;
+        $rapport->zone=$request->get('zone');
+        $rapport->paroisses_concernees=$request->get('paroisses_concernees');
+        $rapport->contexte=$request->get('contexte');
+        $rapport->nombre_des_cultes_tenus=$request->get('nombre_des_cultes_tenus');
+        $rapport->moyenne_de_frequentation=$request->get('moyenne_de_frequentation');
+        $rapport->nombre_des_personnes_baptises=$request->get('nombre_des_personnes_baptises');
+        $rapport->autres_evenements_a_rapporter=$request->get('autres_evenements_a_rapporter');
+        $rapport->dime_des_dimes=$request->get('dime_des_dimes');
+        $rapport->total_offrande=$request->get('total_offrande');
+        $rapport->autres_contributions_a_renseigner=$request->get('autres_contributions_a_renseigner');
+        $rapport->observation=$request->get('observation');
         $rapport->difficultes_defis=$request->get('difficultes_defis');
         $rapport->recommandations=$request->get('recommandations');
-        $rapport->previsions_mois_prochain=json_encode($previsions_mois_prochain);
-
+        $rapport->previsions_mois_prochain=$request->get('previsions_mois_prochain');
+        $rapport->besoins_a_signaler=$request->get('besoins_a_signaler');
         $rapport->update();
 
-        return redirect()->route('rapportmensuel.afficher_rapport_mensuel', $rapport_id)->with('success', 'les mises à jours ont été appliqués');
+        return redirect()->route('rapportdistrict.afficher_rapport', $rapport_id)->with('success', 'les mises à jours ont été appliqués');
     }
 
     public function supprimer_rapport(Request $request)
     {
         $rapport_id = $request->rapport_id;
-        $rapport = RapportMensuel::find($rapport_id);
+        $rapport = RapportDeDistrict::find($rapport_id);
         $rapport->delete();
         return redirect()->back()->with('success', 'le rapport a été supprimé');
     }
 
     public function traitement_du_rapport($rapport_id, Request $request)
     {
-        $rapport = RapportMensuel::find($rapport_id);
+        $rapport = RapportDeDistrict::find($rapport_id);
         $action = $request->input('action');
         $message = '';
         $statut = 'draft';
-        if ($action == 'soumission') {
-            $statut = 'en attente de complétion';
-            $message = 'Le rapport a été soumis à la caisse pour sa complétion';
+        if ($action === 'soumettre_pour_approbation') {
+            $statut = "en attente d'approbation";
+            $message = "Le rapport a été soumis et est en attente d'approbation";
         }
 
-        if ($action == 'validation') {
-            $statut = 'validé';
-            $message = 'Le rapport a été validé';
-        }
-
-        if ($action == 'soumettre_pour_validation') {
+        if ($action === 'soumettre_pour_validation') {
             $statut = 'en attente de validation';
             $message = 'Le rapport a été soumis et est en attente de validation';
+        }
+
+        if ($action === 'soumettre_pour_confirmation') {
+            $caisse_eglise = Caisse::first('departement_id', 1)->first();
+            if (is_null($caisse_eglise)) {
+                $message = "La requête n'a pas été appliqué car il n'y a pas de caisse pour revecoir cette action";
+            }else {
+                $montant_net_total_eglise = $caisse_eglise->montant_net_actuel + $rapport->dime_des_dimes + $rapport->total_offrande;
+                $caisse_eglise->montant_net_actuel = $montant_net_total_eglise;
+                $caisse_eglise->update();
+
+                $transaction = Transactions::create([
+                    'caisse_id' => $caisse_eglise->id,
+                    'date_de_la_transaction'=> Carbon::now(),
+                    'type_de_transaction'=> "crédit",
+                    'montant'=> $rapport->dime_des_dimes,
+                    'source'=> "rapport de district/dime des dimes",
+                    'pourcentage_eglise'=> 0,
+                    'montant_net_restant'=>$montant_net_total_eglise,
+                ]);
+                $transaction = Transactions::create([
+                    'caisse_id' => $caisse_eglise->id,
+                    'date_de_la_transaction'=> Carbon::now(),
+                    'type_de_transaction'=> "crédit",
+                    'montant'=> $rapport->total_offrande,
+                    'source'=> "rapport de district/offrande",
+                    'pourcentage_eglise'=> 0,
+                    'montant_net_restant'=>$montant_net_total_eglise,
+                ]);
+                $statut = 'en attente de confirmation';
+                $message = 'le rapport a été soumis pour confirmation';
+            }
+        }
+
+        if ($action === 'valider') {
+            $statut = 'validé';
+            $message = 'Le rapport a été validé';
         }
         $rapport->statut = $statut;
         $rapport->update();

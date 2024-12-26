@@ -1,6 +1,5 @@
 @extends('base_dashboard')
 @section('page_title', 'Pefaco Universelle')
-@section('titre', '#CREER UNE NOUVELLE CAISSE')
 @section('content')
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -9,6 +8,7 @@
                     <section>
                         <form method="post" action="{{ route('caisses.add_new') }}" class="mt-6 space-y-6">
                             @csrf
+                            <h3 class="mb-3">Nouvelle Caisse</h3>
                             <div class="mb-3 mt-2">
                                 <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                     <label for="id_departement" class="text-muted">Sélectionner le département pour lequel vous voulez créer la caisse</label>

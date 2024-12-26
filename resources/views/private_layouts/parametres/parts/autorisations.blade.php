@@ -121,7 +121,7 @@
                                     <input class="form-check-input" onchange="handleCheckboxClick(this)" name="ecriture" type="checkbox" id="settings-checkbox-2-{{ $autorisation->id }}" @if($autorisation->ecriture === 1) checked @endif>
                                     <label class="form-check-label" for="settings-checkbox-2-{{ $autorisation->id }}">écriture</label>
                                     <div class="ml-4">
-                                        @if($autorisation->table_name === 'rapport_de_cultes' || $autorisation->table_name === 'rapport_mensuels' || $autorisation->table_name === 'rapport_inspections')
+                                        @if($autorisation->table_name === 'rapport_de_cultes' || $autorisation->table_name === 'rapport_mensuels' || $autorisation->table_name === 'rapport_inspections' || $autorisation->table_name === 'rapport_de_districts')
                                             <div class="row g-4 settings-section">
                                                 <div class="col-12 col-md-4">
                                                     <span style="color: dodgerblue">paramètres avancés</span>
@@ -152,7 +152,7 @@
                                                     </div><!--//app-card-->
                                                 </div>
                                             </div><!--//row-->
-                                        @elseif ($autorisation->table_name === 'users' || $autorisation->table_name === 'inventaires' || $autorisation->table_name === 'rapport_inspections' || $autorisation->table_name === 'articles' || $autorisation->table_name === 'annonces' || $autorisation->table_name === 'enseignements' || $autorisation->table_name === 'horaire_hebdos' || $autorisation->table_name === 'don_specials' || $autorisation->table_name === 'caisses' || $autorisation->table_name === 'cotisations' || $autorisation->table_name === 'depenses')
+                                        @elseif ($autorisation->table_name === 'users' || $autorisation->table_name === 'inventaires' || $autorisation->table_name === 'articles' || $autorisation->table_name === 'annonces' || $autorisation->table_name === 'enseignements' || $autorisation->table_name === 'horaire_hebdos' || $autorisation->table_name === 'don_specials' || $autorisation->table_name === 'caisses' || $autorisation->table_name === 'cotisations' || $autorisation->table_name === 'depenses')
                                             <div class="row g-4 settings-section">
                                                 <div class="col-12 col-md-4">
                                                     <span style="color: dodgerblue">paramètres avancés</span>

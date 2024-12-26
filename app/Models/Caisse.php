@@ -17,6 +17,7 @@ class Caisse extends Model
     protected $fillable = [
         'departement_id',
         'caissier_id',
+        'montant_net_actuel',
     ];
 
     public function departement() {

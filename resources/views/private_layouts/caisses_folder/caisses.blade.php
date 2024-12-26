@@ -75,7 +75,7 @@
                                                                 <td class="cell" style="font-size: 10pt">{{ $caisse->id }}</td>
                                                                 <td class="cell" style="font-size: 10pt">{{ $caisse->departement->designation }}</td>
                                                                 <td class="cell" style="font-size: 10pt">{{ $caisse->caissier->nom }} {{ $caisse->caissier->postnom }} {{ $caisse->caissier->prenom }}</td>
-                                                                <td class="cell" style="font-size: 10pt">{{ $caisse->montant_net_actuel }} FC</td>
+                                                                <td class="cell" style="font-size: 10pt">{{ $caisse->montant_net_actuel}} FC</td>
                                                                 <td class="cell" style="font-size: 10pt">{{ $caisse->updated_at->format('d-m-Y') }} à {{ $caisse->updated_at->format('h:i') }}</td>
                                                                 <td class="cell d-flex gap-1">
                                                                     <a class="btn-sm" href="{{ route('caisses.vue_de_la_caisse', $caisse->id) }}"><span class="bi-eye-fill text-success"></span></a>

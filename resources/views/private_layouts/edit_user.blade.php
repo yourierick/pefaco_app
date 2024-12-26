@@ -383,7 +383,41 @@
                                                 </div>
                                             </div><!--//app-card-->
                                         </div>
-                                    @elseif ($autorisation->table_name === 'rapport_mensuels' || $autorisation->table_name === "rapport_de_districts")
+                                    @elseif ($autorisation->table_name === "rapport_de_districts")
+                                        <div class="col-12 col-md-8">
+                                            <div class="app-card app-card-settings p-4">
+                                                <div class="app-card-body">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" value="peux approuver un rapport" name="autorisation_speciale[]" id="rpt_checkbox-1-{{ $autorisation->id }}" @if($autorisation->autorisation_speciale !== null) @if(in_array('peux approuver un rapport', json_decode($autorisation->autorisation_speciale, true))) checked @endif @endif>
+                                                        <label class="form-check-label" for="rpt_checkbox-1-{{ $autorisation->id }}">
+                                                            peux approuver un rapport
+                                                        </label>
+                                                    </div><!--//form-check-->
+                                                    <div class="form-check">
+                                                        <input type="checkbox" value="peux valider un rapport" name="autorisation_speciale[]" id="rpt_checkbox-2-{{ $autorisation->id }}" @if($autorisation->autorisation_speciale !== null) @if(in_array('peux valider un rapport', json_decode($autorisation->autorisation_speciale, true))) checked @endif @endif>
+                                                        <label class="form-check-label" for="rpt_checkbox-2-{{ $autorisation->id }}">
+                                                            peux valider un rapport
+                                                        </label>
+                                                    </div><!--//form-check-->
+                                                    <div class="form-check">
+                                                        <input type="checkbox" value="peux confirmer un rapport" name="autorisation_speciale[]" id="rpt_checkbox-3-{{ $autorisation->id }}" @if($autorisation->autorisation_speciale !== null) @if(in_array('peux confirmer un rapport', json_decode($autorisation->autorisation_speciale, true))) checked @endif @endif>
+                                                        <label class="form-check-label" for="rpt_checkbox-3-{{ $autorisation->id }}">
+                                                            peux confirmer un rapport
+                                                        </label>
+                                                    </div><!--//form-check-->
+                                                    <div class="form-check">
+                                                        <input type="checkbox" value="peux voir la partie financière du rapport" name="autorisation_speciale[]" id="rpt_checkbox-4-{{ $autorisation->id }}" @if($autorisation->autorisation_speciale !== null) @if(in_array('peux voir la partie financière du rapport', json_decode($autorisation->autorisation_speciale, true))) checked @endif @endif>
+                                                        <label class="form-check-label" for="rpt_checkbox-4-{{ $autorisation->id }}">
+                                                            peux voir la partie financière du rapport
+                                                        </label>
+                                                    </div><!--//form-check-->
+                                                </div><!--//app-card-body-->
+                                                <div class="mt-3">
+                                                    <button type="submit" class="btn btn-primary text-light" >Enregistrer</button>
+                                                </div>
+                                            </div><!--//app-card-->
+                                        </div>
+                                    @elseif ($autorisation->table_name === 'rapport_mensuels')
                                         <div class="col-12 col-md-8">
                                             <div class="app-card app-card-settings p-4">
                                                 <div class="app-card-body">

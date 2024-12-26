@@ -48,14 +48,12 @@
                                                 @foreach($users as $user)
                                                     @if($user->id != $current_user->id || 1==1)
                                                         <tr>
-                                                            <th style="font-weight: normal" class="cell">{{ $user -> nom }} {{ $user -> postnom }} {{ $user -> prenom }}</th>
-                                                            <th style="font-weight: normal" class="cell">{{ $user -> sexe }}</th>
-                                                            <th style="font-weight: normal" class="cell">{{ $user -> adresse }}</th>
-                                                            <th style="font-weight: normal" class="cell">{{ $user -> email }}</th>
-                                                            <th style="font-weight: normal" class="cell">{{ $user->groupe_utilisateur ? $user->groupe_utilisateur->groupe : ""}}</th>
-                                                            <th style="font-weight: normal" @class(["badge", "cell", "ml-4 mt-2", "text-white", "bg-danger"=>$user->statut == 0, "bg-success"=>$user->statut == 1])>
-                                                                {{ $user->statut ? "actif": "désactivé" }}
-                                                            </th>
+                                                            <td style="font-weight: normal" class="cell">{{ $user -> nom }} {{ $user -> postnom }} {{ $user -> prenom }}</th>
+                                                            <td style="font-weight: normal" class="cell">{{ $user -> sexe }}</th>
+                                                            <td style="font-weight: normal" class="cell">{{ $user -> adresse }}</th>
+                                                            <td style="font-weight: normal" class="cell">{{ $user -> email }}</th>
+                                                            <td style="font-weight: normal" class="cell">{{ $user->groupe_utilisateur ? $user->groupe_utilisateur->groupe : ""}}</th>
+                                                            <td style="font-weight: normal; font-size: 8pt!important; height: 10px!important" @class(["badge", "cell", "text-white", "bg-danger"=>$user->statut == 0, "bg-success"=>$user->statut == 1])>{{ $user->statut ? "actif": "désactivé" }}</td>
                                                             <td class="cell">
                                                                 <a class="btn-sm app-btn-secondary" href="{{ route('manageprofile.edit_user', $user->id) }}">voir</a>
                                                             </td>

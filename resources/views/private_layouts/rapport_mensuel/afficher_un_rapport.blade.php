@@ -10,10 +10,10 @@
                 <li>
                     <p class="text-center">MENU</p>
                     <div class="dropdown-divider"></div>
+                    <a href="{{ route('rapportmensuel.voir_mes_drafts') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-eye-fill text-secondary"> voir mes drafts</span></a>
                     @if(!is_null($autorisation))
                         @if($autorisation->autorisation_en_ecriture)
                             @if(in_array('peux ajouter un rapport', json_decode($autorisation->autorisation_en_ecriture, true)))
-                                <a href="{{ route('rapportmensuel.voir_mes_drafts') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-eye-fill text-secondary"> voir mes drafts</span></a>
                                 <a href="{{ route('rapportmensuel.ajouter_nouveau_rapport') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-plus-circle-fill text-info"> faire un rapport</span></a>
                             @endif
                         @endif
@@ -30,7 +30,7 @@
                     @endif
                     <div class="dropdown-divider"></div>
                     <p class="text-center mb-1">ACTION SUR LE DOCUMENT</p>
-                    @if($rapport->statut !== "draft")
+                    @if($rapport->statut !== "draft" && $rapport->statut !== "validé")
                         @if(!is_null($autorisation))
                             @if($autorisation->autorisation_en_ecriture)
                                 @if(in_array('peux modifier un rapport', json_decode($autorisation->autorisation_en_ecriture, true)))
@@ -38,14 +38,14 @@
                                 @endif
                             @endif
                         @endif
-                    @else
+                    @elseif($rapport->statut === "draft")
                         <a href="{{ route('rapportmensuel.edit_le_rapport', $rapport->id) }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-pencil-square text-primary"></span> {{ $rapport->statut === "en attente de complétion" && !is_null($autorisation_speciale) && $autorisation_speciale->autorisation_speciale && in_array('peux completer', json_decode($autorisation_speciale->autorisation_speciale, true)) ? "compléter le rapport": "modifier" }}</a>
                     @endif
                     <form action="{{ route('rapportmensuel.traitement_du_rapport', $rapport->id) }}" method="post">
                         @csrf
                         @method('put')
                         @if($rapport->statut === 'draft')
-                            @if($autorisation_speciale)
+                            @if(!is_null($autorisation_speciale))
                                 @if($autorisation_speciale->autorisation_speciale)
                                     @if(in_array('peux voir la partie financiere du rapport', json_decode($autorisation_speciale->autorisation_speciale, true)))
                                         <button name="action" value="soumettre_pour_validation" class="dropdown-item btn btn-outline-secondary perso" type="submit"><span class="bi-check-circle-fill text-success"></span> soumettre pour validation</button>
@@ -59,11 +59,19 @@
                                 <button name="action" value="soumission" class="dropdown-item btn btn-outline-secondary perso" type="submit"><span class="bi-check-circle-fill text-success"></span> soumettre à la caisse</button>
                             @endif
                         @endif
-                        @if($rapport->statut === 'en attente de validation')
-                            <button name="action" value="validation" class="dropdown-item btn btn-outline-secondary perso" type="submit"><span class="bi-check-circle-fill text-success"> valider</span></button>
-                        @endif
-                        @if($rapport->statut === 'en attente de complétion')
-                            <button name="action" value="soumettre_pour_validation" class="dropdown-item btn btn-outline-secondary perso" type="submit"><span class="bi-check-circle-fill text-success"> soumettre pour validation</span></button>
+                        @if(!is_null($autorisation_speciale))
+                            @if($autorisation_speciale->autorisation_speciale)
+                                @if($rapport->statut === 'en attente de validation')
+                                    @if(in_array('peux valider', json_decode($autorisation_speciale->autorisation_speciale, true)))
+                                        <button name="action" value="validation" class="dropdown-item btn btn-outline-secondary perso" type="submit"><span class="bi-check-circle-fill text-success"> valider</span></button>
+                                    @endif
+                                @endif
+                                @if($rapport->statut === 'en attente de complétion')
+                                    @if(in_array('peux voir la partie financiere du rapport', json_decode($autorisation_speciale->autorisation_speciale, true)))
+                                        <button name="action" value="soumettre_pour_validation" class="dropdown-item btn btn-outline-secondary perso" type="submit"><span class="bi-check-circle-fill text-success"> soumettre pour validation</span></button>
+                                    @endif
+                                @endif
+                            @endif
                         @endif
                     </form>
                 </li>
@@ -90,14 +98,14 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg mb-3">
                 <div class="max-w-xl">
-                    <h5 class="text-primary" style="font-weight: bold; margin: 0"> Eglise pefaco universelle|  <span style="color: gray; font-size: 13pt">Rapport mensuel @if($rapport->departement->designation === "comité provincial") de l'église @endif</span></h5>
+                    <h5 class="text-primary" style="font-weight: bold; margin: 0"> Eglise pefaco universelle|  <span style="color: gray; font-size: 12pt">Rapport mensuel @if($rapport->departement->designation === "comité provincial") de l'église @endif</span></h5>
                     <p style="margin: 0">Département: {{ $rapport->departement->designation }}</p>
                 </div>
                 <div class="dropdown-divider"></div>
                 <div class="row mt-5">
                     <div class="col-12 col-md-2">
                         <div class="mt-4">
-                            <img src="/storage/{{ $rapport->user->photo }}" class="img-fluid" alt="" style="box-shadow: 4px 0 0 orangered; padding-right: 10px; max-height: 160px; max-width: 150px">
+                            <img src="/storage/{{ $rapport->user->photo }}" class="img-fluid" alt="" style="box-shadow: 4px 0 0 orangered; padding-right: 2px; max-height: 160px; max-width: 150px">
                         </div>
                     </div>
                     <div class="col-12 col-md-8" style="align-content: center">
@@ -236,25 +244,25 @@
                                     <h6 class="ml-2">4.1. Prévisions de ce mois</h6>
                                     <div class="ml-3">
                                         @foreach(json_decode($rapport->previsions_pour_ce_mois, true) as $value)
-                                            <p>- {{ $value }}</p>
+                                            <p style="text-align: justify">- {{ $value }}</p>
                                         @endforeach
                                     </div>
 
                                     <h6 class="ml-2 mt-3">4.2. Réalisations de ce mois</h6>
                                     <div class="ml-3">
                                         @foreach(json_decode($rapport->realisations_de_ce_mois, true) as $value)
-                                            <p>- {{ $value }}</p>
+                                            <p style="text-align: justify">- {{ $value }}</p>
                                         @endforeach
                                     </div>
 
                                     <h6 class="ml-2 mt-3">4.3. Situation actuelle</h6>
                                     <div class="ml-3">
-                                        <p>{{ $rapport->situation_actuelle }}</p>
+                                        <p style="text-align: justify">{{ $rapport->situation_actuelle }}</p>
                                     </div>
 
                                     <h6 class="ml-2 mt-3">4.4. Autres à rapporter</h6>
                                     <div class="ml-3">
-                                        <p>{{ $rapport->autres_a_rapporter }}</p>
+                                        <p style="text-align: justify">{{ $rapport->autres_a_rapporter }}</p>
                                     </div>
                                 </div>
                             </div>

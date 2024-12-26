@@ -9,11 +9,11 @@
             </button>
             <ul class="dropdown-menu p-2" role="menu" style="background-color: #ffffff; border: 1px solid blue">
                 <li>
-                    <p class="text-center">---------- MENU ----------</p>
+                    <p class="text-center">MENU</p>
+                    <a href="{{ route('rapportculte.voir_mes_drafts') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-eye-fill text-secondary"> voir mes drafts</span></a>
                     @if(!is_null($autorisation))
                         @if($autorisation->autorisation_en_ecriture)
                             @if(in_array('peux ajouter un rapport', json_decode($autorisation->autorisation_en_ecriture, true)))
-                                <a href="{{ route('rapportculte.voir_mes_drafts') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-eye-fill text-secondary"> voir mes drafts</span></a>
                                 <a href="{{ route('rapportculte.ajouter_nouveau_rapport') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-plus-circle-fill text-info"> faire un rapport</span></a>
                             @endif
                         @endif
@@ -29,7 +29,7 @@
                         @endif
                     @endif
                     <div class="dropdown-divider"></div>
-                    <p class="text-center mb-1">---- ACTION SUR LE DOCUMENT ----</p>
+                    <p class="text-center mb-1">ACTION SUR LE DOCUMENT</p>
                     @if($rapport->statut === "validé")
                         @if($autorisation_speciale)
                             @if($autorisation_speciale->autorisation_speciale)
@@ -58,7 +58,7 @@
                             @endif
                         @endif
                     @endif
-                    @if($rapport->statut !== "draft")
+                    @if ($rapport->statut !== "draft" || $rapport->statut !== "validé")
                         @if(!is_null($autorisation))
                             @if($autorisation->autorisation_en_ecriture)
                                 @if(in_array('peux modifier un rapport', json_decode($autorisation->autorisation_en_ecriture, true)))
@@ -66,7 +66,7 @@
                                 @endif
                             @endif
                         @endif
-                    @else
+                    @elseif($rapport->statut === "draft")
                         <a href="{{ route('rapportculte.edit_le_rapport', $rapport->id) }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-pencil-square text-primary"></span> {{ $rapport->statut === "en attente de complétion" && !is_null($autorisation_speciale) && $autorisation_speciale->autorisation_speciale && in_array('peux completer', json_decode($autorisation_speciale->autorisation_speciale, true)) ? "compléter le rapport": "modifier" }}</a>
                     @endif
                     <form action="{{ route('rapportculte.traitement_du_rapport', $rapport->id) }}" method="post">

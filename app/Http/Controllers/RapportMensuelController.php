@@ -161,81 +161,87 @@ class RapportMensuelController extends Controller
         $message = '';
         $statut = 'draft';
 
-        if ($action == 'soumission_validation') {
-            $statut = 'en attente de validation';
-
-            $rapport = RapportMensuel::create([
-                'departement_id'=>$request->get('departement_id'),
-                'mois_de_rapportage'=>$date,
-                'rapporteur_principal_id'=>$request->user()->id,
-                'objectifs'=>$request->get('objectifs'),
-                'vision'=>$request->get('vision'),
-                'mission'=>$request->get('mission'),
-                'previsions_pour_ce_mois'=>json_encode($previsions_mois_de_rapportage),
-                'realisations_de_ce_mois'=>json_encode($realisations),
-                'autres_a_rapporter'=>$request->get('autres_a_rapporter'),
-                'situation_actuelle'=>$request->get('situation_actuelle'),
-                'situation_de_la_logistique'=>$request->get('situation_de_la_logistique'),
-                'nombre_des_cultes_tenus'=>$request->get('nombre_des_cultes_tenus', 0),
-                'effectif_total'=>$request->get('effectif_total', 0),
-                'effectif_hommes'=>$request->get('effectif_hommes', 0),
-                'effectif_femmes'=>$request->get('effectif_femmes', 0),
-                'effectif_jeunes'=>$request->get('effectif_jeunes', 0),
-                'effectif_enfants'=>$request->get('effectif_enfants', 0),
-                'moyenne_mensuel_total'=>$request->get('moyenne_mensuel_total', 0),
-                'moyenne_mensuel_hommes'=>$request->get('moyenne_mensuel_hommes', 0),
-                'moyenne_mensuel_femmes'=>$request->get('moyenne_mensuel_femmes', 0),
-                'moyenne_mensuel_jeunes'=>$request->get('moyenne_mensuel_jeunes', 0),
-                'moyenne_mensuel_enfants'=>$request->get('moyenne_mensuel_enfants', 0),
-                'nombre_des_personnes_baptises'=>$request->get('nombre_des_personnes_baptises', 0),
-                'situation_caisse'=>$request->get('situation_caisse', 0),
-                'autres_contributions_a_renseigner'=>$request->get('autres_contributions_a_renseigner'),
-                'difficultes_defis'=>$request->get('difficultes_defis'),
-                'recommandations'=>$request->get('recommandations'),
-                'previsions_mois_prochain'=>json_encode($previsions_mois_prochain),
-                'statut'=>$statut,
-            ]);
-            $message = 'Le rapport a été soumis et est en attente de validation';
+        $scan = RapportMensuel::where('departement_id', $validated['departement_id'])->where('mois_de_rapportage', $date)->first();
+        if (is_null($scan)) {
+            if ($action == 'soumission_validation') {
+                $statut = 'en attente de validation';
+    
+                $rapport = RapportMensuel::create([
+                    'departement_id'=>$request->get('departement_id'),
+                    'mois_de_rapportage'=>$date,
+                    'rapporteur_principal_id'=>$request->user()->id,
+                    'objectifs'=>$request->get('objectifs'),
+                    'vision'=>$request->get('vision'),
+                    'mission'=>$request->get('mission'),
+                    'previsions_pour_ce_mois'=>json_encode($previsions_mois_de_rapportage),
+                    'realisations_de_ce_mois'=>json_encode($realisations),
+                    'autres_a_rapporter'=>$request->get('autres_a_rapporter'),
+                    'situation_actuelle'=>$request->get('situation_actuelle'),
+                    'situation_de_la_logistique'=>$request->get('situation_de_la_logistique'),
+                    'nombre_des_cultes_tenus'=>$request->get('nombre_des_cultes_tenus', 0),
+                    'effectif_total'=>$request->get('effectif_total', 0),
+                    'effectif_hommes'=>$request->get('effectif_hommes', 0),
+                    'effectif_femmes'=>$request->get('effectif_femmes', 0),
+                    'effectif_jeunes'=>$request->get('effectif_jeunes', 0),
+                    'effectif_enfants'=>$request->get('effectif_enfants', 0),
+                    'moyenne_mensuel_total'=>$request->get('moyenne_mensuel_total', 0),
+                    'moyenne_mensuel_hommes'=>$request->get('moyenne_mensuel_hommes', 0),
+                    'moyenne_mensuel_femmes'=>$request->get('moyenne_mensuel_femmes', 0),
+                    'moyenne_mensuel_jeunes'=>$request->get('moyenne_mensuel_jeunes', 0),
+                    'moyenne_mensuel_enfants'=>$request->get('moyenne_mensuel_enfants', 0),
+                    'nombre_des_personnes_baptises'=>$request->get('nombre_des_personnes_baptises', 0),
+                    'situation_caisse'=>$request->get('situation_caisse', 0),
+                    'autres_contributions_a_renseigner'=>$request->get('autres_contributions_a_renseigner'),
+                    'difficultes_defis'=>$request->get('difficultes_defis'),
+                    'recommandations'=>$request->get('recommandations'),
+                    'previsions_mois_prochain'=>json_encode($previsions_mois_prochain),
+                    'statut'=>$statut,
+                ]);
+                $message = 'Le rapport a été soumis et est en attente de validation';
+            }else {
+                if ($action == 'soumission_completion') {
+                    $statut = 'en attente de complétion';
+                    $message = 'Le rapport a été soumis à la caisse pour sa complétion';
+                }
+                if ($action == 'draft') {
+                    $statut = 'draft';
+                    $message = 'Le rapport a été enregistré en tant que draft';
+                }
+    
+                $rapport = RapportMensuel::create([
+                    'departement_id'=>$request->get('departement_id'),
+                    'mois_de_rapportage'=>$date,
+                    'rapporteur_principal_id'=>$request->user()->id,
+                    'objectifs'=>$request->get('objectifs'),
+                    'vision'=>$request->get('vision'),
+                    'mission'=>$request->get('mission'),
+                    'previsions_pour_ce_mois'=>json_encode($previsions_mois_de_rapportage),
+                    'realisations_de_ce_mois'=>json_encode($realisations),
+                    'autres_a_rapporter'=>$request->get('autres_a_rapporter'),
+                    'situation_actuelle'=>$request->get('situation_actuelle'),
+                    'situation_de_la_logistique'=>$request->get('situation_de_la_logistique'),
+                    'nombre_des_cultes_tenus'=>$request->get('nombre_des_cultes_tenus', 0),
+                    'effectif_total'=>$request->get('effectif_total', 0),
+                    'effectif_hommes'=>$request->get('effectif_hommes', 0),
+                    'effectif_femmes'=>$request->get('effectif_femmes', 0),
+                    'effectif_jeunes'=>$request->get('effectif_jeunes', 0),
+                    'effectif_enfants'=>$request->get('effectif_enfants', 0),
+                    'moyenne_mensuel_total'=>$request->get('moyenne_mensuel_total', 0),
+                    'moyenne_mensuel_hommes'=>$request->get('moyenne_mensuel_hommes', 0),
+                    'moyenne_mensuel_femmes'=>$request->get('moyenne_mensuel_femmes', 0),
+                    'moyenne_mensuel_jeunes'=>$request->get('moyenne_mensuel_jeunes', 0),
+                    'moyenne_mensuel_enfants'=>$request->get('moyenne_mensuel_enfants', 0),
+                    'nombre_des_personnes_baptises'=>$request->get('nombre_des_personnes_baptises', 0),
+                    'difficultes_defis'=>$request->get('difficultes_defis'),
+                    'recommandations'=>$request->get('recommandations'),
+                    'previsions_mois_prochain'=>json_encode($previsions_mois_prochain),
+                    'statut'=>$statut,
+                ]);
+            }
         }else {
-            if ($action == 'soumission_completion') {
-                $statut = 'en attente de complétion';
-                $message = 'Le rapport a été soumis à la caisse pour sa complétion';
-            }
-            if ($action == 'draft') {
-                $statut = 'draft';
-                $message = 'Le rapport a été enregistré en tant que draft';
-            }
-
-            $rapport = RapportMensuel::create([
-                'departement_id'=>$request->get('departement_id'),
-                'mois_de_rapportage'=>$date,
-                'rapporteur_principal_id'=>$request->user()->id,
-                'objectifs'=>$request->get('objectifs'),
-                'vision'=>$request->get('vision'),
-                'mission'=>$request->get('mission'),
-                'previsions_pour_ce_mois'=>json_encode($previsions_mois_de_rapportage),
-                'realisations_de_ce_mois'=>json_encode($realisations),
-                'autres_a_rapporter'=>$request->get('autres_a_rapporter'),
-                'situation_actuelle'=>$request->get('situation_actuelle'),
-                'situation_de_la_logistique'=>$request->get('situation_de_la_logistique'),
-                'nombre_des_cultes_tenus'=>$request->get('nombre_des_cultes_tenus', 0),
-                'effectif_total'=>$request->get('effectif_total', 0),
-                'effectif_hommes'=>$request->get('effectif_hommes', 0),
-                'effectif_femmes'=>$request->get('effectif_femmes', 0),
-                'effectif_jeunes'=>$request->get('effectif_jeunes', 0),
-                'effectif_enfants'=>$request->get('effectif_enfants', 0),
-                'moyenne_mensuel_total'=>$request->get('moyenne_mensuel_total', 0),
-                'moyenne_mensuel_hommes'=>$request->get('moyenne_mensuel_hommes', 0),
-                'moyenne_mensuel_femmes'=>$request->get('moyenne_mensuel_femmes', 0),
-                'moyenne_mensuel_jeunes'=>$request->get('moyenne_mensuel_jeunes', 0),
-                'moyenne_mensuel_enfants'=>$request->get('moyenne_mensuel_enfants', 0),
-                'nombre_des_personnes_baptises'=>$request->get('nombre_des_personnes_baptises', 0),
-                'difficultes_defis'=>$request->get('difficultes_defis'),
-                'recommandations'=>$request->get('recommandations'),
-                'previsions_mois_prochain'=>json_encode($previsions_mois_prochain),
-                'statut'=>$statut,
-            ]);
+            return redirect()->back()->with('error', "ce mois a déjà été rapporté");
         }
+        
         return redirect()->route('rapportmensuel.list_des_rapports')->with('success', $message);
     }
 

@@ -10,6 +10,7 @@
             <ul class="dropdown-menu p-2" role="menu" style="background-color: #ffffff; border: 1px solid blue">
                 <li>
                     <p class="text-center">MENU</p>
+                    <div class="dropdown-divider"></div>
                     @if(!is_null($autorisation))
                         @if($autorisation->autorisation_en_ecriture)
                             @if(in_array('peux ajouter un rapport', json_decode($autorisation->autorisation_en_ecriture, true)))
@@ -79,14 +80,14 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 sm:rounded-lg shadow mb-3">
                 <div class="max-w-xl">
-                    <h5 style="font-weight: bold; margin: 0; color: dodgerblue"> Eglise pefaco universelle|  <span style="color: gray; font-size: 13pt">Rapport d'Inspection</span></h5>
+                    <h5 style="font-weight: bold; margin: 0; color: dodgerblue"> Eglise pefaco universelle|  <span style="color: gray; font-size: 12pt">Rapport d'Inspection</span></h5>
                     <p style="margin: 0">Département: {{ $rapport->rapporteur->departement->designation }}</p>
                 </div>
                 <div class="dropdown-divider"></div>
                 <div class="row mt-5">
                     <div class="col-12 col-md-2">
                         <div class="mt-4">
-                            <img src="/storage/{{ $rapport->rapporteur->photo }}" class="img-fluid" alt="" style="box-shadow: 4px 0 0 orangered; padding-right: 10px; max-height: 160px; max-width: 150px">
+                            <img src="/storage/{{ $rapport->rapporteur->photo }}" class="img-fluid" alt="" style="box-shadow: 4px 0 0 orangered; padding-right: 1px; max-height: 160px; max-width: 150px">
                         </div>
                     </div>
                     <div class="col-12 col-md-8" style="align-content: center">
@@ -126,11 +127,15 @@
                             <ul class="list-timeline list-timeline-primary">
                                 <li class="list-timeline-item p-0 pb-4 pb-lg-4 d-flex flex-wrap flex-column" data-toggle="collapse" data-target="#day-1-item-2">
                                     <p class="my-0 text-dark show flex-fw text-sm text-uppercase"><span class="text-primary op-8 infinite animated flash" data-animate="flash" data-animate-infinite="1" data-animate-duration="3.5" style="animation-duration: 3.5s;"></span></p>
-                                    <p class="my-0 collapse flex-fw text-xs text-dark op-8 show" id="day-1-item-2"><span style="font-weight: 500">4. DIFFICULTES RENCONTREES</span></p>
+                                    <p class="my-0 collapse flex-fw text-xs text-dark op-8 show" id="day-1-item-2"><span style="font-weight: 500">4. CONCLUSIONS</span></p>
                                 </li>
                                 <li class="list-timeline-item p-0 pb-4 pb-lg-4 d-flex flex-wrap flex-column" data-toggle="collapse" data-target="#day-1-item-2">
                                     <p class="my-0 text-dark show flex-fw text-sm text-uppercase"><span class="text-primary op-8 infinite animated flash" data-animate="flash" data-animate-infinite="1" data-animate-duration="3.5" style="animation-duration: 3.5s;"></span></p>
-                                    <p class="my-0 collapse flex-fw text-xs text-dark op-8 show" id="day-1-item-2"><span style="font-weight: 500">5. RECOMMANDATIONS</span></p>
+                                    <p class="my-0 collapse flex-fw text-xs text-dark op-8 show" id="day-1-item-2"><span style="font-weight: 500">5. DIFFICULTES RENCONTREES</span></p>
+                                </li>
+                                <li class="list-timeline-item p-0 pb-4 pb-lg-4 d-flex flex-wrap flex-column" data-toggle="collapse" data-target="#day-1-item-2">
+                                    <p class="my-0 text-dark show flex-fw text-sm text-uppercase"><span class="text-primary op-8 infinite animated flash" data-animate="flash" data-animate-infinite="1" data-animate-duration="3.5" style="animation-duration: 3.5s;"></span></p>
+                                    <p class="my-0 collapse flex-fw text-xs text-dark op-8 show" id="day-1-item-2"><span style="font-weight: 500">6. RECOMMANDATIONS</span></p>
                                 </li>
                             </ul>
                         </div>
@@ -141,7 +146,7 @@
                     <div class="row">
                         <div class="custom-card d-flex align-items-center">
                             <div class="icon-circle text-white">
-                                <i class="fa fa-church text-warning fs-3"></i>
+                                <i class="fa fa-church text-warning fs-4"></i>
                             </div>
                             <div style="background: #457ebe;" class="card-content">
                                 <h5 class="text-white">1. PAROISSES CONCERNEES</h5>
@@ -154,7 +159,7 @@
                         </div>
                         <div class="custom-card d-flex align-items-center">
                             <div class="icon-circle text-white">
-                                <i class="fa fa-person-burst text-secondary fs-3"></i>
+                                <i class="fa fa-person-burst text-secondary fs-4"></i>
                             </div>
                             <div class="card-content bg-secondary">
                                 <h5 class="text-white">2. CONTEXTE</h5>
@@ -167,7 +172,7 @@
                         </div>
                         <div class="custom-card d-flex align-items-center">
                             <div class="icon-circle text-white">
-                                <i class="fa fa-bible text-secondary fs-3"></i>
+                                <i class="fa fa-bible text-secondary fs-4"></i>
                             </div>
                             <div class="card-content bg-secondary">
                                 <h5 class="text-white">3. CONSTATS</h5>
@@ -180,10 +185,23 @@
                         </div>
                         <div class="custom-card d-flex align-items-center">
                             <div class="icon-circle text-white">
-                                <i class="fa fa-file-archive text-warning fs-3"></i>
+                                <i class="fa fa-file-archive-o text-success fs-4"></i>
+                            </div>
+                            <div style="background: #5E6F8FFF;" class="card-content">
+                                <h5 class="text-white">4.CONCLUSIONS</h5>
+                            </div>
+                        </div>
+                        <div style="padding: 0" class="p-3">
+                            <div class="custom-card-text mt-2 p-2">
+                                <p class="ml-2" style="text-align: justify">{{ $rapport->conclusions }}</p>
+                            </div>
+                        </div>
+                        <div class="custom-card d-flex align-items-center">
+                            <div class="icon-circle text-white">
+                                <i class="fa fa-file-archive text-warning fs-4"></i>
                             </div>
                             <div style="background: #457ebe;" class="card-content">
-                                <h5 class="text-white">4.DIFFICULTES RENCONTREES</h5>
+                                <h5 class="text-white">5.DIFFICULTES RENCONTREES</h5>
                             </div>
                         </div>
                         <div style="padding: 0" class="p-3">
@@ -193,10 +211,10 @@
                         </div>
                         <div class="custom-card d-flex align-items-center">
                             <div class="icon-circle text-white">
-                                <i class="fa fa-lightbulb text-warning fs-3"></i>
+                                <i class="fa fa-lightbulb text-warning fs-4"></i>
                             </div>
                             <div style="background: #457ebe;" class="card-content">
-                                <h5 class="text-white">5. RECOMMANDATIONS</h5>
+                                <h5 class="text-white">6. RECOMMANDATIONS</h5>
                             </div>
                         </div>
                         <div style="padding: 0" class="p-3">

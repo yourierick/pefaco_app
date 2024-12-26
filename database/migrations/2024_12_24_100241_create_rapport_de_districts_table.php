@@ -24,10 +24,8 @@ return new class extends Migration
             $table->integer('nombre_des_personnes_baptises')->default(0);
             $table->text('autres_evenements_a_rapporter')->nullable();
             $table->double('dime_des_dimes')->default(0);
-            $table->boolean('accuse_de_reception_dime')->default(false);
             $table->double('total_offrande')->default(0);
             $table->boolean('accuse_de_reception_offrande')->default(false);
-            $table->text('autres_contributions_a_renseigner')->nullable();
             $table->text('observation')->nullable();
             $table->text('difficultes_defis');
             $table->text('recommandations');

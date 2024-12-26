@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('departement_id');
             $table->foreign('departement_id')->references('id')->on('departements')->onDelete("cascade");
             $table->unsignedBigInteger('caissier_id');
-            $table->double('montant_total_net')->default(0);
+            $table->double('montant_net_actuel')->default(0);
             $table->foreign('caissier_id')->references('id')->on('users');
             $table->timestamps();
         });
