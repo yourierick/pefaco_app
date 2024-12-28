@@ -49,6 +49,9 @@
     $autorisation_rapport_mensuel = \App\Models\Autorisations::where('groupe_id', $current_user->groupe_utilisateur_id)->where('table_name', 'rapport_mensuels')->first();
     $autorisation_rapport_inspection = \App\Models\Autorisations::where('groupe_id', $current_user->groupe_utilisateur_id)->where('table_name', 'rapport_inspections')->first();
     $autorisation_rapport_district = \App\Models\Autorisations::where('groupe_id', $current_user->groupe_utilisateur_id)->where('table_name', 'rapport_de_districts')->first();
+    $autorisation_membres = \App\Models\AutorisationSpeciale::where('table_name', 'membres')->where('user_id', $current_user->id)->first();
+    $autorisation_invites = \App\Models\AutorisationSpeciale::where('table_name', 'invites')->where('user_id', $current_user->id)->first();
+    $autorisation_baptises = \App\Models\AutorisationSpeciale::where('table_name', 'baptemes')->where('user_id', $current_user->id)->first();
 @endphp
 <header class="app-header fixed-top">
     <div class="app-header-inner">
@@ -171,25 +174,18 @@
 
                             </div><!--//dropdown-menu-->
                         </div><!--//app-utility-item-->
-                        @php
-                            $group = \App\Models\GroupesUtilisateurs::find($current_user->groupe_utilisateur_id);
-                        @endphp
-                        @if ($group)
-                            @if($group->groupe == 'A0')
-                                <div class="app-utility-item">
-                                    <a href="{{ route('settings') }}">
-                                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear icon"
-                                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd"
-                                                  d="M8.837 1.626c-.246-.835-1.428-.835-1.674 0l-.094.319A1.873 1.873 0 0 1 4.377 3.06l-.292-.16c-.764-.415-1.6.42-1.184 1.185l.159.292a1.873 1.873 0 0 1-1.115 2.692l-.319.094c-.835.246-.835 1.428 0 1.674l.319.094a1.873 1.873 0 0 1 1.115 2.693l-.16.291c-.415.764.42 1.6 1.185 1.184l.292-.159a1.873 1.873 0 0 1 2.692 1.116l.094.318c.246.835 1.428.835 1.674 0l.094-.319a1.873 1.873 0 0 1 2.693-1.115l.291.16c.764.415 1.6-.42 1.184-1.185l-.159-.291a1.873 1.873 0 0 1 1.116-2.693l.318-.094c.835-.246.835-1.428 0-1.674l-.319-.094a1.873 1.873 0 0 1-1.115-2.692l.16-.292c.415-.764-.42-1.6-1.185-1.184l-.291.159A1.873 1.873 0 0 1 8.93 1.945l-.094-.319zm-2.633-.283c.527-1.79 3.065-1.79 3.592 0l.094.319a.873.873 0 0 0 1.255.52l.292-.16c1.64-.892 3.434.901 2.54 2.541l-.159.292a.873.873 0 0 0 .52 1.255l.319.094c1.79.527 1.79 3.065 0 3.592l-.319.094a.873.873 0 0 0-.52 1.255l.16.292c.893 1.64-.902 3.434-2.541 2.54l-.292-.159a.873.873 0 0 0-1.255.52l-.094.319c-.527 1.79-3.065 1.79-3.592 0l-.094-.319a.873.873 0 0 0-1.255-.52l-.292.16c-1.64.893-3.433-.902-2.54-2.541l.159-.292a.873.873 0 0 0-.52-1.255l-.319-.094c-1.79-.527-1.79-3.065 0-3.592l.319-.094a.873.873 0 0 0 .52-1.255l-.16-.292c-.892-1.64.902-3.433 2.541-2.54l.292.159a.873.873 0 0 0 1.255-.52l.094-.319z"/>
-                                            <path fill-rule="evenodd"
-                                                  d="M8 5.754a2.246 2.246 0 1 0 0 4.492 2.246 2.246 0 0 0 0-4.492zM4.754 8a3.246 3.246 0 1 1 6.492 0 3.246 3.246 0 0 1-6.492 0z"/>
-                                        </svg>
-                                    </a>
-                                </div><!--//app-utility-item-->
-                            @endif
-                        @endif
+                        <div class="app-utility-item">
+                            <a href="{{ route('parametres.settings') }}">
+                                <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear icon"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M8.837 1.626c-.246-.835-1.428-.835-1.674 0l-.094.319A1.873 1.873 0 0 1 4.377 3.06l-.292-.16c-.764-.415-1.6.42-1.184 1.185l.159.292a1.873 1.873 0 0 1-1.115 2.692l-.319.094c-.835.246-.835 1.428 0 1.674l.319.094a1.873 1.873 0 0 1 1.115 2.693l-.16.291c-.415.764.42 1.6 1.185 1.184l.292-.159a1.873 1.873 0 0 1 2.692 1.116l.094.318c.246.835 1.428.835 1.674 0l.094-.319a1.873 1.873 0 0 1 2.693-1.115l.291.16c.764.415 1.6-.42 1.184-1.185l-.159-.291a1.873 1.873 0 0 1 1.116-2.693l.318-.094c.835-.246.835-1.428 0-1.674l-.319-.094a1.873 1.873 0 0 1-1.115-2.692l.16-.292c.415-.764-.42-1.6-1.185-1.184l-.291.159A1.873 1.873 0 0 1 8.93 1.945l-.094-.319zm-2.633-.283c.527-1.79 3.065-1.79 3.592 0l.094.319a.873.873 0 0 0 1.255.52l.292-.16c1.64-.892 3.434.901 2.54 2.541l-.159.292a.873.873 0 0 0 .52 1.255l.319.094c1.79.527 1.79 3.065 0 3.592l-.319.094a.873.873 0 0 0-.52 1.255l.16.292c.893 1.64-.902 3.434-2.541 2.54l-.292-.159a.873.873 0 0 0-1.255.52l-.094.319c-.527 1.79-3.065 1.79-3.592 0l-.094-.319a.873.873 0 0 0-1.255-.52l-.292.16c-1.64.893-3.433-.902-2.54-2.541l.159-.292a.873.873 0 0 0-.52-1.255l-.319-.094c-1.79-.527-1.79-3.065 0-3.592l.319-.094a.873.873 0 0 0 .52-1.255l-.16-.292c-.892-1.64.902-3.433 2.541-2.54l.292.159a.873.873 0 0 0 1.255-.52l.094-.319z"/>
+                                    <path fill-rule="evenodd"
+                                          d="M8 5.754a2.246 2.246 0 1 0 0 4.492 2.246 2.246 0 0 0 0-4.492zM4.754 8a3.246 3.246 0 1 1 6.492 0 3.246 3.246 0 0 1-6.492 0z"/>
+                                </svg>
+                            </a>
+                        </div><!--//app-utility-item-->
 
                         <div class="app-utility-item app-user-dropdown dropdown">
                             <a class="dropdown-toggle" id="user-dropdown-toggle" data-bs-toggle="dropdown"
@@ -199,18 +195,19 @@
                                      class="rounded-circle">
                             </a>
 
-                            <ul class="dropdown-menu text-center" aria-labelledby="user-dropdown-toggle">
+                            <ul class="dropdown-menu text-center p-4" aria-labelledby="user-dropdown-toggle">
                                 <p class="text-center">MENU</p>
                                 <div class="dropdown-divider"></div>
-                                <li><a class="dropdown-item text-primary bi-person" href="{{ route('profile.edit') }}">Mon compte</a></li>
+                                <li><a class="dropdown-item text-secondary bi-person fs-5" href="{{ route('profile.edit') }}"><span style="color: black"> Mon compte</span></a></li>
+                                <li><a class="dropdown-item text-secondary bi-calendar fs-5" href="#"><span style="color: black"> Mon agenda</span></a></li>
                                 <li>
                                     <div class="dropdown-divider"></div>
                                 </li>
                                 <li>
                                     <form action="{{ route('logout') }}" method="post">
                                         @csrf
-                                        <button class="dropdown-item text-danger bi-arrow-down-right-square-fill">
-                                            Se déconnecter
+                                        <button class="dropdown-item text-danger bi-arrow-down-right-square-fill fs-5">
+                                            <span> Se déconnecter</span>
                                         </button>
                                     </form>
                                 </li>
@@ -495,6 +492,50 @@
                             </li><!--//nav-item-->
                         @endif
                     @endif
+
+                    <li class="nav-item has-submenu">
+                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                        <a @class(['nav-link', 'active'=>str_starts_with($routename, 'annonce.') || str_starts_with($routename, 'article.') || str_starts_with($routename, 'horairehebdo.')]) class="submenu-toggle" href="#" data-bs-toggle="collapse"
+                           data-bs-target="#submenu-0" aria-expanded="false" aria-controls="submenu-0">
+                                <span class="nav-icon">
+                                    <i class='bx bxs-group' style="font-size: 24px"></i>
+                                </span>
+                            <span class="nav-link-text">Membres</span>
+                            <span class="submenu-arrow">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                </svg>
+                            </span><!--//submenu-arrow-->
+                        </a><!--//nav-link-->
+                        <div @class(['collapse', 'submenu', 'submenu-1', 'show'=>str_starts_with($routename, 'membres.') || str_starts_with($routename, 'invites.') || str_starts_with($routename, 'baptemes.')]) id="submenu-0" class="collapse submenu submenu-2" data-bs-parent="#menu-accordion">
+                            <ul class="submenu-list list-unstyled">
+                                @if(!is_null($autorisation_membres))
+                                    @if(in_array('peux lire', json_decode($autorisation_membres->autorisation_speciale, true)))
+                                        <li class="submenu-item">
+                                            <a @class(['submenu-link', 'active'=>str_starts_with($routename, 'membres.')]) href="{{ route('membres.list_des_membres') }}">Membres</a>
+                                        </li>
+                                    @endif
+                                @endif
+                                @if (!is_null($autorisation_invites))
+                                    @if (in_array('peux lire', json_decode($autorisation_invites->autorisation_speciale, true)))
+                                        <li class="submenu-item">
+                                            <a @class(['submenu-link', 'active'=>str_starts_with($routename, 'invites.')]) href="{{ route('invites.list_des_invites') }}">Invités</a>
+                                        </li>
+                                    @endif
+                                @endif
+                                @if (!is_null($autorisation_baptises))
+                                    @if (in_array('peux lire', json_decode($autorisation_baptises->autorisation_speciale, true)))
+                                        <li class="submenu-item">
+                                            <a @class(['submenu-link', 'active'=>str_starts_with($routename, 'baptemes.')]) href="{{ route('baptemes.list_des_baptises') }}">Baptême</a>
+                                        </li>
+                                    @endif
+                                @endif
+                            </ul>
+                        </div>
+                    </li><!--//nav-item-->
+
                     <li class="nav-item">
                         <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
                         <a @class(['nav-link', 'active'=>str_starts_with($routename, 'aide.')]) href="#">
@@ -514,25 +555,21 @@
             <div class="app-sidepanel-footer">
                 <nav class="app-nav app-nav-footer">
                     <ul class="app-menu footer-menu list-unstyled">
-                        @if($group)
-                            @if($group->groupe === 'A0')
-                                <li class="nav-item">
-                                    <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                                    <a class="nav-link" href="{{ route('settings') }}">
-                                    <span class="nav-icon">
-                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear"
-                                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd"
-                                                  d="M8.837 1.626c-.246-.835-1.428-.835-1.674 0l-.094.319A1.873 1.873 0 0 1 4.377 3.06l-.292-.16c-.764-.415-1.6.42-1.184 1.185l.159.292a1.873 1.873 0 0 1-1.115 2.692l-.319.094c-.835.246-.835 1.428 0 1.674l.319.094a1.873 1.873 0 0 1 1.115 2.693l-.16.291c-.415.764.42 1.6 1.185 1.184l.292-.159a1.873 1.873 0 0 1 2.692 1.116l.094.318c.246.835 1.428.835 1.674 0l.094-.319a1.873 1.873 0 0 1 2.693-1.115l.291.16c.764.415 1.6-.42 1.184-1.185l-.159-.291a1.873 1.873 0 0 1 1.116-2.693l.318-.094c.835-.246.835-1.428 0-1.674l-.319-.094a1.873 1.873 0 0 1-1.115-2.692l.16-.292c.415-.764-.42-1.6-1.185-1.184l-.291.159A1.873 1.873 0 0 1 8.93 1.945l-.094-.319zm-2.633-.283c.527-1.79 3.065-1.79 3.592 0l.094.319a.873.873 0 0 0 1.255.52l.292-.16c1.64-.892 3.434.901 2.54 2.541l-.159.292a.873.873 0 0 0 .52 1.255l.319.094c1.79.527 1.79 3.065 0 3.592l-.319.094a.873.873 0 0 0-.52 1.255l.16.292c.893 1.64-.902 3.434-2.541 2.54l-.292-.159a.873.873 0 0 0-1.255.52l-.094.319c-.527 1.79-3.065 1.79-3.592 0l-.094-.319a.873.873 0 0 0-1.255-.52l-.292.16c-1.64.893-3.433-.902-2.54-2.541l.159-.292a.873.873 0 0 0-.52-1.255l-.319-.094c-1.79-.527-1.79-3.065 0-3.592l.319-.094a.873.873 0 0 0 .52-1.255l-.16-.292c-.892-1.64.902-3.433 2.541-2.54l.292.159a.873.873 0 0 0 1.255-.52l.094-.319z"/>
-                                            <path fill-rule="evenodd"
-                                                  d="M8 5.754a2.246 2.246 0 1 0 0 4.492 2.246 2.246 0 0 0 0-4.492zM4.754 8a3.246 3.246 0 1 1 6.492 0 3.246 3.246 0 0 1-6.492 0z"/>
-                                        </svg>
-                                    </span>
-                                        <span class="nav-link-text">Paramètres</span>
-                                    </a><!--//nav-link-->
-                                </li><!--//nav-item-->
-                            @endif
-                        @endif
+                        <li class="nav-item">
+                            <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                            <a @class(['nav-link', 'active'=>str_starts_with($routename, 'parametres.')]) href="{{ route('parametres.settings') }}">
+                            <span class="nav-icon">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M8.837 1.626c-.246-.835-1.428-.835-1.674 0l-.094.319A1.873 1.873 0 0 1 4.377 3.06l-.292-.16c-.764-.415-1.6.42-1.184 1.185l.159.292a1.873 1.873 0 0 1-1.115 2.692l-.319.094c-.835.246-.835 1.428 0 1.674l.319.094a1.873 1.873 0 0 1 1.115 2.693l-.16.291c-.415.764.42 1.6 1.185 1.184l.292-.159a1.873 1.873 0 0 1 2.692 1.116l.094.318c.246.835 1.428.835 1.674 0l.094-.319a1.873 1.873 0 0 1 2.693-1.115l.291.16c.764.415 1.6-.42 1.184-1.185l-.159-.291a1.873 1.873 0 0 1 1.116-2.693l.318-.094c.835-.246.835-1.428 0-1.674l-.319-.094a1.873 1.873 0 0 1-1.115-2.692l.16-.292c.415-.764-.42-1.6-1.185-1.184l-.291.159A1.873 1.873 0 0 1 8.93 1.945l-.094-.319zm-2.633-.283c.527-1.79 3.065-1.79 3.592 0l.094.319a.873.873 0 0 0 1.255.52l.292-.16c1.64-.892 3.434.901 2.54 2.541l-.159.292a.873.873 0 0 0 .52 1.255l.319.094c1.79.527 1.79 3.065 0 3.592l-.319.094a.873.873 0 0 0-.52 1.255l.16.292c.893 1.64-.902 3.434-2.541 2.54l-.292-.159a.873.873 0 0 0-1.255.52l-.094.319c-.527 1.79-3.065 1.79-3.592 0l-.094-.319a.873.873 0 0 0-1.255-.52l-.292.16c-1.64.893-3.433-.902-2.54-2.541l.159-.292a.873.873 0 0 0-.52-1.255l-.319-.094c-1.79-.527-1.79-3.065 0-3.592l.319-.094a.873.873 0 0 0 .52-1.255l-.16-.292c-.892-1.64.902-3.433 2.541-2.54l.292.159a.873.873 0 0 0 1.255-.52l.094-.319z"/>
+                                    <path fill-rule="evenodd"
+                                          d="M8 5.754a2.246 2.246 0 1 0 0 4.492 2.246 2.246 0 0 0 0-4.492zM4.754 8a3.246 3.246 0 1 1 6.492 0 3.246 3.246 0 0 1-6.492 0z"/>
+                                </svg>
+                            </span>
+                                <span class="nav-link-text">Paramètres</span>
+                            </a><!--//nav-link-->
+                        </li><!--//nav-item-->
                     </ul><!--//footer-menu-->
                 </nav>
             </div><!--//app-sidepanel-footer-->
@@ -607,6 +644,166 @@
     @endif
 
     $("#multi-filter-select").DataTable({
+        pageLength: 5,
+        initComplete: function () {
+            this.api()
+            .columns()
+            .every(function () {
+                var column = this;
+                var select = $(
+                    '<select class="form-select"><option value=""></option></select>'
+                )
+                    .appendTo($(column.footer()).empty())
+                    .on("change", function () {
+                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                        column
+                            .search(val ? "^" + val + "$" : "", true, false)
+                            .draw();
+                    });
+
+                column
+                .data()
+                .unique()
+                .sort()
+                .each(function (d, j) {
+                    select.append(
+                        '<option value="' + d + '">' + d + "</option>"
+                    );
+                });
+            });
+        },
+    });
+
+    $("#multi-filter-select2").DataTable({
+        pageLength: 5,
+        initComplete: function () {
+            this.api()
+            .columns()
+            .every(function () {
+                var column = this;
+                var select = $(
+                    '<select class="form-select"><option value=""></option></select>'
+                )
+                    .appendTo($(column.footer()).empty())
+                    .on("change", function () {
+                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                        column
+                            .search(val ? "^" + val + "$" : "", true, false)
+                            .draw();
+                    });
+
+                column
+                .data()
+                .unique()
+                .sort()
+                .each(function (d, j) {
+                    select.append(
+                        '<option value="' + d + '">' + d + "</option>"
+                    );
+                });
+            });
+        },
+    });
+
+    $("#multi-filter-select3").DataTable({
+        pageLength: 5,
+        initComplete: function () {
+            this.api()
+            .columns()
+            .every(function () {
+                var column = this;
+                var select = $(
+                    '<select class="form-select"><option value=""></option></select>'
+                )
+                    .appendTo($(column.footer()).empty())
+                    .on("change", function () {
+                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                        column
+                            .search(val ? "^" + val + "$" : "", true, false)
+                            .draw();
+                    });
+
+                column
+                .data()
+                .unique()
+                .sort()
+                .each(function (d, j) {
+                    select.append(
+                        '<option value="' + d + '">' + d + "</option>"
+                    );
+                });
+            });
+        },
+    });
+
+    $("#multi-filter-select4").DataTable({
+        pageLength: 5,
+        initComplete: function () {
+            this.api()
+            .columns()
+            .every(function () {
+                var column = this;
+                var select = $(
+                    '<select class="form-select"><option value=""></option></select>'
+                )
+                    .appendTo($(column.footer()).empty())
+                    .on("change", function () {
+                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                        column
+                            .search(val ? "^" + val + "$" : "", true, false)
+                            .draw();
+                    });
+
+                column
+                .data()
+                .unique()
+                .sort()
+                .each(function (d, j) {
+                    select.append(
+                        '<option value="' + d + '">' + d + "</option>"
+                    );
+                });
+            });
+        },
+    });
+
+    $("#multi-filter-select5").DataTable({
+        pageLength: 5,
+        initComplete: function () {
+            this.api()
+            .columns()
+            .every(function () {
+                var column = this;
+                var select = $(
+                    '<select class="form-select"><option value=""></option></select>'
+                )
+                    .appendTo($(column.footer()).empty())
+                    .on("change", function () {
+                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                        column
+                            .search(val ? "^" + val + "$" : "", true, false)
+                            .draw();
+                    });
+
+                column
+                .data()
+                .unique()
+                .sort()
+                .each(function (d, j) {
+                    select.append(
+                        '<option value="' + d + '">' + d + "</option>"
+                    );
+                });
+            });
+        },
+    });
+
+    $("#multi-filter-select6").DataTable({
         pageLength: 5,
         initComplete: function () {
             this.api()

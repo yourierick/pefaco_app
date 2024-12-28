@@ -74,7 +74,7 @@ class CommuniqueController extends Controller
 
     public function supprimer_un_communique(Request $request)
     {
-        $comminique_id = $request->get("communique_id");
+        $communique_id = $request->get("communique_id");
         $communique = Communique::find($communique_id);
         $communique->delete();
 

@@ -120,13 +120,13 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg mb-3">
                 <div class="max-w-xl">
-                    <h5 class="text-info" style="font-weight: 600; margin: 0"> Eglise pefaco universelle|  <span style="color: gray; font-size: 11pt">Rapport de District</span></h5>
+                    <h5 class="text-info" style="font-weight: 400; margin: 0"> Eglise pefaco universelle|  <span style="color: gray; font-size: 11pt">Rapport de District</span></h5>
                 </div>
                 <div class="dropdown-divider"></div>
                 <div class="row mt-5">
                     <div class="col-12 col-md-2">
                         <div class="mt-4">
-                            <img src="/storage/{{ $rapport->rapporteur->photo }}" class="img-fluid" alt="" style="box-shadow: 4px 0 0 #457ebe; padding-right: 2px; max-height: 160px; max-width: 150px">
+                            <img src="@if ($rapport->rapporteur->photo) /storage/{{ $rapport->rapporteur->photo }} @else {{ asset('css/images/utilisateur.png') }} @endif" class="img-fluid" alt="" style="box-shadow: 4px 0 0 #457ebe; padding-right: 2px; max-height: 160px; max-width: 150px">
                         </div>
                     </div>
                     <div class="col-12 col-md-8" style="align-content: center">

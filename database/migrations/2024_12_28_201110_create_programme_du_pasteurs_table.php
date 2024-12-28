@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('serviteurs', function (Blueprint $table) {
+        Schema::create('programme_du_pasteurs', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
-            $table->string('image');
-            $table->string('qualite');
-            $table->string('telephone')->nullable();
-            $table->string('email')->nullable();
+            $table->string('jour', 100);
+            $table->string('interval_de_temps', 100);
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('serviteurs');
+        Schema::dropIfExists('programme_du_pasteurs');
     }
 };

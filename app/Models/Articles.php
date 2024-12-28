@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Articles extends Model
 {
@@ -37,5 +38,20 @@ class Articles extends Model
     public function rapporteur_user()
     {
         return $this->belongsTo(User::class, "rapporteur_id");
+    }
+
+    public function delete() {
+        if ($this->video && Storage::disk('public')->exists($this->video)) {
+            Storage::disk('public')->delete($this->video);
+        }
+
+        $bibliotheque = json_decode($this->bibliotheque);
+        foreach($bibliotheque as $path) {
+            if (Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
+        }
+
+        return parent::delete();
     }
 }

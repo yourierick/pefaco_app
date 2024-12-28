@@ -41,7 +41,7 @@ class ArticlesController extends Controller
     {
         $autorisation = Autorisations::where('table_name', 'articles')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'articles')->where('user_id', $request->user()->id)->first();
-        $articles = Articles::with(["departement", "rapporteur"])->where('statut', 'draft')->where('rapporteur_id', $request->user()->id)->get();
+        $articles = Articles::with(["departement", "rapporteur_user"])->where('statut', 'draft')->where('rapporteur_id', $request->user()->id)->get();
         return view('private_layouts.articles_folder.list_des_articles', ['current_user'=>$request->user(), 'articles'=>$articles, 
         'autorisation'=>$autorisation, 'autorisation_speciale'=>$autorisation_speciale]);
     }

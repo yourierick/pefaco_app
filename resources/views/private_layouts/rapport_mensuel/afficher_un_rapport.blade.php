@@ -105,7 +105,7 @@
                 <div class="row mt-5">
                     <div class="col-12 col-md-2">
                         <div class="mt-4">
-                            <img src="/storage/{{ $rapport->user->photo }}" class="img-fluid" alt="" style="box-shadow: 4px 0 0 orangered; padding-right: 2px; max-height: 160px; max-width: 150px">
+                            <img src="@if ($rapport->user->photo) /storage/{{ $rapport->user->photo }} @else {{ asset('css/images/utilisateur.png') }} @endif" class="img-fluid" alt="" style="box-shadow: 4px 0 0 orangered; padding-right: 2px; max-height: 160px; max-width: 150px">
                         </div>
                     </div>
                     <div class="col-12 col-md-8" style="align-content: center">
@@ -376,7 +376,7 @@
                                                                 <td class="cell">{{ $transaction->type_de_transaction }}</td>
                                                                 <td class="cell">{{ $transaction->code_de_depense }}</td>
                                                                 <td class="cell">{{ $transaction->montant }} FC</td>
-                                                                <td class="cell">{{ $transaction->motif }} FC</td>
+                                                                <td class="cell">{{ $transaction->motif }}</td>
                                                                 <td class="cell">{{ $transaction->source }}</td>
                                                                 @if($rapport->departement->id !== 1)
                                                                     <td class="cell">{{ $transaction->pourcentage_eglise }} %</td>

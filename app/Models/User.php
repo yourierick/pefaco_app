@@ -81,4 +81,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsTo(GroupesUtilisateurs::class, "groupe_utilisateur_id");
     }
+
+    public function delete() {
+        if ($this->photo && Storage::disk('public')->exists($this->photo)) {
+            Storage::disk('public')->delete($this->photo);
+        }
+
+        return parent::delete();
+    }
 }

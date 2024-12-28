@@ -31,7 +31,7 @@ Route::middleware('auth')->name('manageprofile.')->group(function () {
     Route::put('/manage_user/user_account_status_check/{user_id}', [UserController::class, 'user_account_status_check'])->name('user_account_status_check');
     Route::put('/manage_user/save_autorisations_speciales/{autorisation_id}', [UserController::class, 'save_autorisations_speciales'])->name('save_autorisations_speciales');
 });
-
+require __DIR__.'/publicroutes.php';
 require __DIR__.'/auth.php';
 require __DIR__.'/depenses.php';
 require __DIR__.'/caisses.php';
@@ -48,3 +48,4 @@ require __DIR__.'/horairehebdo.php';
 require __DIR__.'/rapportmensuel.php';
 require __DIR__.'/rapportinspection.php';
 require __DIR__.'/rapportdistrict.php';
+require __DIR__.'/membres.php';

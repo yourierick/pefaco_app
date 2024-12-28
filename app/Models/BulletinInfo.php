@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class BulletinInfo extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'email'
+    ];
 }

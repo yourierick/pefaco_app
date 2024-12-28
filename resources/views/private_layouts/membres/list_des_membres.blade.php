@@ -1,12 +1,11 @@
 @extends('base_dashboard')
 @section('page_title', 'Pefaco Universelle')
-@section('titre', "#Communiqués/liste des communiqués")
 @section('other_content')
     <div class="d-flex" style="gap: 3px; float: right">
-        @if ($autorisationspeciales)
-            @if($autorisationspeciales->autorisation_speciale)
-                @if(in_array('peux ajouter', json_decode($autorisationspeciales->autorisation_speciale, true)))
-                    <a href="{{ route('communique.nouveau_communique') }}" class="btn btn-primary mb-2" title="nouvel enseignement" style="float:right"><span style="color: white"><i class='bx bx-edit-alt'></i></span></a>
+        @if (!is_null($autorisations))
+            @if($autorisations->autorisation_speciale)
+                @if(in_array('peux ajouter', json_decode($autorisations->autorisation_speciale, true)))
+                    <a href="{{ route('membres.nouveau_membre') }}" class="btn btn-primary mb-2" title="nouveau membre" style="float:right"><span style="color: white"><i class='bx bx-edit-alt'></i></span></a>
                 @endif
            @endif
         @endif
@@ -24,15 +23,15 @@
                 </div>
                 <div class="modal-body">
                     <div class="w-100 fw-normal">
-                        <p>voulez-vous vraiment supprimer ce communique ?</p>
+                        <p>voulez-vous vraiment supprimer ce membre ?</p>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <form method="post" action="{{ route('communique.supprimer_un_communique') }}">
+                    <form method="post" action="{{ route('membres.supprimer_membre') }}">
                         @csrf
                         @method('delete')
-                        <input type="hidden" name="communique_id" id="id_communique">
-                        <button type="submit" class="btn btn-danger text-light" style="font-weight: normal" title="supprimer ce communique">
+                        <input type="hidden" name="membre_id" id="id_membre">
+                        <button type="submit" class="btn btn-danger text-light" style="font-weight: normal" title="supprimer ce membre">
                             Oui je le veux
                         </button>
                     </form>
@@ -56,33 +55,38 @@
                                                 <thead style="text-transform: uppercase; background-color: #0a5a97; color: whitesmoke">
                                                 <tr>
                                                     <th class="cell" style="font-weight: normal; color: whitesmoke">N°</th>
-                                                    <th class="cell" style="font-weight: normal; color: whitesmoke">Code</th>
-                                                    <th class="cell" style="font-weight: normal; color: whitesmoke">titre</th>
-                                                    <th class="cell" style="font-weight: normal; color: whitesmoke">date</th>
+                                                    <th class="cell" style="font-weight: normal; color: whitesmoke">Nom</th>
+                                                    <th class="cell" style="font-weight: normal; color: whitesmoke">Paroisse</th>
+                                                    <th class="cell" style="font-weight: normal; color: whitesmoke">Etat</th>
                                                     <th class="cell"></th>
                                                 </tr>
                                                 </thead>
                                                 <tfoot>
                                                     <tr>
                                                         <th class="cell">N°</th>
-                                                        <th class="cell">Code</th>
-                                                        <th class="cell">titre</th>
-                                                        <th class="cell">date</th>
+                                                        <th class="cell">Nom</th>
+                                                        <th class="cell">Paroisse</th>
+                                                        <th class="cell">Etat</th>
                                                     </tr>
                                                 </tfoot>
                                                 <tbody>
-                                                @foreach($communiques as $communique)
+                                                @foreach($membres as $membre)
                                                     <tr>
                                                         <td class="cell">{{ $loop->iteration }}</td>
-                                                        <td class="cell">Communiqué n°00{{ $communique->id }}</td>
-                                                        <td class="cell">{{ $communique->titre }}</td>
-                                                        <td class="cell">{{ $communique->date->format('d/m/Y') }}</td>
+                                                        <td class="cell">{{ $membre->nom }}</td>
                                                         <td class="cell">
-                                                            <a class="btn-sm app-btn-secondary" href="{{ route('communique.afficher_un_communique', $communique->id) }}">voir</a>
-                                                            @if (!is_null($autorisationspeciales))
-                                                                @if($autorisationspeciales->autorisation_speciale)
-                                                                    @if(in_array('peux supprimer', json_decode($autorisationspeciales->autorisation_speciale, true)))
-                                                                        <a href="#" data-role="{{ $communique->id }}" onclick="loadidcommuniqueformodaldelete(this)" class="btn-sm app-btn-secondary" data-bs-toggle="modal"  data-bs-target='#modaldelete'><span class="bi-trash-fill text-danger"></span></a>
+                                                            @php
+                                                                $paroisse = \App\Models\Paroisses::find($membre->paroisse_id)
+                                                            @endphp
+                                                            {{ $paroisse->designation }}
+                                                        </td>
+                                                        <td class="cell">{{ $membre->etat }}</td>
+                                                        <td class="cell">
+                                                            <a class="btn-sm app-btn-secondary" href="{{ route('membres.afficher_membre', $membre->id) }}">voir</a>
+                                                            @if (!is_null($autorisations))
+                                                                @if($autorisations->autorisation_speciale)
+                                                                    @if(in_array('peux supprimer', json_decode($autorisations->autorisation_speciale, true)))
+                                                                        <a href="#" data-role="{{ $membre->id }}" onclick="loadidmembreformodaldelete(this)" class="btn-sm app-btn-secondary" data-bs-toggle="modal"  data-bs-target='#modaldelete'><span class="bi-trash-fill text-danger"></span></a>
                                                                     @endif
                                                                 @endif
                                                             @endif
@@ -104,8 +108,8 @@
 @endsection
 @section('scripts')
     <script>
-        function loadidcommuniqueformodaldelete(element) {
-            $("#id_communique").val(element.getAttribute('data-role'));
+        function loadidmembreformodaldelete(element) {
+            $("#id_membre").val(element.getAttribute('data-role'));
         }
     </script>
 @endsection

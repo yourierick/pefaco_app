@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Departements extends Model
+class ProgrammeDeCulte extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'designation',
+        'jour',
+        'interval_de_temps',
+        'programme',
     ];
 }

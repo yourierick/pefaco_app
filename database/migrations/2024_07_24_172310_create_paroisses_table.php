@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('designation', 100);
             $table->string('localisation', 255);
-            $table->foreignIdFor(\App\Models\Zones::class)->constrained()->cascadeOnDelete();
+            $table->unsignedBigInteger('zones_id')->nullable();
+            $table->foreign('zones_id')->references('id')->on('zones')->onDelete('set null');
+            $table->timestamps();
         });
     }
 

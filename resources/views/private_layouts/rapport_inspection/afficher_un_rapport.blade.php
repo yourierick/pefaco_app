@@ -87,7 +87,7 @@
                 <div class="row mt-5">
                     <div class="col-12 col-md-2">
                         <div class="mt-4">
-                            <img src="/storage/{{ $rapport->rapporteur->photo }}" class="img-fluid" alt="" style="box-shadow: 4px 0 0 orangered; padding-right: 1px; max-height: 160px; max-width: 150px">
+                            <img src="@if ($rapport->rapporteur->photo) /storage/{{ $rapport->rapporteur->photo }} @else {{ asset('css/images/utilisateur.png') }} @endif" class="img-fluid" alt="" style="box-shadow: 4px 0 0 orangered; padding-right: 1px; max-height: 160px; max-width: 150px">
                         </div>
                     </div>
                     <div class="col-12 col-md-8" style="align-content: center">

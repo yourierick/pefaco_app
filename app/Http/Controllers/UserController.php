@@ -56,7 +56,7 @@ class UserController extends Controller
             /** @var UploadedFile $photo */
             $image = $request->photo;
             $imagePath = $image->store('medias', 'public');
-            if ($photo_init){
+            if (Storage::disk('public')->exists($photo_init)){
                 Storage::disk('public')->delete($photo_init);
             }
             $user->photo = $imagePath;

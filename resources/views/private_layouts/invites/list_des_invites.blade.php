@@ -1,12 +1,11 @@
 @extends('base_dashboard')
 @section('page_title', 'Pefaco Universelle')
-@section('titre', "#Communiqués/liste des communiqués")
 @section('other_content')
     <div class="d-flex" style="gap: 3px; float: right">
-        @if ($autorisationspeciales)
-            @if($autorisationspeciales->autorisation_speciale)
-                @if(in_array('peux ajouter', json_decode($autorisationspeciales->autorisation_speciale, true)))
-                    <a href="{{ route('communique.nouveau_communique') }}" class="btn btn-primary mb-2" title="nouvel enseignement" style="float:right"><span style="color: white"><i class='bx bx-edit-alt'></i></span></a>
+        @if (!is_null($autorisations))
+            @if($autorisations->autorisation_speciale)
+                @if(in_array('peux ajouter', json_decode($autorisations->autorisation_speciale, true)))
+                    <a href="{{ route('invites.nouvel_invite') }}" class="btn btn-primary mb-2" style="float:right"><span style="color: white"><i class='bx bx-edit-alt'></i></span></a>
                 @endif
            @endif
         @endif
@@ -24,15 +23,15 @@
                 </div>
                 <div class="modal-body">
                     <div class="w-100 fw-normal">
-                        <p>voulez-vous vraiment supprimer ce communique ?</p>
+                        <p>voulez-vous vraiment supprimer cet invité ?</p>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <form method="post" action="{{ route('communique.supprimer_un_communique') }}">
+                    <form method="post" action="{{ route('invites.supprimer_invite') }}">
                         @csrf
                         @method('delete')
-                        <input type="hidden" name="communique_id" id="id_communique">
-                        <button type="submit" class="btn btn-danger text-light" style="font-weight: normal" title="supprimer ce communique">
+                        <input type="hidden" name="invite_id" id="id_invite">
+                        <button type="submit" class="btn btn-danger text-light" style="font-weight: normal">
                             Oui je le veux
                         </button>
                     </form>
@@ -56,33 +55,44 @@
                                                 <thead style="text-transform: uppercase; background-color: #0a5a97; color: whitesmoke">
                                                 <tr>
                                                     <th class="cell" style="font-weight: normal; color: whitesmoke">N°</th>
-                                                    <th class="cell" style="font-weight: normal; color: whitesmoke">Code</th>
-                                                    <th class="cell" style="font-weight: normal; color: whitesmoke">titre</th>
-                                                    <th class="cell" style="font-weight: normal; color: whitesmoke">date</th>
+                                                    <th class="cell" style="font-weight: normal; color: whitesmoke">Nom</th>
+                                                    <th class="cell" style="font-weight: normal; color: whitesmoke">Sexe</th>
+                                                    <th class="cell" style="font-weight: normal; color: whitesmoke">Contacts</th>
+                                                    <th class="cell" style="font-weight: normal; color: whitesmoke">Adresse de résidence</th>
+                                                    <th class="cell" style="font-weight: normal; color: whitesmoke">Eglise de provenance</th>
+                                                    <th class="cell" style="font-weight: normal; color: whitesmoke">Date</th>
                                                     <th class="cell"></th>
                                                 </tr>
                                                 </thead>
                                                 <tfoot>
                                                     <tr>
                                                         <th class="cell">N°</th>
-                                                        <th class="cell">Code</th>
-                                                        <th class="cell">titre</th>
-                                                        <th class="cell">date</th>
+                                                        <th class="cell">Nom</th>
+                                                        <th class="cell">Sexe</th>
+                                                        <th class="cell">Contacts</th>
+                                                        <th class="cell">Adresse de résidence</th>
+                                                        <th class="cell">Eglise de provenance</th>
+                                                        <th class="cell">Date</th>
                                                     </tr>
                                                 </tfoot>
                                                 <tbody>
-                                                @foreach($communiques as $communique)
+                                                @foreach($invites as $invite)
                                                     <tr>
                                                         <td class="cell">{{ $loop->iteration }}</td>
-                                                        <td class="cell">Communiqué n°00{{ $communique->id }}</td>
-                                                        <td class="cell">{{ $communique->titre }}</td>
-                                                        <td class="cell">{{ $communique->date->format('d/m/Y') }}</td>
-                                                        <td class="cell">
-                                                            <a class="btn-sm app-btn-secondary" href="{{ route('communique.afficher_un_communique', $communique->id) }}">voir</a>
-                                                            @if (!is_null($autorisationspeciales))
-                                                                @if($autorisationspeciales->autorisation_speciale)
-                                                                    @if(in_array('peux supprimer', json_decode($autorisationspeciales->autorisation_speciale, true)))
-                                                                        <a href="#" data-role="{{ $communique->id }}" onclick="loadidcommuniqueformodaldelete(this)" class="btn-sm app-btn-secondary" data-bs-toggle="modal"  data-bs-target='#modaldelete'><span class="bi-trash-fill text-danger"></span></a>
+                                                        <td class="cell">{{ $invite->nom }}</td>
+                                                        <td class="cell">{{ $invite->sexe }}</td>
+                                                        <td class="cell">{{ $invite->telephone }}</td>
+                                                        <td class="cell">{{ $invite->adresse_de_residence }}</td>
+                                                        <td class="cell">{{ $invite->eglise_de_provenance }}</td>
+                                                        <td class="cell">{{ $invite->created_at->isoFormat('dddd') }}, le {{ $invite->created_at->format('d/m/Y') }}</td>
+                                                        <td class="cell d-flex gap-1">
+                                                            @if (!is_null($autorisations))
+                                                                @if($autorisations->autorisation_speciale)
+                                                                    @if(in_array('peux modifier', json_decode($autorisations->autorisation_speciale, true)))
+                                                                        <a href="{{ route('invites.edit_invite', $invite->id) }}" class="btn-sm btn-primary"><span style="color: white"><i class='bx bx-edit-alt'></i></span></a>
+                                                                    @endif
+                                                                    @if(in_array('peux supprimer', json_decode($autorisations->autorisation_speciale, true)))
+                                                                        <a href="#" data-role="{{ $invite->id }}" onclick="loadidinviteformodaldelete(this)" class="btn-sm app-btn-secondary" data-bs-toggle="modal"  data-bs-target='#modaldelete'><span class="bi-trash-fill text-danger"></span></a>
                                                                     @endif
                                                                 @endif
                                                             @endif
@@ -104,8 +114,8 @@
 @endsection
 @section('scripts')
     <script>
-        function loadidcommuniqueformodaldelete(element) {
-            $("#id_communique").val(element.getAttribute('data-role'));
+        function loadidinviteformodaldelete(element) {
+            $("#id_invite").val(element.getAttribute('data-role'));
         }
     </script>
 @endsection
