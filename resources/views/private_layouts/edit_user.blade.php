@@ -489,6 +489,12 @@
                                                             peux supprimer
                                                         </label>
                                                     </div>
+                                                    <div class="form-check">
+                                                        <input type="checkbox" value="peux changer l'audience" name="autorisation_speciale[]" id="rpt_checkbox-5-{{ $autorisation->id }}" @if($autorisation->autorisation_speciale !== null) @if(in_array("peux changer l'audience", json_decode($autorisation->autorisation_speciale, true))) checked @endif @endif>
+                                                        <label class="form-check-label" for="rpt_checkbox-5-{{ $autorisation->id }}">
+                                                            peux changer l'audience
+                                                        </label>
+                                                    </div>
                                                 </div><!--//app-card-body-->
                                                 <div class="mt-3">
                                                     <button type="submit" class="btn btn-primary text-light" >Enregistrer</button>

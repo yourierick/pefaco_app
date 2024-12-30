@@ -27,7 +27,7 @@
                             <button type="button" class="btn" id="btn_communique"><i class='bx bx-plus-circle' style="font-size: 12pt"></i></button>
                             <hr>
 
-                            <button type="submit" class="btn btn-primary mt-2 text-light">Soumettre</button>
+                            <button type="submit" class="btn btn-primary mt-2 text-light">Partager</button>
                         </form>
                     </section>
                 </div>

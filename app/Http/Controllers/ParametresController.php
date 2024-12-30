@@ -137,6 +137,7 @@ class ParametresController extends Controller
             'notre_vision'=>['required'],
             'notre_communaute'=>['required'],
             'pasteur_responsable'=>['required'],
+            'nom_du_pasteur'=>['required'],
         ], [
             'nom_eglise.required'=>"ce champs est obligatoire",
             'localisation.required'=>"ce champs est obligatoire",
@@ -150,13 +151,14 @@ class ParametresController extends Controller
             'notre_vision.required'=>"ce champs est obligatoire",
             'notre_communaute.required'=>"ce champs est obligatoire",
             'pasteur_responsable.required'=>"ce champs est obligatoire",
+            'nom_du_pasteur.required'=>"ce champs est obligatoire",
         ]);
 
         $configuration_generale = ConfigurationGenerale::all();
 
         if (!$configuration_generale->isEmpty()) {
             $configuration_generale = ConfigurationGenerale::find(1);
-            $logoinit = $configuration_generale->logo;
+            $logoinit = $configuration_generale->logo ? $configuration_generale->logo : "";
             if ($request->hasFile('logo')) {
                 /** @var UploadedFile $photo */
                 $image = $request->logo;
@@ -165,6 +167,17 @@ class ParametresController extends Controller
                     Storage::disk('public')->delete($logoinit);
                 }
                 $configuration_generale->logo = $imagePath;
+            }
+
+            $photo_du_pasteur_responsable_init = $configuration_generale->photo_du_pasteur_responsable ? $configuration_generale->photo_du_pasteur_responsable: "";
+            if ($request->hasFile('photo_du_pasteur_responsable')) {
+                /** @var UploadedFile $photo */
+                $image = $request->photo_du_pasteur_responsable;
+                $imagePathPhoto = $image->store('medias', 'public');
+                if (Storage::disk('public')->exists($photo_du_pasteur_responsable_init)){
+                    Storage::disk('public')->delete($photo_du_pasteur_responsable_init);
+                }
+                $configuration_generale->photo_du_pasteur_responsable = $imagePathPhoto;
             }
 
             $configuration_generale->nom_eglise = $request->get('nom_eglise');
@@ -179,6 +192,7 @@ class ParametresController extends Controller
             $configuration_generale->notre_vision = $request->get('notre_vision');
             $configuration_generale->notre_communaute = $request->get('notre_communaute');
             $configuration_generale->pasteur_responsable = $request->get('pasteur_responsable');
+            $configuration_generale->nom_du_pasteur = $request->get('nom_du_pasteur');
 
             $configuration_generale->update();
         } else {
@@ -186,6 +200,11 @@ class ParametresController extends Controller
                 /** @var UploadedFile $photo */
                 $image = $request->logo;
                 $imagePath = $image->store('medias', 'public');
+            }
+            if ($request->hasFile('photo_du_pasteur_responsable')) {
+                /** @var UploadedFile $photo */
+                $image = $request->photo_du_pasteur_responsable;
+                $imagePathPhoto = $image->store('medias', 'public');
             }
             $configuration_generale = ConfigurationGenerale::create([
                 'logo'=>$imagePath,
@@ -201,6 +220,8 @@ class ParametresController extends Controller
                 'notre_vision'=>$request->get('notre_vision'),
                 'notre_communaute'=>$request->get('notre_communaute'),
                 'pasteur_responsable'=>$request->get('pasteur_responsable'),
+                'nom_du_pasteur'=>$request->get('nom_du_pasteur'),
+                'photo_du_pasteur_responsable'=>$imagePathPhoto,
             ]);
         }
 

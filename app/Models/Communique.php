@@ -14,7 +14,7 @@ class Communique extends Model
         'communiquant_id',
         'titre',
         'contenu',
-        'accuse_de_reception',
+        'audience',
     ];
 
     protected function casts(): array

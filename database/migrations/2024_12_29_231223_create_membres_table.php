@@ -32,8 +32,8 @@ return new class extends Migration
             $table->date('date_de_bapteme')->nullable();
             $table->string('statut');
             $table->string('fonction')->nullable();
-            $table->string('responsabilites', 500)->nullable();
-            $table->string('etat')->nullable();
+            $table->text('responsabilites')->nullable();
+            $table->string('etat')->default('en service');
             $table->string('motif_de_suspension', 500)->nullable();
             $table->timestamps();
         });

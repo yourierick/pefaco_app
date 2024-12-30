@@ -121,8 +121,8 @@
                             <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                 <label for="id_statut" style="color: #818183">Statut</label>
                                 <select name="statut" id="id_statut" class="form-control">
-                                    <option value="Oui">Serviteur</option>
-                                    <option value="Non">Simple membre</option>    
+                                    <option value="Serviteur">Serviteur</option>
+                                    <option value="Simple membre">Simple membre</option>    
                                 </select>
                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('statut')"/>
                             </div>
@@ -136,12 +136,6 @@
                                 <textarea class="form-control" name="responsabilites" id="id_responsabilites" value="">{{ old('responsabilites') }}</textarea>
                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('responsabilites')"/>
                             </div>
-                            <div class="form-group-kaiadmin form-group-default-kaiadmin">
-                                <label for="id_motif_de_suspension" style="color: #818183">Motif de suspension</label>
-                                <textarea class="form-control" name="motif_de_suspension" id="id_motif_de_suspension" value="">{{ old('motif_de_suspension') }}</textarea>
-                                <x-input-error class="mt-2 text-danger" :messages="$errors->get('motif_de_suspension')"/>
-                            </div>
-
                             <button type="submit" class="btn btn-primary mt-2 text-light">Enregistrer</button>
                         </form>
                     </section>

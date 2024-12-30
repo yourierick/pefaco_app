@@ -201,17 +201,19 @@
                                     <p style="margin: 0">Etat: </p>
                                 </div>
                                 <div class="col-6 col-md-8">
-                                    <p @class(['text-warning' => $membre->etat === 'Suspendu', 'text-success' => $membre->etat === 'En service']) style="margin: 0; font-weight: 500">{{ $membre->etat }}</p>
+                                    <p @class(['text-warning' => $membre->etat === 'suspendu', 'text-success' => $membre->etat === 'en service']) style="margin: 0; font-weight: 500">{{ $membre->etat }}</p>
                                 </div>
                             </div>
-                            <div class="row mt-2">
-                                <div class="col-6 col-md-4">
-                                    <p class="text-muted" style="margin: 0">Motif de suspension: </p>
+                            @if ($membre->etat === "suspendu")
+                                <div class="row mt-2">
+                                    <div class="col-6 col-md-4">
+                                        <p class="text-muted" style="margin: 0">Motif de suspension: </p>
+                                    </div>
+                                    <div class="col-6 col-md-8">
+                                        <p class="text-muted" style="margin: 0"> <span style="text-transform: capitalize; font-weight: 400">{{ $membre->motif_de_suspension }}</span></p> 
+                                    </div>
                                 </div>
-                                <div class="col-6 col-md-8">
-                                    <p class="text-muted" style="margin: 0"> <span style="text-transform: capitalize; font-weight: 400">{{ $membre->motif_de_suspension }}</span></p> 
-                                </div>
-                            </div>
+                            @endif
                         </div>
                     </section>
                 </div>

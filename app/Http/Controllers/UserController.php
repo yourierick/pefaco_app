@@ -51,7 +51,7 @@ class UserController extends Controller
                 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
                 'telephone' => ['required', 'max:10', Rule::unique(User::class)->ignore($user->id)],
             ]);
-        $photo_init = $user->photo;
+        $photo_init = $user->photo ? $user->photo : "";
         if ($request->hasFile('photo')){
             /** @var UploadedFile $photo */
             $image = $request->photo;

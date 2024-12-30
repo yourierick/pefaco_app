@@ -7,12 +7,28 @@
 @endsection
 @section('other_content')
     <div style="float:right; display: flex; gap: 2px">
-        @if ($autorisationspeciales)
+        @if (!is_null($autorisationspeciales))
             @if($autorisationspeciales->autorisation_speciale)
                 @if(in_array('peux modifier', json_decode($autorisationspeciales->autorisation_speciale, true)))
                     <div style="float:right">
                         <a href="{{ route('communique.edit_un_communique', $communique->id) }}" class="btn btn-primary mb-2"><span style="color: white">modifier</span></a>
                     </div>
+                @endif
+                @if(in_array("peux changer l'audience", json_decode($autorisationspeciales->autorisation_speciale, true)))
+                    @if ($communique->audience === "privé")
+                        <form method="post" action="{{ route('communique.audience_communique', $communique->id) }}">
+                            @csrf
+                            @method('put')
+                            <button type="submit" name="action" value="publier" class="btn app-btn-secondary mb-2"><span>publier</span></button>
+                        </form>
+                    @endif
+                    @if($communique->audience === "public")
+                        <form method="post" action="{{ route('communique.audience_communique', $communique->id) }}">
+                            @csrf
+                            @method('put')
+                            <button type="submit" name="action" value="depublier" class="btn btn-danger  mb-2"><span class="text-light">dépublier</span></button>
+                        </form>
+                    @endif
                 @endif
             @endif
         @endif
@@ -43,7 +59,7 @@
                                                                 <hr>
                                                                 <div class="ml-2" style="box-shadow: -2px 0 0 rgb(194, 194, 194); padding-left: 10px">
                                                                     <div id="text" class="ml-3">
-                                                                        <h5 class="title mb-4">Objet: "{{ $communique->titre }}" pour le {{ $communique->date->format('d/m/Y')  }}</h5>
+                                                                        <h5 class="title mb-4">Objet: "{{ $communique->titre }}"</h5>
                                                                         @foreach(json_decode($communique->contenu, true) as $value)
                                                                             <p style="text-align: justify"><span style="font-weight: 600">{{ $loop->iteration }}.</span>  {{ $value }}</p>
                                                                         @endforeach

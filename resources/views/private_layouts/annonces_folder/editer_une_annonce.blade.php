@@ -32,7 +32,7 @@
 
                             <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                 <label for="id_photo" style="color: #818183">photo déscriptive</label>
-                                <input class="form-control" type="file" value="{{ $annonce->photo_descriptive }}" name="video" id="id_photo">
+                                <input class="form-control" type="file" value="{{ $annonce->photo_descriptive }}" name="photo_descriptive" id="id_photo">
                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('photo_descriptive')"/>
                             </div>
                             

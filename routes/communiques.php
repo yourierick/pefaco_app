@@ -18,5 +18,7 @@ Route::middleware('auth')->name('communique.')->group(function () {
         'edit_un_communique'])->name('edit_un_communique');
     Route::put('/communique/save_edition_communique/{communique_id}', [CommuniqueController::class,
         'save_edition_communique'])->name('save_edition_communique');
+    Route::put('/communique/audience_communique/{communique_id}', [CommuniqueController::class,
+        'audience_communique'])->name('audience_communique');
 });
 

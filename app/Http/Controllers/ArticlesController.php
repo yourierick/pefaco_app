@@ -196,7 +196,9 @@ class ArticlesController extends Controller
         $deleted_photos = array_diff($existing_photos, $submitted_photos);
 
         foreach ($deleted_photos as $photo) {
-            Storage::disk('public')->delete($photo);
+            if (Storage::disk('public')->exists($photo)) {
+                Storage::disk('public')->delete($photo);
+            }
         }
 
         $updated_photos = array_diff($existing_photos, $deleted_photos);

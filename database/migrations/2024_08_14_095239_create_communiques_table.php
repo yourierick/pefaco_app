@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreign('communiquant_id')->references('id')->on('users')->onDelete("set null");
             $table->string('titre', '255');
             $table->json('contenu');
-            $table->json('accuse_de_reception')->nullable();
+            $table->string('audience')->default('privé');
             $table->timestamps();
         });
     }

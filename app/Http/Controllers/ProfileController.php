@@ -33,13 +33,15 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $photo_init = $request->user()->photo;
+        $photo_init = $request->user()->photo ? $request->user()->photo : "";
         $request->user()->fill($request->validated());
         if ($request->hasFile('photo')){
             /** @var UploadedFile $photo */
             $image = $request->photo;
             $imagePath = $image->store('medias', 'public');
-            Storage::disk('public')->delete($photo_init);
+            if(Storage::disk('public')->delete($photo_init)) {
+                Storage::disk('public')->delete($photo_init);
+            }
             $request->user()->photo = $imagePath;
         }else {
             $request->user()->photo = $photo_init;

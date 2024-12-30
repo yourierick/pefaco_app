@@ -1,6 +1,5 @@
 @extends('base_dashboard')
 @section('page_title', 'Pefaco Universelle')
-@section('titre', '#Annonce')
 @section('style')
     <link rel="stylesheet" href="{{ asset("assets/css/affichage_rapport_event.css") }}">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -32,7 +31,7 @@
             @endif
         @endif
         @if($annonce->statut === "validé")
-            @if($autorisation_speciale)
+            @if(!is_null($autorisation_speciale))
                 @if($autorisation_speciale->autorisation_speciale)
                     @if(in_array("peux changer l'audience", json_decode($autorisation_speciale->autorisation_speciale, true)))
                         @if ($annonce->audience === "privé")
@@ -46,7 +45,7 @@
                             <form method="post" action="{{ route('annonce.traitement_annonce', $annonce->id) }}">
                                 @csrf
                                 @method('put')
-                                <button type="submit" name="action" value="prive" class="btn btn-danger text-light mb-2"><span>privé</span></button>
+                                <button type="submit" name="action" value="prive" class="btn btn-danger mb-2"><span class="text-light">dépublier</span></button>
                             </form>
                         @endif
                      @endif
@@ -84,7 +83,7 @@
                         </div><!--//tab-content-->
                     </section>
                 </div>
-                <p style="font-weight: bold; font-size: 10pt">Signé par {{ $annonce->annonceur->nom }} {{ $annonce->annonceur->postnom }} {{ $annonce->annonceur->prenom }}</p>
+                <p style="font-weight: normal; font-size: 10pt; font-style: italic">Signé par {{ $annonce->annonceur->nom }} {{ $annonce->annonceur->postnom }} {{ $annonce->annonceur->prenom }}</p>
             </div>
         </div>
     </div>

@@ -88,8 +88,6 @@ class MembreController extends Controller
             'statut'=>$request->get('statut'),
             'fonction'=>$request->get('fonction'),
             'responsabilites'=>$request->get('responsabilites'),
-            'etat'=>$request->get('etat'),
-            'motif_de_suspension'=>$request->get('motif_de_suspension'),
         ]);
 
         return redirect()->route('membres.list_des_membres')->with('success', "le membre a été ajouté");
@@ -162,6 +160,12 @@ class MembreController extends Controller
             $membre->photo = $imagePath;
         }
 
+        if ($request->get('etat') === "en service") {
+            $membre->motif_de_suspension = "";
+        }else {
+            $membre->motif_de_suspension = $request->get('motif_de_suspension');
+        }
+
 
         $membre->paroisse_id= $request->get('paroisse_id');
         $membre->nom = $request->get('nom');
@@ -183,7 +187,7 @@ class MembreController extends Controller
         $membre->fonction = $request->get('fonction');
         $membre->responsabilites = $request->get('responsabilites');
         $membre->etat = $request->get('etat');
-        $membre->motif_de_suspension = $request->get('motif_de_suspension');
+        
 
         $membre->update();
 

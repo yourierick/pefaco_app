@@ -118,4 +118,20 @@ class CommuniqueController extends Controller
 
         return redirect()->route('communique.afficher_un_communique', $communique_id )->with('success', 'les mises à jours ont été appliqués');
     }
+
+    public function audience_communique($communique_id, Request $request) {
+        $communique = Communique::find($communique_id);
+        $action = $request->input('action');
+        $message = "";
+        if ($action == 'publier') {
+            $communique->audience = 'public';
+            $message = "le communiqué a été publié";
+        }else {
+            $communique->audience = 'privé';
+            $message = "le communiqué a été dépublié";
+        }
+        $communique->update();
+
+        return Redirect()->back()->with('status', $message);
+    }
 }

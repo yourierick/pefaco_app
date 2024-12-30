@@ -102,7 +102,7 @@
                                                         <td class="cell">{{ $article->titre }}</td>
                                                         <td class="cell">{{ $article->statut }}</td>
                                                         <td class="cell">{{ $article->audience }}</td>
-                                                        <td class="cell">
+                                                        <td class="cell d-flex gap-1">
                                                             <a class="btn-sm app-btn-secondary" href="{{ route('article.afficher_article', $article->id) }}">voir</a>
                                                             @if($autorisation)
                                                                 @if($autorisation->autorisation_en_ecriture)

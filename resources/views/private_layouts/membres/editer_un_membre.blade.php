@@ -141,8 +141,8 @@
                             <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                 <label for="id_etat" style="color: #818183">Etat</label>
                                 <select name="etat" id="id_etat" class="form-control">
-                                    <option @if ($membre->etat === "En service") selected @endif value="En service">En service</option>
-                                    <option @if ($membre->etat === "Suspendu") selected @endif value="Suspendu">Suspendre</option>    
+                                    <option @if ($membre->etat === "En service") selected @endif value="en service">En service</option>
+                                    <option @if ($membre->etat === "Suspendu") selected @endif value="suspendu">Suspendre</option>    
                                 </select>
                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('etat')"/>
                             </div>

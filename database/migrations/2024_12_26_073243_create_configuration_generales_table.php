@@ -25,7 +25,9 @@ return new class extends Migration
             $table->text('notre_vision');
             $table->text('notre_communaute');
             $table->string('localisation', 255);
+            $table->string('nom_du_pasteur')->nullable();
             $table->text('pasteur_responsable', 255);
+            $table->text('photo_du_pasteur_responsable')->nullable();
             $table->timestamps();
         });
     }

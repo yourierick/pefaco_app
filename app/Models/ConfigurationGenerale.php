@@ -23,5 +23,7 @@ class ConfigurationGenerale extends Model
         'notre_vision',
         'notre_communaute',
         'pasteur_responsable',
+        'photo_du_pasteur_responsable',
+        'nom_du_pasteur',
     ];
 }

@@ -15,6 +15,7 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset("new_styles_and_scripts/css/plugins.min.css") }}"/>
     <link rel="stylesheet" href="{{ asset("new_styles_and_scripts/css/kaiadmin.css") }}"/>
+    <link rel="stylesheet" href="{{ asset("new_styles_and_scripts/css/card-articles.css") }}"/>
 
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -78,8 +79,11 @@
             -moz-transition:all 0.4s ease;
             transition:all 0.4s ease;
         }
+        a {
+            text-decoration: none!important;
+        }
     </style>
-
+    @yield('style')
 </head>
 <body>
 
@@ -100,7 +104,7 @@
 <!-- End Preloader -->
 <!-- Get Pro Button -->
 <ul class="pro-features">
-    <a class="get-pro" href="#">MENU</a>
+    <a class="get-pro" style="cursor: pointer">MENU</a>
     <div class="button">
         @if (Route::has('login'))
             @auth
@@ -126,8 +130,8 @@
                 <div class="col-lg-6 col-md-5 col-12">
                     <!-- Contact -->
                     <ul class="top-link">
-                        <li><a href="#">A propos de nous!</a></li>
-                        <li><a href="#">Nous contacter</a></li>
+                        <li><a href="#section_apropos">A propos de nous!</a></li>
+                        <li><a href="#section_nous_ecrire">Nous contacter</a></li>
                     </ul>
                     <!-- End Contact -->
                 </div>
@@ -166,15 +170,15 @@
                                 <ul class="nav menu">
                                     <li class="active"><a href="#">Accueil <i class="icofont-rounded-down"></i></a>
                                         <ul class="dropdown">
-                                            <li><a href="index.html">accueil</a></li>
+                                            <li><a href="#accueil">accueil</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="#">A propos de nous! </a></li>
-                                    <li><a href="#">Communiqués </a></li>
-                                    <li><a href="#">Actualités <i class="icofont-rounded-down"></i></a>
+                                    <li><a href="#section_apropos">A propos de nous! </a></li>
+                                    <li><a href="#section_communique">Communiqués </a></li>
+                                    <li><a style="cursor: pointer">Actualités <i class="icofont-rounded-down"></i></a>
                                         <ul class="dropdown">
-                                            <li><a href="#">Annonces et publicités</a></li>
-                                            <li><a href="#">Report</a></li>
+                                            <li><a href="#annonces_et_publicites">Annonces et publicités</a></li>
+                                            <li><a href="#articles">Articles</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -219,14 +223,14 @@
                         <div>
                             <div class="col-12">
                                 <ul>
-                                    <li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i>Accueil</a></li>
-                                    <li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i>A propos de nous</a>
+                                    <li><a href="#accueil"><i class="fa fa-caret-right" aria-hidden="true"></i>Accueil</a></li>
+                                    <li><a href="#section_apropos"><i class="fa fa-caret-right" aria-hidden="true"></i>A propos de nous</a>
                                     </li>
-                                    <li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i>Nous contacter</a>
+                                    <li><a href="#section_nous_ecrire"><i class="fa fa-caret-right" aria-hidden="true"></i>Nous contacter</a>
                                     </li>
-                                    <li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i>Communiqués</a>
+                                    <li><a href="#section_communique"><i class="fa fa-caret-right" aria-hidden="true"></i>Communiqués</a>
                                     </li>
-                                    <li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i>Actualités</a>
+                                    <li><a href="#articles"><i class="fa fa-caret-right" aria-hidden="true"></i>Actualités</a>
                                     </li>
                                 </ul>
                             </div>
@@ -235,11 +239,20 @@
                 </div>
                 <div class="col-lg-3 col-md-6 col-12">
                     <div class="single-footer">
-                        <h2>Horaire de disponibilité</h2>
-                        <p>Lorem ipsum dolor sit ame consectetur adipisicing elit do eiusmod tempor incididunt.</p>
+                        <h2>Programme de culte</h2>
+                        <p>Calendrier hebdomadaire des cultes</p>
                         <ul class="time-sidual">
-                            <li class="day">Lundi- Vendredi <span>16.00-20.00</span></li>
-                            <li class="day">Samedi <span>8.00-10.00</span></li>
+                            @for ($i = 0 ; $i < $programmedeculte->count(); $i++)
+                                @php
+                                    $programme = $programmedeculte->get($i);
+                                @endphp
+                                <div>
+                                    <li style="color: whitesmoke">
+                                        - {{ $programme->programme }}
+                                        <p class="ml-2">{{ $programme->jour }} : {{ $programme->interval_de_temps }}</p>
+                                    </li>
+                                </div>
+                            @endfor
                         </ul>
                     </div>
                 </div>
@@ -366,6 +379,6 @@
         });
     @endif
 </script>
-
+@yield('scripts')
 </body>
 </html>

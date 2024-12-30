@@ -56,7 +56,7 @@
                             <form method="post" action="{{ route('article.traitement_article', $article->id) }}">
                                 @csrf
                                 @method('put')
-                                <button type="submit" name="action" value="publication" class="btn app-btn-secondary mb-2"><span class="text-light">publier</span></button>
+                                <button type="submit" name="action" value="publication" class="btn app-btn-secondary mb-2"><span>publier</span></button>
                             </form>
                         @endif
                         @if($article->audience === "public")
@@ -107,24 +107,30 @@
                                  aria-labelledby="orders-all-tab">
                                 <div class="app-card app-card-orders-table shadow-sm mb-5">
                                     <div class="app-card-body">
-                                        <h3 class="ml-3 text-muted" style="text-transform: capitalize">{{ $article->titre }} Date de rapportage: {{ $article->date->format("d-m-Y") }}</h3>
+                                        <h3 class="ml-3 text-muted" style="text-transform: capitalize; font-weight: normal">{{ $article->titre }} du: {{ $article->date->format("d-m-Y") }}</h3>
                                         <div class="p-4">
                                             @php
                                                 $bibliotheque = json_decode($article->bibliotheque, true);
                                                 $firstelement = isset($bibliotheque[0]) ? $bibliotheque[0]: '#';
                                             @endphp
-                                            <img src="{{ \Illuminate\Support\Facades\Storage::url($firstelement) }}" alt="#" style="max-height: 500px; width: 100%">
-                                            <div class="mt-4">
-                                                <p style="color: darkgray; text-align: justify">{{ $article->description }}</p>
+                                            <div class="row mt-4 mb-3">
+                                                <div class="col-md-6 col-sm-12 pr-1">
+                                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($firstelement) }}" alt="#" style="max-height: 500px; width: 100%">
+                                                </div>
+                                                <div class="col-md-6 col-sm-12 pl-1">
+                                                    <p style="color: darkgray; text-align: justify">{{ $article->description }}</p>
+                                                </div>
                                             </div>
+                                            <hr>
+                                            <h5 class="mb-2">Related</h5>
                                             <div>
                                                 @php
                                                     $bibliotheques = json_decode($article->bibliotheque, true);
                                                 @endphp
                                                 <div class="row mt-3 p-2 shadow">
                                                     @foreach($bibliotheques as $bibliotheque)
-                                                        <div class="col-4">    
-                                                            <img src="{{ \Illuminate\Support\Facades\Storage::url($bibliotheque) }}" alt="#" style="max-width: 100%; min-height: 100%">
+                                                        <div class="col-2">    
+                                                            <img src="{{ \Illuminate\Support\Facades\Storage::url($bibliotheque) }}" alt="#" style="max-height: 100px; min-width: 100%">
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -132,7 +138,7 @@
                                         </div>
                                         @if($article->video)
                                             <hr>
-                                            <h3 class="ml-3">Vidéo déscriptive</h3>
+                                            <h3 class="ml-3">Related Video</h3>
                                             <div class="p-3">
                                                 <video controls height="300px" width="100%">
                                                     <video src="" controls></video>

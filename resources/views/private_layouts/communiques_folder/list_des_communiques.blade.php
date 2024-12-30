@@ -59,6 +59,7 @@
                                                     <th class="cell" style="font-weight: normal; color: whitesmoke">Code</th>
                                                     <th class="cell" style="font-weight: normal; color: whitesmoke">titre</th>
                                                     <th class="cell" style="font-weight: normal; color: whitesmoke">date</th>
+                                                    <th class="cell" style="font-weight: normal; color: whitesmoke">audience</th>
                                                     <th class="cell"></th>
                                                 </tr>
                                                 </thead>
@@ -68,6 +69,7 @@
                                                         <th class="cell">Code</th>
                                                         <th class="cell">titre</th>
                                                         <th class="cell">date</th>
+                                                        <th class="cell">audience</th>
                                                     </tr>
                                                 </tfoot>
                                                 <tbody>
@@ -77,6 +79,7 @@
                                                         <td class="cell">Communiqué n°00{{ $communique->id }}</td>
                                                         <td class="cell">{{ $communique->titre }}</td>
                                                         <td class="cell">{{ $communique->date->format('d/m/Y') }}</td>
+                                                        <td class="cell">{{ $communique->audience }}</td>
                                                         <td class="cell">
                                                             <a class="btn-sm app-btn-secondary" href="{{ route('communique.afficher_un_communique', $communique->id) }}">voir</a>
                                                             @if (!is_null($autorisationspeciales))

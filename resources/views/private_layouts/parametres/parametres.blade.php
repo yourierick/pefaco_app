@@ -356,7 +356,7 @@
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('notre_communaute')"/>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Pasteur responsable
+                                    <label class="form-label">Nom du pasteur
                                         <span class="ms-2" data-container="body" data-bs-toggle="popover" data-trigger="hover" data-placement="top" data-content="This is a Bootstrap popover example. You can use popover to provide extra info.">
                                             <svg
                                                 width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle"
@@ -367,8 +367,38 @@
                                             </svg>
                                         </span>
                                     </label>
-                                    <textarea type="text" name="pasteur_responsable" class="form-control" id="id_pasteur_responsable" required>{{ old('pasteur_responsable', $configuration_generale ? $configuration_generale->pasteur_responsable: "") }}</textarea>
+                                    <input type="text" name="nom_du_pasteur" class="form-control" id="id_nom_du_pasteur" value="{{ old('nom_du_pasteur', $configuration_generale ? $configuration_generale->nom_du_pasteur: "") }}" required>
+                                    <x-input-error class="mt-2 text-danger" :messages="$errors->get('nom_du_pasteur')"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">A propos du pasteur
+                                        <span class="ms-2" data-container="body" data-bs-toggle="popover" data-trigger="hover" data-placement="top" data-content="This is a Bootstrap popover example. You can use popover to provide extra info.">
+                                            <svg
+                                                width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle"
+                                                fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
+                                                <circle cx="8" cy="4.5" r="1"/>
+                                            </svg>
+                                        </span>
+                                    </label>
+                                    <textarea name="pasteur_responsable" class="form-control" id="id_pasteur_responsable" required>{{ old('pasteur_responsable', $configuration_generale ? $configuration_generale->pasteur_responsable: "") }}</textarea>
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('pasteur_responsable')"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label  class="form-label">Photo du pasteur responsable
+                                        <span class="ms-2" data-container="body" data-bs-toggle="popover" data-trigger="hover" data-placement="top" data-content="This is a Bootstrap popover example. You can use popover to provide extra info.">
+                                            <svg
+                                                width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle"
+                                                fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
+                                                <circle cx="8" cy="4.5" r="1"/>
+                                            </svg>
+                                        </span>
+                                    </label>
+                                    <input class="form-control" type="file" name="photo_du_pasteur_responsable" id="id_photo_du_pasteur_responsable" value="{{ old('photo_du_pasteur_responsable', $configuration_generale ? $configuration_generale->photo_du_pasteur_responsable: "") }}">
+                                    <x-input-error class="mt-2 text-danger" :messages="$errors->get('photo_du_pasteur_responsable')"/>
                                 </div>
                                 
                                 <button type="submit" class="btn btn-primary text-light" style="font-weight: normal">Enregistrer les modifications</button>
@@ -755,17 +785,7 @@
                                                     <div class="d-flex gap-2">
                                                         <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                                             <label for="id_jour">jour</label>
-                                                            <select name="jour" id="id_jour" class="form-control">
-                                                                <option value="{{ old('jour', "Lundi") }}">Lundi</option>
-                                                                <option value="{{ old('jour', "Mardi") }}">Mardi</option>
-                                                                <option value="{{ old('jour', "Mercredi") }}">Mercredi</option>
-                                                                <option value="{{ old('jour', "Jeudi") }}">Jeudi</option>
-                                                                <option value="{{ old('jour', "Vendredi") }}">Vendredi</option>
-                                                                <option value="{{ old('jour', "Samedi") }}">Samedi</option>
-                                                                <option value="{{ old('jour', "Dimanche") }}">Dimanche</option>
-                                                                <option value="{{ old('jour', "Tous les jours") }}">Tous les jours</option>
-                                                                <option value="{{ old('jour', "Du lundi au samedi") }}">Du lundi au samedi</option>
-                                                            </select>
+                                                            <input type="text" name="jour" id="id_jour" class="form-control">
                                                             <x-input-error class="mt-2 text-danger" :messages="$errors->get('jour')"/>
                                                         </div>
                                                         <div class="form-group-kaiadmin form-group-default-kaiadmin">

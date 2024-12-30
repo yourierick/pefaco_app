@@ -60,6 +60,7 @@ class AnnonceController extends Controller
             ]);
 
 
+        $photo = "";
         if ($request->hasFile('photo_descriptive')) {
             $path = $request->photo_descriptive->store('medias', 'public');
             $photo = $path;
@@ -159,10 +160,12 @@ class AnnonceController extends Controller
 
         $annonce = Annonce::find($annonce_id);
 
-
+        $photo_init = $annonce->photo_descriptive;
         if ($request->hasFile('photo_descriptive')) {
             $path = $request->file('photo_descriptive')->store('medias', 'public');
-            Storage::disk('public')->delete($annonce->photo_descriptive);
+            if (Storage::disk('public')->exists($photo_init)) {
+                Storage::disk('public')->delete($photo_init);
+            }
             $annonce->photo_descriptive = $path;
         }
 
