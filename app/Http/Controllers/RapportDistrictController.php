@@ -21,8 +21,13 @@ class RapportDistrictController extends Controller
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_districts')->where('user_id', $request->user()->id)->first();
         $current_user = User::with("groupe_utilisateur")->find($request->user()->id);
         $rapports = RapportDeDistrict::with("rapporteur")->where('statut', 'validé')->get();
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportdistrict/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+        ];
         return view('private_layouts.rapport_district.list_des_rapports', compact("autorisation",
-            "current_user", "autorisation_speciale", "rapports"));
+            "current_user", "autorisation_speciale", "rapports", "breadcrumbs"));
     }
 
     public function voir_mes_drafts(Request $request):View
@@ -31,7 +36,14 @@ class RapportDistrictController extends Controller
         $rapports = RapportDeDistrict::with("rapporteur")->where('statut', 'draft')->where('rapporteur_id', $request->user()->id)->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_districts')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_district.list_des_rapports', compact("autorisation", "rapports", "current_user", "autorisation_speciale"));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportdistrict/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportdistrict/voir_mes_drafts'), 'label'=>'Mes drafts', 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.rapport_district.list_des_rapports', compact("autorisation", 
+        "rapports", "current_user", "autorisation_speciale", "breadcrumbs"));
     }
 
     public function les_attentes_en_validation(Request $request):View
@@ -40,7 +52,14 @@ class RapportDistrictController extends Controller
         $rapports = RapportDeDistrict::with('rapporteur')->where('statut', 'en attente de validation')->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_districts')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_district.list_des_rapports', compact("autorisation_speciale", "autorisation", "current_user", "rapports"));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportdistrict/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportdistrict/les_attentes_en_validation'), 'label'=>'Rapports en attente', 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.rapport_district.list_des_rapports', compact("autorisation_speciale", 
+        "autorisation", "current_user", "rapports", "breadcrumbs"));
     }
 
     public function les_attentes_en_approbation(Request $request):View
@@ -49,7 +68,14 @@ class RapportDistrictController extends Controller
         $rapports = RapportDeDistrict::with('rapporteur')->where('statut', "en attente d'approbation")->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_districts')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_district.list_des_rapports', compact("autorisation_speciale", "autorisation", "current_user", "rapports"));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportdistrict/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportdistrict/les_attentes_en_approbation'), 'label'=>'Rapports en attente', 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.rapport_district.list_des_rapports', compact("autorisation_speciale", 
+        "autorisation", "current_user", "rapports", "breadcrumbs"));
     }
 
     public function les_attentes_en_confirmation(Request $request):View
@@ -58,7 +84,14 @@ class RapportDistrictController extends Controller
         $rapports = RapportDeDistrict::with('rapporteur')->where('statut', 'en attente de confirmation')->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_districts')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_district.list_des_rapports', compact("autorisation_speciale", "autorisation", "current_user", "rapports"));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportdistrict/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportdistrict/les_attentes_en_confirmation'), 'label'=>'Rapports en attente', 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.rapport_district.list_des_rapports', compact("autorisation_speciale", 
+        "autorisation", "current_user", "rapports", "breadcrumbs"));
     }
 
     public function ajouter_nouveau_rapport(Request $request):View
@@ -66,7 +99,14 @@ class RapportDistrictController extends Controller
         $current_user = $request->user();
         $autorisation = Autorisations::where('table_name', 'rapport_de_districts')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_districts')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_district.ajouter_un_rapport', compact("current_user", "autorisation_speciale", 'autorisation'));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportdistrict/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportdistrict/ajouter_nouveau_rapport'), 'label'=>'Ajouter', 'icon'=>'bi-plus-circle fs-5'],
+        ];
+        return view('private_layouts.rapport_district.ajouter_un_rapport', compact("current_user", 
+        "autorisation_speciale", 'autorisation', "breadcrumbs"));
     }
 
     public function sauvegarder_le_rapport(Request $request)
@@ -177,8 +217,14 @@ class RapportDistrictController extends Controller
         $rapport = RapportDeDistrict::with("rapporteur")->find($rapport_id);
 
         $current_user = $request->user();
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportdistrict/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportdistrict/afficher_rapport'), 'label'=>'Afficher', 'icon'=>'bi-eye fs-5'],
+        ];
         return view('private_layouts.rapport_district.afficher_un_rapport', compact("autorisation", "autorisation_speciale",
-        "rapport", "current_user"));
+        "rapport", "current_user", "breadcrumbs"));
     }
 
     public function edit_le_rapport($rapport_id, Request $request):View
@@ -187,7 +233,14 @@ class RapportDistrictController extends Controller
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_districts')->where('user_id', $request->user()->id)->first();
         $rapport = RapportDeDistrict::find($rapport_id);
         $current_user = $request->user();
-        return view('private_layouts.rapport_district.editer_un_rapport', compact("rapport", "autorisation", "autorisation_speciale", "current_user"));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportdistrict/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportdistrict/les_attentes_en_approbation'), 'label'=>'Rapports en attente', 'icon'=>'bi-pencil-square fs-5'],
+        ];
+        return view('private_layouts.rapport_district.editer_un_rapport', compact("rapport", "autorisation", 
+        "autorisation_speciale", "current_user", "breadcrumbs"));
     }
 
 

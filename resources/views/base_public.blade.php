@@ -22,7 +22,7 @@
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <!-- Favicon -->
-    <link rel="icon" href="{{ asset('css/css_vendor_public/img/favicon.png') }}">
+    <link rel="icon" href="/storage/{{ $parametre_logo }}">
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="{{ asset('css/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
@@ -156,7 +156,7 @@
                     <div class="col-lg-3 col-md-3 col-12">
                         <!-- Start Logo -->
                         <div class="logo">
-                            <a href="{{ route('home') }}"><img style="width: 130px; height: 100px;" src="/storage/{{ $parametres->logo }}" alt="#"></a>
+                            <a href="{{ route('home') }}"><img style="width: 130px; height: 100px;" src="/storage/{{ $parametre_logo }}" alt="#"></a>
                         </div>
                         <!-- End Logo -->
                         <!-- Mobile Nav -->

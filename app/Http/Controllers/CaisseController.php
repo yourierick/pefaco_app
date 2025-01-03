@@ -32,13 +32,26 @@ class CaisseController extends Controller
                 }
             }
         }
-        return view('private_layouts.caisses_folder.caisses', ['caisses' => $caisses, 'current_user' => $request->user(), 'autorisation' => $autorisation]);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/caisses'), 'label'=>"Caisses", 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.caisses_folder.caisses', ['caisses' => $caisses, 
+        'current_user' => $request->user(), 'autorisation' => $autorisation, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function add_new_caisse(Request $request): View
     {
         $departements = Departements::all();
-        return view('private_layouts.caisses_folder.add_caisse', ['departements' => $departements, 'current_user' => $request->user()]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/caisses'), 'label'=>"Caisses", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/caisses/add_new'), 'label'=>"Ajouter", 'icon'=>'bi-plus-circle fs-5'],
+        ];
+
+        return view('private_layouts.caisses_folder.add_caisse', ['departements' => $departements, 
+        'current_user' => $request->user(), "breadcrumbs"=>$breadcrumbs]);
     }
 
     #Ajax:: load Users
@@ -72,7 +85,14 @@ class CaisseController extends Controller
     {
         $caisse = Caisse::find($caisse_id);
         $departements = Departements::all();
-        return view('private_layouts.caisses_folder.edit_caisse', ['caisse'=>$caisse, 'departements' => $departements, 'current_user' => $request->user()]);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/caisses'), 'label'=>"Caisses", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/caisses/edit_caisse'), 'label'=>"Editer", 'icon'=>'bi-pencil-square fs-5'],
+        ];
+        return view('private_layouts.caisses_folder.edit_caisse', ['caisse'=>$caisse, 
+        'departements' => $departements, 'current_user' => $request->user(), "breadcrumbs"=>$breadcrumbs]);
     }
 
 
@@ -98,14 +118,28 @@ class CaisseController extends Controller
         $departement = Departements::where('id', $caisse->departement_id)->first();
         $transactions = Transactions::where('caisse_id', $caisse_id)->orderBy('id', 'desc')->get();
         $current_user = $request->user();
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/caisses'), 'label'=>"Caisses", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/caisses/vue_de_la_caisse'), 'label'=>"Afficher", 'icon'=>'bi-eye fs-5'],
+        ];
+
         return view('private_layouts.caisses_folder.vue_de_la_caisse', compact("autorisation", "caisse",
-        "departement", "transactions", "current_user"));
+        "departement", "transactions", "current_user", "breadcrumbs"));
     }
 
     public function nouvelle_transaction($caisse_id):View
     {
         $current_user = Auth::user();
-        return view('private_layouts.caisses_folder.nouvelle_transaction', compact("current_user", "caisse_id"));
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/caisses'), 'label'=>"Caisses", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/caisses/nouvelle_transaction'), 'label'=>"Nouvelle transaction", 'icon'=>'bi-plus-circle fs-5'],
+        ];
+        return view('private_layouts.caisses_folder.nouvelle_transaction', compact("current_user", 
+        "caisse_id", "breadcrumbs"));
     }
 
     public function check_code_de_depense($code, $caisse_id)
@@ -159,7 +193,7 @@ class CaisseController extends Controller
             if ($request->type_de_transaction === "crédit") {
                 if ($caisse->departement_id !== 1){
                     $departement = Departements::find($caisse->departement_id);
-                    $pourcentage_eglise = ($request->montant * 20)/100;
+                    $pourcentage_eglise = ($request->montant * $request->get('parametre_pourcentage'))/100;
                     $montant_net_restant = $montant_net_actuel + ($request->montant - $pourcentage_eglise);
                     $transaction = Transactions::create([
                         'caisse_id' => $caisse->id,
@@ -248,7 +282,7 @@ class CaisseController extends Controller
             $caisse->montant_net_actuel = $caisse->montant_net_actuel - $transaction->montant;
             if ($caisse->departement_id !== 1){
                 $caisse_eglise = Caisse::first('departement_id', 1)->first();
-                $caisse_eglise->montant_net_actuel = $caisse_eglise->montant_net_actuel - ($transaction->montant*20)/100;
+                $caisse_eglise->montant_net_actuel = $caisse_eglise->montant_net_actuel - ($transaction->montant * $request->get('parametre_pourcentage'))/100;
                 $caisse_eglise->update();
             }
         }

@@ -124,7 +124,7 @@
                 <hr style="height: 1px;">
                 <div class="mt-5">
                     <h6 class="text-muted">0. SOMMAIRE</h6>
-                    <div class="row ml-5">
+                    <div class="row ml-3">
                         <div class="col-12 col-md-6">
                             <ul class="list-timeline list-timeline-primary">
                                 <li class="list-timeline-item p-0 pb-4 pb-lg-4 d-flex flex-wrap flex-column" data-toggle="collapse" data-target="#day-1-item-2">
@@ -181,7 +181,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="container my-5">
+                    <div class="container my-2">
                         <div>
                             <div class="custom-card d-flex align-items-center">
                                 <div class="icon-circle text-white">
@@ -191,7 +191,7 @@
                                     <h5 class="text-white">1. OBJECTIFS</h5>
                                 </div>
                             </div>
-                            <div style="padding: 0" class="p-3">
+                            <div style="padding: 0">
                                 <div class="custom-card-text mt-2 p-2">
                                     <p class="ml-2" style="text-align: justify">
                                         {{ $rapport->objectifs }}
@@ -333,7 +333,7 @@
                                         <div style="padding: 0" class="p-3">
                                             <div class="custom-card-text mt-2 p-2">
                                                 <ul><li style="font-weight: bold">Situation actuelle de la caisse</li></ul>
-                                                <p>Le montant actuellement dans la caisse est <span style="font-weight: bold; color: blue">{{ $rapport->situation_caisse }} FC</span></p>
+                                                <p>Le montant actuellement dans la caisse est <span style="font-weight: bold; color: blue">{{ $rapport->situation_caisse }} {{ $parametre_devise }}</span></p>
                                                 <br>
                                                 <h5>Rélevé des transactions de ce mois</h5>
                                                 <div>
@@ -375,13 +375,13 @@
                                                                 <td class="cell">{{ $transaction->date_de_la_transaction->format('d-m-Y') }}</td>
                                                                 <td class="cell">{{ $transaction->type_de_transaction }}</td>
                                                                 <td class="cell">{{ $transaction->code_de_depense }}</td>
-                                                                <td class="cell">{{ $transaction->montant }} FC</td>
+                                                                <td class="cell">{{ $transaction->montant }} {{ $parametre_devise }}</td>
                                                                 <td class="cell">{{ $transaction->motif }}</td>
                                                                 <td class="cell">{{ $transaction->source }}</td>
                                                                 @if($rapport->departement->id !== 1)
                                                                     <td class="cell">{{ $transaction->pourcentage_eglise }} %</td>
                                                                 @endif
-                                                                <td class="cell">{{ $transaction->montant_net_restant }} FC</td>
+                                                                <td class="cell">{{ $transaction->montant_net_restant }} {{ $parametre_devise }}</td>
                                                             </tr>
                                                         @endforeach
                                                         </tbody>

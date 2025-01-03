@@ -1,7 +1,7 @@
 @extends('base_dashboard')
 @section('page_title', 'Pefaco Universelle')
 @section('content')
-    <div class="py-12">
+    <div class="py-12 mt-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg shadow mb-3">
                 <div class="max-w-xl">
@@ -26,7 +26,7 @@
                             </div>
                             <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                 <label for="id_photo" style="color: #818183">Photo Affiche</label>
-                                <input class="form-control" accept=".jpeg, .jpg, .png, .jfif" type="file" onchange="validateImageFileType(this)" name="affiche_photo" id="id_photo">
+                                <input class="form-control" required accept=".jpeg, .jpg, .png, .jfif" type="file" onchange="validateImageFileType(this)" name="affiche_photo" id="id_photo">
                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('affiche_photo')"/>
                             </div>
                             <div class="form-group-kaiadmin form-group-default-kaiadmin">

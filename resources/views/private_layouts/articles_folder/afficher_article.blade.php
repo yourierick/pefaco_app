@@ -1,22 +1,4 @@
 @extends('base_dashboard')
-@section('page_title', 'Pefaco Universelle')
-@section('titre', '#Article de rapportage')
-@section('style')
-    <style>
-        .orange-line {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 50%;
-            height: 40px;
-            background-color: rgb(145, 145, 145);
-            transform: translateY(-50%);
-        }
-    </style>
-    <link rel="stylesheet" href="{{ asset("assets/css/affichage_rapport_event.css") }}">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
-@endsection
 @section('other_content')
     <div style="float:right; display: flex; gap: 2px">
         @if($article->statut === "draft")
@@ -72,93 +54,119 @@
         @endif
     </div>
 @endsection
+@section('style')
+    <style>
+        .btn-reply-comment:hover{
+            color: dodgerblue;
+            cursor: pointer;
+        }
+        .btn-trash-comment:hover{
+            color: #ef904d;
+        }
+        .owl-prev, .owl-next {
+            display: none!important;
+        }
+        .bi-send:hover {
+            cursor: pointer;
+            color: blue
+        }
+        .scrollable-div {
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        .likeaction {
+            transition: box-shadow 0.3s ease
+        }
+        .likeaction:hover {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5)
+        }
+    </style>
+@endsection
 @section('content')
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg shadow mb-3">
-                <div class="max-w-xl">
-                    <h5 class="text-primary" style="font-weight: bold; margin: 0"> Eglise pefaco universelle|  <span style="color: gray; font-size: 11pt">{{ $article->titre }} du {{ $article->date->format('d/m/Y') }}</h5>
-                    <p style="margin: 0">Département: {{ $article->departement->designation }}</p>
-                </div>
-                <div class="dropdown-divider"></div>
-                <div class="row mt-5">
-                    <div class="col-12 col-md-2">
-                        <div class="mt-4">
-                            <img src="/storage/{{ $article->rapporteur_user->photo }}" class="img-fluid" alt="" style="box-shadow: 4px 0 0 rgb(134, 134, 134); padding-right: 0px; max-height: 160px; max-width: 150px">
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-8 p-4" style="align-content: center">
-                        <div style="margin-top: 30px">
-                            <p style="font-size: 12pt; margin: 0">Editeur</p>
-                            <hr style="background-color: rgb(40, 41, 44); height: 4px; margin: 0">
-                            <p class="text-primary" style="font-size: 14pt"> {{ $article->rapporteur }}</p>
-                            <p>Date de rapportage: {{ $article->date->format("d-m-Y") }}</p>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-2 position-relative d-none d-md-block">
-                        <div class="orange-line"></div>
-                    </div>
-                </div>
-                <hr>
-                <div class="max-w-xl">
-                    <section>
-                        <div class="tab-content" id="orders-table-tab-content">
-                            <div class="tab-pane fade show active" id="orders-all" role="tabpanel"
-                                 aria-labelledby="orders-all-tab">
-                                <div class="app-card app-card-orders-table shadow-sm mb-5">
-                                    <div class="app-card-body">
-                                        <h3 class="ml-3 text-muted" style="text-transform: capitalize; font-weight: normal">{{ $article->titre }} du: {{ $article->date->format("d-m-Y") }}</h3>
-                                        <div class="p-4">
-                                            @php
-                                                $bibliotheque = json_decode($article->bibliotheque, true);
-                                                $firstelement = isset($bibliotheque[0]) ? $bibliotheque[0]: '#';
-                                            @endphp
-                                            <div class="row mt-4 mb-3">
-                                                <div class="col-md-6 col-sm-12 pr-1">
-                                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($firstelement) }}" alt="#" style="max-height: 500px; width: 100%">
-                                                </div>
-                                                <div class="col-md-6 col-sm-12 pl-1">
-                                                    <p style="color: darkgray; text-align: justify">{{ $article->description }}</p>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <h5 class="mb-2">Related</h5>
-                                            <div>
-                                                @php
-                                                    $bibliotheques = json_decode($article->bibliotheque, true);
-                                                @endphp
-                                                <div class="row mt-3 p-2 shadow">
-                                                    @foreach($bibliotheques as $bibliotheque)
-                                                        <div class="col-2">    
-                                                            <img src="{{ \Illuminate\Support\Facades\Storage::url($bibliotheque) }}" alt="#" style="max-height: 100px; min-width: 100%">
-                                                        </div>
-                                                    @endforeach
+    <div class="mt-5 p-2">
+        <hr>
+        <div class="row">
+            <div class="col-lg-8 p-3">
+                <!-- Post content-->
+                <article>
+                    <!-- Post header-->
+                    <header class="mb-4 p-2">
+                        <!-- Post title-->
+                        <h1 class="fw-bolder mb-1">{{ $article->titre }}</h1>
+                        <!-- Post meta content-->
+                        <div class="text-muted fst-italic mb-2">Publié le {{ $article->date->format("d/m/Y") }}, par {{ $article->rapporteur_user->nom }} {{ $article->rapporteur_user->postnom }} {{ $article->rapporteur_user->prenom }}</div>
+                    </header>
+                    <!-- Preview image figure-->
+                    <figure class="mb-4"><img class="img-fluid rounded" style="height: 300px" src="/storage/{{ $bibliothequephoto[0] }}" alt="..." /></figure>
+                    <!-- Post content-->
+                    <section class="mb-5 p-2">
+                        <h2 class="fw-bolder mb-4 mt-5">Related</h2>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="owl-carousel portfolio-slider">
+                                    @foreach($bibliothequephoto as $photo)
+                                        <div class="single-pf shadow">
+                                            <div class="d-block">
+                                                <img class="shadow-sm" src="/storage/{{ $photo }}" alt="...">
+                                                <div class="details">
                                                 </div>
                                             </div>
                                         </div>
-                                        @if($article->video)
-                                            <hr>
-                                            <h3 class="ml-3">Related Video</h3>
-                                            <div class="p-3">
-                                                <video controls height="300px" width="100%">
-                                                    <video src="" controls></video>
-                                                        <source src="{{ \Illuminate\Support\Facades\Storage::url($article->video) }}" type="video/mp4">
-                                                        Votre navigateur ne supporte pas la balise vidéo.
-                                                </video>
+                                    @endforeach
+                                    @foreach($bibliothequephoto as $photo)
+                                    <div class="single-pf shadow">
+                                        <div class="d-block">
+                                            <img class="shadow-sm" src="/storage/{{ $photo }}" alt="...">
+                                            <div class="details">
                                             </div>
-                                        @endif
-                                    </div><!--//app-card-body-->
-                                </div><!--//app-card-->
-                                <p style="font-style: italic">Signé par {{ $article->rapporteur }}</p>
-                            </div><!--//tab-pane-->
-                        </div><!--//tab-content-->
+                                        </div>
+                                    </div>
+                                @endforeach
+                                @foreach($bibliothequephoto as $photo)
+                                <div class="single-pf shadow">
+                                    <div class="d-block">
+                                        <img class="shadow-sm" src="/storage/{{ $photo }}" alt="...">
+                                        <div class="details">
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        @if ($article->video)
+                            <div class="col-lg-12 col-md-8 col-sm-12 p-0">
+                                <video class="w-100" loop controls style="max-height: 500px">
+                                <source src="/storage/{{ $article->video }}" type="video/mp4" />
+                                </video>
+                            </div>
+                        @endif
                     </section>
+                </article>
+            </div>
+            <!-- Side widgets-->
+            <div class="col-lg-4 p-3">
+                <!-- Search widget-->
+                <div class="card mb-4">
+                    <div class="card-header">COMMENTAIRE</div>
+                    <div class="card-body">
+                        <section class="mb-5">
+                            <div class="card bg-light">
+                                <div class="card-body"  style="padding: 0px">
+                                    <p class="mb-4" style="text-align: justify">{{ $article->description }}</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </div> 
+        <hr>
+    </div> 
 @endsection
 @section('scripts')
-    <script src="https://kit.fontawesome.com/48764efa36.js" crossorigin="anonymous"></script>
 @endsection
+
 

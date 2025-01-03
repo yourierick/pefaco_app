@@ -20,7 +20,8 @@ Route::middleware('auth')->name('rapportculte.')->group(function () {
         'save_completion_offrande'])->name('save_completion_offrande');
     Route::delete('/rapportculte/supp_rapport', [RapportCulteController::class,
         'supprimer_rapport'])->name('supprimer_rapport');
-    Route::get('/rapportculte/voir_mes_drafts', [RapportCulteController::class,  'voir_mes_drafts'])->name('voir_mes_drafts');
+    Route::get('/rapportculte/voir_mes_drafts', [RapportCulteController::class,  
+        'voir_mes_drafts'])->name('voir_mes_drafts');
     Route::get('/rapportculte/les_attentes_en_completion', [RapportCulteController::class,
         'les_attentes_en_completion'])->name('les_attentes_en_completion');
     Route::get('/rapportculte/les_attentes_en_validation', [RapportCulteController::class,

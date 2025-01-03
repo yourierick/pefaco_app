@@ -126,7 +126,7 @@
                 <div class="row mt-5">
                     <div class="col-12 col-md-2">
                         <div class="mt-4">
-                            <img src="@if ($rapport->user_rapporteur->photo) /storage/{{ $rapport->user_rapporteur->photo }} @else {{ asset('css/images/utilisateur.png') }} @endif" class="img-fluid" alt="" style="box-shadow: 4px 0 0 orangered; padding-right: 10px; max-height: 160px; max-width: 150px">
+                            <img src="@if ($rapport->user_rapporteur->photo) /storage/{{ $rapport->user_rapporteur->photo }} @else {{ asset('css/images/utilisateur.png') }} @endif" class="img-fluid" alt="" style="box-shadow: 4px 0 0 orangered; padding-right: 1px; max-height: 160px; max-width: 150px">
                         </div>
                     </div>
                     <div class="col-12 col-md-8" style="align-content: center">
@@ -271,7 +271,7 @@
                                 @if($autorisation_speciale)
                                     @if($autorisation_speciale->autorisation_speciale)
                                         @if(in_array('peux voir la partie financiere du rapport', json_decode($autorisation_speciale->autorisation_speciale, true)))
-                                            <ul><li><span>Offrandes totales :</span> <span style="font-weight: 500">{{ $rapport->total_offrande }} FC</span><br></li></ul>
+                                            <ul><li><span>Offrandes totales :</span> <span style="font-weight: 500">{{ $rapport->total_offrande }} {{ $parametre_devise }}</span><br></li></ul>
                                         @endif
                                     @endif
                                 @endif

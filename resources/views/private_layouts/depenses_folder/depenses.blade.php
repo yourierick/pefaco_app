@@ -51,7 +51,7 @@
                                                         <td class="cell">{{ $depense->created_at->format('d-m-Y') }}</td>
                                                         <td class="cell">{{ $depense->departement->designation }}</td>
                                                         <td class="cell">{{ $depense->code_de_depense }}</td>
-                                                        <td class="cell">{{ $depense->montant }} FC</td>
+                                                        <td class="cell">{{ $depense->montant }} {{ $parametre_devise }}</td>
                                                         <td class="cell">{{ $depense->statut }}</td>
                                                         <td class="cell text-center">
                                                             <a class="btn-sm app-btn-secondary" href="{{ route('depense.afficher', $depense->id) }}"><span class="bi-eye"></span></a>

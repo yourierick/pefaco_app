@@ -101,14 +101,14 @@
                             <div class="p-1 mb-2" style="background: #618F4FFF; border-radius: 9px"><p style="font-size: 12pt; font-weight: bold; color: whitesmoke"><span class="fa fa-file-word-o"></span> FINANCES</p></div>
                             <div class="mb-3">
                                 <div class="form-group-kaiadmin form-group-default-kaiadmin">
-                                    <label for="id_dime_des_dimes" style="color: #818183">Dime des dimes</label>
+                                    <label for="id_dime_des_dimes" style="color: #818183">Dime des dimes (en {{ $parametre_devise }})</label>
                                     <input class="form-control" type="number" step="any" name="dime_des_dimes" id="id_dime_des_dimes" value="{{ old('dime_des_dimes', 0) }}">
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('dime_des_dimes')"/>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-group-kaiadmin form-group-default-kaiadmin">
-                                    <label for="id_total_offrande" style="color: #818183">Total Offrande</label>
+                                    <label for="id_total_offrande" style="color: #818183">Total Offrande (en {{ $parametre_devise }})</label>
                                     <input class="form-control" type="number" step="any" name="total_offrande" id="id_total_offrande" value="{{ old('total_offrande', 0) }}">
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('total_offrande')"/>
                                 </div>

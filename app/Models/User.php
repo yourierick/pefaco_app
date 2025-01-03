@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Notifications\CustomerVerifyEmail;
+use App\Notifications\CustomResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -58,6 +60,15 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    public function sendEmailVerificationNotification() {
+        $this->notify(new CustomerVerifyEmail());
+    }
+
+    public function sendPasswordResetNotification($token) {
+        $this->notify(new CustomResetPassword($token));
+    }
+
     public function imageUrl(): string
     {
         return Storage::disk('public')->url($this->photo);
@@ -89,4 +100,5 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return parent::delete();
     }
+
 }

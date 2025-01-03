@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Programme;
 use Illuminate\Http\Request;
 use App\Models\Autorisations;
+use App\Models\Departements;
 use App\Models\HoraireHebdo;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -16,7 +17,12 @@ class HoraireHebdoController extends Controller
         $autorisation = Autorisations::where('table_name', 'horaire_hebdos')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $horaires = HoraireHebdo::all();
 
-        return view('private_layouts.horairehebdo_folder.list_des_horaires', ['current_user'=>$request->user(), 'horaires'=>$horaires, 'autorisation'=>$autorisation]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/horairehebdo/list'), 'label'=>"Programmes", 'icon'=>'bi-list fs-5']
+        ];
+        return view('private_layouts.horairehebdo_folder.list_des_horaires', ['current_user'=>$request->user(), 
+        'horaires'=>$horaires, 'autorisation'=>$autorisation, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_horaire(Request $request)
@@ -49,7 +55,14 @@ class HoraireHebdoController extends Controller
     {
         $horaire = HoraireHebdo::find($horaire_id);
         $programmation = Programme::where('horaire_id', $horaire_id)->get();
-        return view('private_layouts.horairehebdo_folder.programmation_horaire', ['current_user' => $request->user(), 'horaire'=>$horaire, 'programmes'=>$programmation]);
+        $departements = Departements::all();
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/horairehebdo/list'), 'label'=>"Programmes", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/horairehebdo/programmer'), 'label'=>"Programmation Hebdo", 'icon'=>'bi-calendar fs-5'],
+        ];
+        return view('private_layouts.horairehebdo_folder.programmation_horaire', ['current_user' => $request->user(), 
+        'horaire'=>$horaire, 'programmes'=>$programmation, "departements"=>$departements, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_programmation($horaire_id, Request $request)
@@ -58,10 +71,12 @@ class HoraireHebdoController extends Controller
             [
                 'jour'=>['required'],
                 'programme'=>['required'],
+                'departement'=>['required'],
             ],
             [
                 'jour.required'=>'ce champs est obligatoire',
                 'programme.required'=>"aucun programme n'a été renseigné",
+                'departement.required'=>"aucun programme n'a été renseigné",
             ]
         );
 
@@ -72,10 +87,11 @@ class HoraireHebdoController extends Controller
             $programmes = array_filter($data['programme']);
         }
 
-        $scan = Programme::where('jour', $request->jour)->where('horaire_id', $horaire_id)->first();
+        $scan = Programme::where('jour', $request->jour)->where('horaire_id', $horaire_id)->where('departement', $request->get('departement'))->first();
         if (!$scan){
             $programme = Programme::create([
                 'horaire_id'=>$horaire_id,
+                'departement'=>$request->get('departement'),
                 'jour'=>$request->get('jour'),
                 'programme'=>json_encode($programmes),
             ]);
@@ -99,7 +115,14 @@ class HoraireHebdoController extends Controller
         $horaire = HoraireHebdo::find($horaire_id);
         $programmation = Programme::where('horaire_id', $horaire_id)->get();
 
-        return view('private_layouts.horairehebdo_folder.afficher_horaire', ['horaire'=>$horaire, 'programmes'=>$programmation, 'current_user'=>$request->user(), 'autorisation'=>$autorisation]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/horairehebdo/list'), 'label'=>"Programmes", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/horairehebdo/afficher_un_horaire'), 'label'=>"Afficher", 'icon'=>'bi-eye fs-5'],
+        ];
+        return view('private_layouts.horairehebdo_folder.afficher_horaire', ['horaire'=>$horaire, 
+        'programmes'=>$programmation, 'current_user'=>$request->user(), 'autorisation'=>$autorisation, 
+        "breadcrumbs"=>$breadcrumbs]);
     }
 
 
@@ -142,18 +165,27 @@ class HoraireHebdoController extends Controller
     public function editer_programme($programme_id ,Request $request)
     {
         $programme = Programme::find($programme_id);
-        return view('private_layouts.horairehebdo_folder.editer_programme', ['current_user'=>$request->user(), 'programme'=>$programme]);
+        $departements = Departements::all();
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/horairehebdo/list'), 'label'=>"Programmes", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/horairehebdo/editer_programme'), 'label'=>"Editer", 'icon'=>'bi-pencil-square fs-5'],
+        ];
+        return view('private_layouts.horairehebdo_folder.editer_programme', ['current_user'=>$request->user(), 
+        'programme'=>$programme, "breadcrumbs"=>$breadcrumbs, "departements"=>$departements]);
     }
 
-    public function save_edition_programme($programme_id ,Request $request)
+    public function save_edition_programme($programme_id, Request $request)
     {
         $request->validate(
             [
                 'jour'=>['required'],
+                'departement'=>['required'],
                 'programme'=>['required'],
             ],
             [
                 'jour.required'=>'ce champs est obligatoire',
+                'departement.required'=>'ce champs est obligatoire',
                 'programme.required'=>"aucun programme n'a été renseigné",
             ]
         );
@@ -167,10 +199,11 @@ class HoraireHebdoController extends Controller
             $programmes = array_filter($data['programme']);
         }
 
-        $scan = Programme::where('jour', $request->jour)->where('horaire_id', $programme->horaire_id)->where('id', '!=', $programme_id)->first();
-        if (!$scan) {
+        $scan = Programme::where('jour', $request->jour)->where('horaire_id', $programme->horaire_id)->where('departement', $request->get('departement'))->where('id', '!=', $programme_id)->first();
+        if (is_null($scan)) {
             $programme->jour = $request->jour;
             $programme->programme = $programmes;
+            $programme->departement = $request->departement;
             $programme->update();
         }
         return redirect()->route('horairehebdo.afficher_un_horaire', $programme->horaire_id);

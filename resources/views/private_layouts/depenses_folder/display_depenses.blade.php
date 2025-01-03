@@ -261,7 +261,7 @@
             <p class="ml-3">{{ $depense->motif }}</p>
             <hr>
             <label>3. Montant démandé</label>
-            <p class="ml-3">{{ $depense->montant }} FC</p>
+            <p class="ml-3">{{ $depense->montant }} {{ $parametre_devise }}</p>
             <label>4. Statut de la dépense</label>
             <p class="ml-3 text-danger">{{ $depense->statut }}</p>
         </div>

@@ -126,7 +126,7 @@
             <div class="container">
                 <div class="section-title">
                     <h2 class="mb-0">Articles</h2>
-                    <p class="mt-0">Restez dans l'actualité de ce qui se passe!</p>
+                    <p class="mt-0">Révivons ensemble ces moments</p>
                 </div>
                 <hr>
                 <div class="row">
@@ -178,7 +178,7 @@
                             <p style="font-style: italic"> Ce {{ Carbon\Carbon::parse($latestarticle->date)->isoFormat('dddd') }}, {{ $latestarticle->date->format('d/m/Y') }}</p>
                             <p style="text-align: justify"> {{ Str::limit($latestarticle->description, 600) }}</p>
                         </div>
-                        <a href="#" class="apropos" style="text-decoration: none"><span class="fa fa-arrow-circle-right"></span> EN SAVOIR PLUS</a>
+                        <a href="{{ route('public.afficher_article', $latestarticle->id) }}" class="apropos" style="text-decoration: none"><span class="fa fa-arrow-circle-right"></span> EN SAVOIR PLUS</a>
                         <!-- End Choose Left -->
                     </div>
                 </div>
@@ -202,7 +202,7 @@
                                 {{ Str::limit($article->description, 200) }}
                             </p>
                             <span class="mb-2" style="font-style: italic; color: black">{{ $article->created_at->diffForHumans() }}</span><br>
-                            <a href="#" class="read-more">
+                            <a href="{{ route('public.afficher_article', $article->id) }}" class="read-more">
                             En savoir plus <span class="sr-only">à propos de cet article</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -214,7 +214,7 @@
             @endforeach
         </div>
         <div class="mt-3 ml-5">
-            <a href="#" class="apropos" style="text-decoration: none"><span class="fa fa-arrow-circle-right"></span> VOIR PLUS D'ARTICLES</a></p>
+            <a href="{{ route('public.list_des_articles') }}" class="apropos" style="text-decoration: none"><span class="fa fa-arrow-circle-right"></span> VOIR PLUS D'ARTICLES</a></p>
         </div>
         <hr>
         <!--/ End Feautes -->
@@ -272,7 +272,7 @@
                         <button type="button" data-bs-target="#carouselAnnonceIndicators" data-bs-slide-to="2"
                                 aria-label="Slide 3"></button>
                     </div>
-                    <div class="carousel-inner p-5 shadow">
+                    <div class="carousel-inner p-3 shadow">
                         <div class="carousel-item active">
                             <div class="row">
                                 <div class="col-lg-6 col-12">
@@ -435,8 +435,10 @@
                     <div class="owl-carousel portfolio-slider">
                         @foreach($serviteurs as $serviteur)
                             <div class="single-pf shadow">
-                                <div class="d-block">
-                                    <img style="border-radius: 100%" class="shadow-sm" src="/storage/{{ $serviteur->photo }}" alt="...">
+                                <div class="d-block text-center">
+                                    <div style="display: flex; justify-content: center; align-items: center">
+                                        <img style="border-radius: 100%; height: 100px!important; width: 250px!important" class="shadow-sm" src="/storage/{{ $serviteur->photo }}" alt="...">
+                                    </div>
                                     <div class="details">
                                         <hr>
                                         <p style="font-weight: normal; color: black">{{ $serviteur->nom }}</p>
@@ -490,8 +492,8 @@
                                         <span class="mb-2 text-dark" style="font-style: italic">{{ $enseignement->reference }}</span><br>
                                         <br><span class="mb-2">Publié par {{ $enseignement->auteur->nom }} {{ $enseignement->auteur->postnom }} {{ $enseignement->auteur->prenom }}</span><br>
                                         <span class="mb-2" style="font-style: italic; color: black">{{ $enseignement->created_at->diffForHumans() }}</span><br>
-                                        <a href="#" class="read-more">
-                                        En savoir plus <span class="sr-only">à propos de cet article</span>
+                                        <a href="{{ route('public.afficher_enseignement', $enseignement->id) }}" class="read-more">
+                                        En savoir plus <span class="sr-only">à propos de cet enseignement</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                                         </svg>
@@ -502,7 +504,7 @@
                         @endforeach
                     </section>
                     <br>
-                    <a href="#" class="apropos" style="text-decoration: none"><span class="fa fa-arrow-circle-right"></span> VOIR PLUS D'ENSEIGNEMENTS</a></p>
+                    <a href="{{ route('public.list_des_enseignements') }}" class="apropos" style="text-decoration: none"><span class="fa fa-arrow-circle-right"></span> VOIR PLUS D'ENSEIGNEMENTS</a></p>
                 </div>
             </div>
         </section>

@@ -23,7 +23,13 @@ class UserController extends Controller
     {
         $current_user = Auth::user();
         $users = User::with("groupe_utilisateur")->get();
-        return view('private_layouts.list_users', ['users' => $users, 'current_user'=>$current_user]);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/manage_user'), 'label'=>"Profiles", 'icon'=>'bi-people fs-5'],
+        ];
+        return view('private_layouts.list_users', ['users' => $users, 'current_user'=>$current_user, 
+        "breadcrumbs"=>$breadcrumbs]);
     }
 
     /* Editer un utilisateur */
@@ -32,7 +38,13 @@ class UserController extends Controller
         $current_user = Auth::user();
         $autorisations = AutorisationSpeciale::where('user_id', $user->id)->get();
         $user = User::find($user->id);
-        return view('private_layouts.edit_user', compact('user', 'current_user', 'autorisations'));
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/manage_user'), 'label'=>"Profiles", 'icon'=>'bi-people fs-5'],
+            ['url'=>url('/manage_user/edit_user'), 'label'=>"Editer", 'icon'=>'bi-pencil-square fs-5'],
+        ];
+        return view('private_layouts.edit_user', compact('user', 'current_user', 'autorisations', "breadcrumbs"));
     }
 
     /* module de mise à jour des informations d'un utilisateur */
@@ -116,13 +128,6 @@ class UserController extends Controller
         return Redirect::to('manageprofile.list_users');
     }
 
-    public function autorisation_speciales($user_id, Request $request):View
-    {
-        $autorisations = AutorisationSpeciale::where('user_id', $user_id)->get();
-        $user = User::find($user_id);
-        return view('private_layouts.autorisations_utilisateurs', ['autorisations' => $autorisations, 'user' => $user, 'current_user'=>$request->user()]);
-    }
-
     public function load_autorisation_speciales($user_id)
     {
         $tables = DB::select('SHOW TABLES');
@@ -130,8 +135,13 @@ class UserController extends Controller
         $tablesAIgnorer = ['cache', 'jobs', 'failed_jobs', 'cache_locks', 'contenu_agendas', 'cotisation_accounts',
             'job_batches', 'migrations', 'password_reset_tokens', 'sessions', 'qualites', 'permissions',
             'livre_grande_caisses', 'groupes_utilisateurs', 'departements', 'paroisses', 'caisse_accounts', 'autorisations',
-            'serviteurs', 'zones', 'users', 'cotisations', 'inventaires', 'message_et_commentaires',
+            'serviteurs', 'zones', 'users', 'cotisations', 'inventaires',
             'don_specials', 'caisses', 'bulletin_infos', 'autorisation_speciales', 'agendas', 'programmes'];
+
+        AutorisationSpeciale::create([
+            'user_id' => $user_id,
+            'table_name' => 'paramètres généraux'
+        ]);
 
         foreach ($tableNames as $tableName) {
             if (!in_array($tableName, $tablesAIgnorer)) {
@@ -141,7 +151,7 @@ class UserController extends Controller
                 ]);
             }
         }
-        return redirect()->route('manageprofile.autorisation_speciales', $user_id)->with('success', 'les autorisations ont été chargés');
+        return redirect()->back()->with('success', 'les autorisations ont été chargés');
     }
 
     public function user_account_status_check ($user_id, Request $request)

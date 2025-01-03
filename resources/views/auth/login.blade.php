@@ -27,11 +27,10 @@
     </head>
 
     <body class="app app-login p-0">
-        <x-auth-session-status class="mb-4" :status="session('status')" />
         <div class="wrapper shadow" style="background-image: url('{{ asset('login_css/images/bg-registration-form-2.jpg') }}');">
             <div class="inner">
                 <form action="{{ route('login') }}" method="post">
-                    <div class="app-auth-branding mb-4"><a class="app-logo" href="{{ route('home') }}"><img class="logo-icon me-2" style="width: 130px; height: 80px" src="{{ asset('css/images/logo.jpg') }}" alt="logo"></a></div>
+                    <div class="app-auth-branding mb-4"><a class="app-logo" href="{{ route('home') }}"><img class="logo-icon me-2" style="width: 130px; height: 80px" src="/storage/{{ $parametre_logo }}" alt="logo"></a></div>
                     <h3 class="auth-heading text-center mb-5">Connectez vous à votre compte</h3>
                     <div class="form-wrapper">
                         @csrf
@@ -46,6 +45,7 @@
                         <label for="">Mot de passe</label>
                         <x-text-input type="password" class="form-control" name="password"/>
                         <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                        <x-auth-session-status class="mb-4 text-success" :status="session('status')" />
                     </div>
                     <div class="checkbox row">
                         <div class="col-6">

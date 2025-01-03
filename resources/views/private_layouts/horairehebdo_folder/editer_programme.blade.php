@@ -2,7 +2,7 @@
 @section('page_title', 'Pefaco Universelle')
 @section('titre', "#Editer un programme")
 @section('content')
-    <div class="py-12">
+    <div class="py-12 mt-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg shadow mb-3">
                 <div class="max-w-xl">
@@ -10,6 +10,15 @@
                         <form method="post" action="{{ route('horairehebdo.save_edition_programme', $programme->id) }}" class="mt-6 space-y-6">
                             @csrf
                             @method('put')
+                            <div class="form-group-kaiadmin form-group-default-kaiadmin">
+                                <label for="id_dept" style="color: #818183">département</label>
+                                <select name="departement" class="form-control" required>
+                                    @foreach($departements as $departement)
+                                        <option @if(old('departement', $departement->designation) === $departement->designation) selected @endif value="{{ $departement->designation }}">{{ $departement->designation }}</option>
+                                    @endforeach
+                                </select>
+                                <x-input-error class="mt-2 text-danger" :messages="$errors->get('departement')"/>
+                            </div>
                             <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                 <label for="id_jour" style="color: #818183">jour</label>
                                 <select name="jour" class="form-control">

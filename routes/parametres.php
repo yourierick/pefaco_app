@@ -31,4 +31,6 @@ Route::middleware('auth')->name('parametres.')->group(function () {
     Route::delete('/settings/supprimer_paroisse', [ParametresController::class, 'supprimer_paroisse'])->name('supprimer_paroisse');
     Route::delete('/settings/supprimer_programmeculte', [ParametresController::class, 'supprimer_programmeculte'])->name('supprimer_programmeculte');
     Route::delete('/settings/supprimer_programmedupasteur', [ParametresController::class, 'supprimer_programmedupasteur'])->name('supprimer_programmedupasteur');
+    Route::post('/settings/diffuser_un_message', [ParametresController::class, 'diffuser_un_message'])->name('diffuser_un_message');
+
 });

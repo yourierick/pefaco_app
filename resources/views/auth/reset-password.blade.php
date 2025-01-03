@@ -36,7 +36,7 @@
 </head>
 <body>
     <div id="form_display">
-        <img class="logo-icon me-2" style="width: 130px; height: 80px" src="{{ asset('css/images/logo.jpg') }}" alt="logo">
+        <img class="logo-icon me-2" style="width: 130px; height: 80px" src="/storage/{{ $parametre_logo }}" alt="logo">
         <hr style="border: 2px solid #095ba9; width: 100%">
         <form method="POST" action="{{ route('password.store') }}">
             @csrf

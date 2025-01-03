@@ -28,14 +28,26 @@ class DepenseController extends Controller
                 }
             }
         }
-        return view('private_layouts.depenses_folder.depenses', ['depenses' => $depenses, 'current_user' => $request->user(), 'autorisation'=>$autorisation]);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/depenses/list'), 'label'=>"Dépenses", 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.depenses_folder.depenses', ['depenses' => $depenses, 
+        'current_user' => $request->user(), 'autorisation'=>$autorisation, 'breadcrumbs'=>$breadcrumbs]);
     }
 
     public function add_new_depense(Request $request)
     {
         $current_user = $request->user();
         $caisse = Caisse::with('departement')->where("departement_id", $current_user->departement_id)->first();
-        return view('private_layouts.depenses_folder.adddepense', compact('caisse', 'current_user'));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/depenses/list'), 'label'=>"Dépenses", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/depenses/add_new_depense'), 'label'=>"Ajouter", 'icon'=>'bi-plus-circle fs-5'],
+        ];
+        return view('private_layouts.depenses_folder.adddepense', compact('caisse', 'current_user', "breadcrumbs"));
     }
 
     public function generate_depense_code()
@@ -93,7 +105,14 @@ class DepenseController extends Controller
         $current_user = $request->user();
         $caisse = Caisse::with('departement')->where("departement_id", $current_user->departement_id)->first();
         $depense = Depense::find($depense_id);
-        return view('private_layouts.depenses_folder.editdepense', compact("current_user", "caisse", "depense"));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/depenses/list'), 'label'=>"Dépenses", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/depenses/edit_depense'), 'label'=>"Editer", 'icon'=>'bi-pencil-square fs-5'],
+        ];
+        return view('private_layouts.depenses_folder.editdepense', compact("current_user", "caisse", 
+        "depense", "breadcrumbs"));
     }
 
     public function save_edit_depense($depense_id, Request $request)
@@ -128,7 +147,15 @@ class DepenseController extends Controller
         $depense = Depense::with(['departement', 'caisse'])->find($depense_id);
         $autorisation = Autorisations::where('table_name', 'depenses')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisations_speciales = AutorisationSpeciale::where('user_id', $request->user()->id)->where('table_name', 'depenses')->first();
-        return view('private_layouts.depenses_folder.display_depenses', ['depense' => $depense, 'current_user' => $request->user(), 'autorisation'=>$autorisation, 'autorisations_speciales'=>$autorisations_speciales]);
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/depenses/list'), 'label'=>"Dépenses", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/depenses/afficher'), 'label'=>"Afficher", 'icon'=>'bi-eye fs-5'],
+        ];
+        return view('private_layouts.depenses_folder.display_depenses', ['depense' => $depense, 
+        'current_user' => $request->user(), 'autorisation'=>$autorisation, 
+        'autorisations_speciales'=>$autorisations_speciales, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function traitement_depense($depense_id, Request $request)

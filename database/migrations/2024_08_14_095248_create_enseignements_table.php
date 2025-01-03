@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('video', '255')->nullable();
             $table->string('statut')->default('draft');
             $table->string('audience')->default('privé');
+            $table->integer('like')->default(0);
+            $table->integer('dislike')->default(0);
             $table->timestamps();
         });
     }

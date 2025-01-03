@@ -1,11 +1,4 @@
 @extends('base_dashboard')
-@section('page_title', 'Pefaco Universelle')
-@section('titre', '#Enseignement')
-@section('style')
-    <link rel="stylesheet" href="{{ asset("assets/css/enseignement.css") }}">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
-@endsection
 @section('other_content')
     <div style="float:right; display: flex; gap: 2px">
         @if($enseignement->statut === "draft")
@@ -61,74 +54,123 @@
         @endif
     </div>
 @endsection
+@section('style')
+    <style>
+        .btn-reply-comment:hover{
+            color: dodgerblue;
+            cursor: pointer;
+        }
+        .btn-trash-comment:hover{
+            color: #ef904d;
+        }
+        .owl-prev, .owl-next {
+            display: none!important;
+        }
+        .bi-send:hover {
+            cursor: pointer;
+            color: blue
+        }
+
+        button {
+            border: none!important;
+            box-shadow: none!important;
+        }
+        .scrollable-div {
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        .likeaction {
+            transition: box-shadow 0.3s ease
+        }
+        .likeaction:hover {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5)
+        }
+
+        /*---------------------------------------------------------------------*/
+     
+
+        .audio-container {
+            position: relative;
+            height: 300px;
+            background: url('/storage/{{ $enseignement->affiche_photo }}') no-repeat center center;
+            background-size: cover;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+
+        .audio-container audio {
+            position: absolute;
+            bottom: 0.1px;
+            background: transparent;
+            width: 100%;
+            opacity: 0.6;
+            border: none;
+            border-radius: 0!important;
+        }
+
+        .audio-container audio::webkit-media-controls-panel,
+        .audio-container audio::webkit-media-controls-play-button,
+        .audio-container audio::webkit-media-controls-mute-button,
+        .audio-container audio::webkit-media-controls-timeline,
+        .audio-container audio::webkit-media-controls-current-time-display,
+        .audio-container audio::webkit-media-controls-time-remaining-display,
+        .audio-container audio::webkit-media-controls-seek-back-button,
+        .audio-container audio::webkit-media-controls-seek-forward-button,
+        .audio-container audio::webkit-media-controls-fullscreen-button,
+        .audio-container audio::webkit-media-controls-volume-slider {
+            background: transparent;
+            color: white;
+        },
+    </style>
+@endsection
 @section('content')
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg shadow mb-3">
-                <div class="max-w-xl">
-                    <section>
-                        <div class="tab-content" id="orders-table-tab-content">
-                            <div class="tab-pane fade show active" id="orders-all" role="tabpanel"
-                                 aria-labelledby="orders-all-tab">
-                                <div class="app-card app-card-orders-table shadow-sm mb-5">
-                                    <div class="app-card-body">
-                                        <div>
-                                            <!-- Single Table -->
-                                            <div class="col-12">
-                                                <div class="single-table">
-                                                    <!-- Table Head -->
-                                                    <div class="table-head">
-                                                        <div class="p-3">
-                                                            <div class="icon">
-                                                                <i class='bx bxs-bible fs-3' ></i><span class="title text-info fs-4">Thème: "{{ $enseignement->titre }}"</span>
-                                                            </div>
-                                                            <div class="ml-3" style="box-shadow: -2px 0 0 rgb(194, 194, 194); padding-left: 10px">
-                                                                <div class="ml-4">
-                                                                    <div>
-                                                                        <p><span style="font-weight: 600">{{ $enseignement->reference }}</span></p>
-                                                                    </div>
-                                                                    <div>
-                                                                        <p id="text" style="text-align: justify">
-                                                                            {{ $enseignement->enseignement }}
-                                                                        </p>
-                                                                        <a href="#" class="btn text-primary" id="toggleButton">voir plus</a>
-                                                                    </div>
-                                                                    @if($enseignement->video)
-                                                                        <div class="mt-2">
-                                                                            <video style="width: 100%; height: 300px" controls>
-                                                                                <source src="/storage/{{ $enseignement->video }}" type="video/mp4">
-                                                                                Votre navigateur ne supporte pas la balise audio.
-                                                                            </video>
-                                                                        </div>
-                                                                    @endif
-                                                                    @if($enseignement->audio)
-                                                                        <div class="mt-2">
-                                                                            <audio style="width: 100%" controls>
-                                                                                <source src="/storage/{{ $enseignement->audio }}" type="audio/mpeg">
-                                                                                Votre navigateur ne supporte pas la balise audio.
-                                                                            </audio>
-                                                                        </div>
-                                                                    @endif
-                                                                </div>
-                                                                <p class="mt-3" style="font-style: italic">Signé par {{ $enseignement->auteur->nom }} {{ $enseignement->auteur->postnom }} {{ $enseignement->auteur->prenom }}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- End Single Table-->
-                                        </div>
-                                    </div><!--//app-card-body-->
-                                </div><!--//app-card-->
-                            </div><!--//tab-pane-->
-                        </div><!--//tab-content-->
+    <div class="mt-3 p-2">
+        <hr>
+        <div class="row">
+            <div class="col-12">
+                <!-- Post content-->
+                <article>
+                    <!-- Post header-->
+                    <header class="mb-4 p-2">
+                        <!-- Post title-->
+                        <h1 class="fw-bolder mb-1">Thème: {{ $enseignement->titre }}</h1>
+                        <!-- Post meta content-->
+                        <div class="text-muted fst-italic mb-2">Publié le {{ $enseignement->created_at->format("d/m/Y") }}, par {{ $enseignement->auteur->nom }} {{ $enseignement->auteur->postnom }} {{ $enseignement->auteur->prenom }}</div>
+                    </header>
+
+                    <!-- Preview image figure-->
+                    <div class="audio-container">
+                        <audio controls>
+                            <source src="/storage/{{ $enseignement->audio }}" preload="metadata" type="audio/mpeg">
+                            Votre navigateur ne supporte pas la balise audio.
+                        </audio>
+                    </div>
+                    <!-- Post content-->
+                    <section class="mb-5 p-2" style="background-color: rgb(238, 236, 236)">
+                        <p class="mb-4 mt-4" style="text-align: justify">{{ $enseignement->enseignement }}</p>
+                        <h2 class="fw-bolder mb-4 mt-5">Related</h2>
+                        <hr>
+                        @if ($enseignement->video)
+                            <div class="col-lg-12 col-md-8 col-sm-12 p-0">
+                                <video class="w-100" loop controls style="max-height: 500px">
+                                <source src="/storage/{{ $enseignement->video }}" type="video/mp4" />
+                                </video>
+                            </div>
+                        @endif
                     </section>
-                </div>
+                </article>
             </div>
-        </div>
-    </div>
+        </div> 
+        <hr>
+    </div> 
 @endsection
 @section('scripts')
     <script src="{{ asset('assets/js/enseignements_scripts/afficher_enseignement.js') }}"></script>
 @endsection
+
 

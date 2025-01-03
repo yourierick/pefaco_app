@@ -74,7 +74,7 @@
                                                         <td class="cell" style="font-size: 10pt">{{ $don->date ? $don->date->format('d-m-Y'): "" }}</td>
                                                         <td class="cell" style="font-size: 10pt">{{ $don->donateur }}</td>
                                                         <td class="cell" style="font-size: 10pt">{{ $don->don }} FC</td>
-                                                        <td class="cell">
+                                                        <td class="cell text-center">
                                                             @if($autorisations)
                                                                 @if($autorisations->autorisation_en_ecriture)
                                                                     @if(in_array('peux modifier', json_decode($autorisations->autorisation_en_ecriture, true)))

@@ -23,12 +23,24 @@ class CotisationsController extends Controller
                 }
             }
         }
-        return view('private_layouts.cotisations_folder.cotisations', ['cotisations' => $cotisations, 'current_user' => $request->user(), 'autorisation' => $autorisation]);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/cotisation/list'), 'label'=>"Cotisations", 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.cotisations_folder.cotisations', ['cotisations' => $cotisations, 
+        'current_user' => $request->user(), 'autorisation' => $autorisation, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function add_new_cotisation(Request $request): View
     {
-        return view('private_layouts.cotisations_folder.add_cotisation', ['current_user' => $request->user()]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/cotisation/list'), 'label'=>"Cotisations", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/cotisation/add_new_cotisation'), 'label'=>"Ajouter", 'icon'=>'bi-plus-circle fs-5'],
+        ];
+        return view('private_layouts.cotisations_folder.add_cotisation', ['current_user' => $request->user(),
+        "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_new_cotisation(Request $request)
@@ -56,8 +68,14 @@ class CotisationsController extends Controller
     public function edit_cotisation($cotisation_id, Request $request): View
     {
         $cotisation = Cotisation::find($cotisation_id);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/cotisation/list'), 'label'=>"Cotisations", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/cotisation/add_new_cotisation'), 'label'=>"Ajouter", 'icon'=>'bi-plus-circle fs-5'],
+        ];
         return view('private_layouts.cotisations_folder.edit_cotisation',
-            ['cotisation'=>$cotisation, 'current_user'=>$request->user()]);
+            ['cotisation'=>$cotisation, 'current_user'=>$request->user(), "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_edition_cotisation($cotisation_id, Request $request)
@@ -86,8 +104,15 @@ class CotisationsController extends Controller
         $autorisation = Autorisations::where('groupe_id', $request->user()->groupe_utilisateur_id)->where('table_name', 'cotisations')->first();
         $cotisation = Cotisation::find($cotisation_id);
         $cotisation_account = CotisationAccount::where('cotisation_id', $cotisation_id)->get();
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/cotisation/list'), 'label'=>"Cotisations", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/cotisation/afficher'), 'label'=>"Afficher", 'icon'=>'bi-eye fs-5'],
+        ];
         return view('private_layouts.cotisations_folder.detail_cotisation', ['cotisation' => $cotisation,
-            'cotisation_accounts'=>$cotisation_account, 'current_user' => $request->user(), 'autorisation'=>$autorisation]);
+            'cotisation_accounts'=>$cotisation_account, 'current_user' => $request->user(), 
+            'autorisation'=>$autorisation, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function lancer_cotisation($cotisation_id)
@@ -116,6 +141,11 @@ class CotisationsController extends Controller
 
     public function inserer_cotisation_account($cotisation_id, Request $request): View
     {
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/cotisation/list'), 'label'=>"Cotisations", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/cotisation/inserer_cotisation_account'), 'label'=>"Ajouter", 'icon'=>'bi-plus-circle fs-5'],
+        ];
         return view('private_layouts.cotisations_folder.cotiser', ['cotisation_id'=>$cotisation_id,'current_user' => $request->user()]);
     }
 
@@ -146,8 +176,14 @@ class CotisationsController extends Controller
     public function edit_cotisation_account($cotisation_account_id, Request $request): View
     {
         $cotisation_account = CotisationAccount::find($cotisation_account_id);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/cotisation/list'), 'label'=>"Cotisations", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/cotisation/edit_cotisation_account'), 'label'=>"Editer", 'icon'=>'bi-pencil-square fs-5'],
+        ];
         return view('private_layouts.cotisations_folder.edit_cotisation_account',
-            ['cotisation_account'=>$cotisation_account, 'current_user'=>$request->user()]);
+            ['cotisation_account'=>$cotisation_account, 'current_user'=>$request->user(), "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_edition_cotisation_account($cotisation_account_id, Request $request)

@@ -26,14 +26,28 @@ class ArticlesController extends Controller
                 }
             }
         }
-        return view('private_layouts.articles_folder.list_des_articles', ['current_user'=>$request->user(), 'articles'=>$articles, 'autorisation'=>$autorisation, 'autorisation_speciale'=>$autorisation_speciale]);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/article/list'), 'label'=>"Articles", 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.articles_folder.list_des_articles', ['current_user'=>$request->user(), 
+        'articles'=>$articles, 'autorisation'=>$autorisation, 
+        'autorisation_speciale'=>$autorisation_speciale, 'breadcrumbs'=>$breadcrumbs]);
     }
 
     public function nouvel_article(Request $request):View
     {
         $current_user = $request->user();
         $departements = Departements::all();
-        return view('private_layouts.articles_folder.ajouter_un_article', compact("current_user", "departements"));
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/article/list'), 'label'=>"Articles", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/article/nouvel_article'), 'label'=>"Articles", 'icon'=>'bi-plus-circle fs-5'],
+        ];
+        return view('private_layouts.articles_folder.ajouter_un_article', compact("current_user", 
+        "departements", "breadcrumbs"));
     }
 
 
@@ -42,8 +56,15 @@ class ArticlesController extends Controller
         $autorisation = Autorisations::where('table_name', 'articles')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'articles')->where('user_id', $request->user()->id)->first();
         $articles = Articles::with(["departement", "rapporteur_user"])->where('statut', 'draft')->where('rapporteur_id', $request->user()->id)->get();
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/article/list'), 'label'=>"Articles", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/article/voir_mes_drafts_articles'), 'label'=>"Mes drafts", 'icon'=>'bi-list fs-5'],
+        ];
+
         return view('private_layouts.articles_folder.list_des_articles', ['current_user'=>$request->user(), 'articles'=>$articles, 
-        'autorisation'=>$autorisation, 'autorisation_speciale'=>$autorisation_speciale]);
+        'autorisation'=>$autorisation, 'autorisation_speciale'=>$autorisation_speciale, "breadcrumbs"=>$breadcrumbs]);
     }
 
 
@@ -52,8 +73,15 @@ class ArticlesController extends Controller
         $autorisation = Autorisations::where('table_name', 'articles')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'articles')->where('user_id', $request->user()->id)->first();
         $articles = Articles::where('statut', 'en attente de validation')->get();
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/article/list'), 'label'=>"Articles", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/article/voir_les_attentes_en_validation'), 'label'=>"Articles en attente", 'icon'=>'bi-list fs-5'],
+        ];
+
         return view('private_layouts.articles_folder.list_des_articles', ['current_user'=>$request->user(), 'articles'=>$articles, 
-        'autorisation'=>$autorisation, 'autorisation_speciale'=>$autorisation_speciale]);
+        'autorisation'=>$autorisation, 'autorisation_speciale'=>$autorisation_speciale, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_article(Request $request)
@@ -120,8 +148,16 @@ class ArticlesController extends Controller
         $autorisation = Autorisations::where('table_name', 'articles')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisationspeciales = AutorisationSpeciale::where('table_name', 'articles')->where('user_id', $request->user()->id)->first();
         $article = Articles::with(['departement', 'rapporteur_user'])->find($article_id);
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/article/list'), 'label'=>"Articles", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/article/afficher_article'), 'label'=>"Afficher", 'icon'=>'bi-eye fs-5'],
+        ];
+        $bibliothequephoto = json_decode($article->bibliotheque);
+
         return view('private_layouts.articles_folder.afficher_article', ['article'=>$article, 'current_user'=>$request->user(), 
-        'autorisation'=>$autorisation, 'autorisation_speciale'=>$autorisationspeciales]);
+        'autorisation'=>$autorisation, 'autorisation_speciale'=>$autorisationspeciales, "breadcrumbs"=>$breadcrumbs, "bibliothequephoto"=>$bibliothequephoto]);
     }
 
 
@@ -168,7 +204,15 @@ class ArticlesController extends Controller
         $autorisation = Autorisations::where('table_name', 'articles')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $article = Articles::find($article_id);
         $departements = Departements::all();
-        return view('private_layouts.articles_folder.editer_un_article', ['article'=>$article, 'current_user'=>$request->user(), 'autorisation'=>$autorisation, 'departements'=>$departements]);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/article/list'), 'label'=>"Articles", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/article/edit_article'), 'label'=>"Editer", 'icon'=>'bi-pencil-square fs-5'],
+        ];
+        return view('private_layouts.articles_folder.editer_un_article', ['article'=>$article, 
+        'current_user'=>$request->user(), 'autorisation'=>$autorisation, 'departements'=>$departements, 
+        "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_edition_article($article_id, Request $request)

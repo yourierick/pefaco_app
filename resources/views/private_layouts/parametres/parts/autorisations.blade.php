@@ -35,7 +35,7 @@
                 <div class="col-12 col-md-8">
                     <div class="app-card app-card-settings shadow-sm p-4">
                         <div class="app-card-body">
-                            <form class="settings-form" action="{{ route('save_autorisation_changes', $autorisation->id) }}" method="post">
+                            <form class="settings-form" action="{{ route('parametres.save_autorisation_changes', $autorisation->id) }}" method="post">
                                 @csrf
                                 @method('put')
                                 <div class="form-check form-switch mb-3">

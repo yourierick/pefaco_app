@@ -19,12 +19,24 @@ class MembreController extends Controller
         $autorisations = AutorisationSpeciale::where('table_name', 'membres')->where('user_id', $request->user()->id)->first();
         $membres = Membre::all();
 
-        return view('private_layouts.membres.list_des_membres', ['current_user'=>$request->user(), 'membres'=>$membres, 'autorisations'=>$autorisations]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/membres/list'), 'label'=>"Membres", 'icon'=>'bi-people fs-5'],
+        ];
+
+        return view('private_layouts.membres.list_des_membres', ['current_user'=>$request->user(), 
+        'membres'=>$membres, 'autorisations'=>$autorisations, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function nouveau_membre(Request $request):View
     {
-        return view('private_layouts.membres.ajouter_un_membre', ['current_user' => $request->user()]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/membres/list'), 'label'=>"Membres", 'icon'=>'bi-people fs-5'],
+            ['url'=>url('/membres/nouveau_membre'), 'label'=>"Ajouter", 'icon'=>'bi-plus-circle fs-5'],
+        ];
+        return view('private_layouts.membres.ajouter_un_membre', ['current_user' => $request->user(),
+        "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_membre(Request $request)
@@ -97,7 +109,14 @@ class MembreController extends Controller
     {
         $autorisations = AutorisationSpeciale::where('table_name', 'membres')->where('user_id', $request->user()->id)->first();
         $membre = Membre::find($membre_id);
-        return view('private_layouts.membres.afficher_un_membre', ['membre'=>$membre, 'current_user'=>$request->user(), 'autorisations'=>$autorisations]);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/membres/list'), 'label'=>"Membres", 'icon'=>'bi-people fs-5'],
+            ['url'=>url('/membres/afficher_membre'), 'label'=>"Afficher", 'icon'=>'bi-eye fs-5'],
+        ];
+        return view('private_layouts.membres.afficher_un_membre', ['membre'=>$membre, 
+        'current_user'=>$request->user(), 'autorisations'=>$autorisations, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function supprimer_membre(Request $request)
@@ -112,7 +131,14 @@ class MembreController extends Controller
     public function edit_membre($membre_id, Request $request):View
     {
         $membre = Membre::find($membre_id);
-        return view('private_layouts.membres.editer_un_membre', ['membre'=>$membre, 'current_user'=>$request->user()]);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/membres/list'), 'label'=>"Membres", 'icon'=>'bi-people fs-5'],
+            ['url'=>url('/membres/edit_membre'), 'label'=>"Editer", 'icon'=>'bi-pencil-square fs-5'],
+        ];
+        return view('private_layouts.membres.editer_un_membre', ['membre'=>$membre, 
+        'current_user'=>$request->user(), "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_edition_membre($membre_id, Request $request)
@@ -200,12 +226,23 @@ class MembreController extends Controller
         $autorisations = AutorisationSpeciale::where('table_name', 'invites')->where('user_id', $request->user()->id)->first();
         $invites = Invites::all();
 
-        return view('private_layouts.invites.list_des_invites', ['current_user'=>$request->user(), 'invites'=>$invites, 'autorisations'=>$autorisations]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/invites/list'), 'label'=>"Invités", 'icon'=>'bi-list fs-5'],
+        ];
+
+        return view('private_layouts.invites.list_des_invites', ['current_user'=>$request->user(), 
+        'invites'=>$invites, 'autorisations'=>$autorisations, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function nouvel_invite(Request $request):View
     {
-        return view('private_layouts.invites.ajouter_un_invite', ['current_user' => $request->user()]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/invites/list'), 'label'=>"Invités", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/invites/nouvel_invite'), 'label'=>"Ajouter", 'icon'=>'bi-plus-circle fs-5'],
+        ];
+        return view('private_layouts.invites.ajouter_un_invite', ['current_user' => $request->user(), "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_invite(Request $request)
@@ -248,7 +285,13 @@ class MembreController extends Controller
     public function edit_invite($invite_id, Request $request):View
     {
         $invite = Invites::find($invite_id);
-        return view('private_layouts.invites.editer_un_invite', ['invite'=>$invite, 'current_user'=>$request->user()]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/invites/list'), 'label'=>"Invités", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/invites/edit_invite'), 'label'=>"Invités", 'icon'=>'bi-pencil-square fs-5'],
+        ];
+        return view('private_layouts.invites.editer_un_invite', ['invite'=>$invite, 
+        'current_user'=>$request->user(), "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_edition_invite($invite_id, Request $request)
@@ -288,12 +331,22 @@ class MembreController extends Controller
         $autorisations = AutorisationSpeciale::where('table_name', 'baptemes')->where('user_id', $request->user()->id)->first();
         $baptises = Baptemes::all();
 
-        return view('private_layouts.baptemes.list_des_baptises', ['current_user'=>$request->user(), 'baptises'=>$baptises, 'autorisations'=>$autorisations]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/baptemes/list'), 'label'=>"Baptisés", 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.baptemes.list_des_baptises', ['current_user'=>$request->user(), 
+        'baptises'=>$baptises, "breadcrumbs"=>$breadcrumbs,'autorisations'=>$autorisations]);
     }
 
     public function nouveau_baptise(Request $request):View
     {
-        return view('private_layouts.baptemes.ajouter_un_baptise', ['current_user' => $request->user()]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/baptemes/list'), 'label'=>"Baptisés", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/baptemes/nouveau_baptise'), 'label'=>"Ajouter", 'icon'=>'bi-plus-circle fs-5'],
+        ];
+        return view('private_layouts.baptemes.ajouter_un_baptise', ['current_user' => $request->user(), "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_baptise(Request $request)
@@ -341,7 +394,14 @@ class MembreController extends Controller
     {
         $autorisations = AutorisationSpeciale::where('table_name', 'baptemes')->where('user_id', $request->user()->id)->first();
         $baptise = Baptemes::find($baptise_id);
-        return view('private_layouts.baptemes.afficher_un_baptise', ['baptise'=>$baptise, 'current_user'=>$request->user(), 'autorisations'=>$autorisations]);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/baptemes/list'), 'label'=>"Baptisés", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/baptemes/afficher_baptise'), 'label'=>"Ajouter", 'icon'=>'bi-eye-circle fs-5'],
+        ];
+        return view('private_layouts.baptemes.afficher_un_baptise', ['baptise'=>$baptise, 
+        'current_user'=>$request->user(), 'autorisations'=>$autorisations, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function supprimer_baptise(Request $request)
@@ -356,7 +416,13 @@ class MembreController extends Controller
     public function edit_baptise($baptise_id, Request $request):View
     {
         $baptise = Baptemes::find($baptise_id);
-        return view('private_layouts.baptemes.editer_un_baptise', ['baptise'=>$baptise, 'current_user'=>$request->user()]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/baptemes/list'), 'label'=>"Baptisés", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/baptemes/edit_baptise'), 'label'=>"Editer", 'icon'=>'bi-pencil-square fs-5'],
+        ];
+        return view('private_layouts.baptemes.editer_un_baptise', ['baptise'=>$baptise, 
+        'current_user'=>$request->user(),"breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_edition_baptise($baptise_id, Request $request)

@@ -72,7 +72,7 @@
                             <hr style="background-color: #007bff; height: 4px; margin: 0">
                             <p class="text-primary" style="font-size: 14pt"> {{ $caisse->caissier->nom }} {{ $caisse->caissier->postnom }} {{ $caisse->caissier->prenom }}</p>
                             <p>Date de création: {{ $caisse->created_at->format("d-m-Y") }}</p>
-                            <p>Montant actuel dans la caisse : <span style="color: orangered">{{ $caisse->montant_net_actuel }} FC</span></p>
+                            <p>Montant actuel dans la caisse : <span style="color: orangered">{{ $caisse->montant_net_actuel }} {{ $parametre_devise }}</span></p>
                         </div>
                     </div>
                     <div class="col-12 col-md-2 position-relative d-none d-md-block">
@@ -130,13 +130,13 @@
                                                         <td class="cell">{{ $transaction->date_de_la_transaction->format('d-m-Y') }}</td>
                                                         <td class="cell">{{ $transaction->type_de_transaction }}</td>
                                                         <td class="cell">{{ $transaction->code_de_depense }}</td>
-                                                        <td class="cell">{{ $transaction->montant }} FC</td>
-                                                        <td class="cell">{{ $transaction->motif }} FC</td>
+                                                        <td class="cell">{{ $transaction->montant }} {{ $parametre_devise }}</td>
+                                                        <td class="cell">{{ $transaction->motif }}</td>
                                                         <td class="cell">{{ $transaction->source }}</td>
                                                         @if($departement->id !== 1)
                                                             <td class="cell">{{ $transaction->pourcentage_eglise }} %</td>
                                                         @endif
-                                                        <td class="cell">{{ $transaction->montant_net_restant }} FC</td>
+                                                        <td class="cell">{{ $transaction->montant_net_restant }} {{ $parametre_devise }}</td>
                                                         <td class="cell">
                                                             @if($autorisation->autorisation_en_ecriture)
                                                                 @if(in_array('peux modifier', json_decode($autorisation->autorisation_en_ecriture, true)))

@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Autorisations;
 use App\Models\AutorisationSpeciale;
 use App\Models\Annonce;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use App\CustomSystemNotificationTrait;
 
 class AnnonceController extends Controller
 {
+    use CustomSystemNotificationTrait;
     public function list_des_annonces(Request $request):View
     {
         $autorisation = Autorisations::where('table_name', 'annonces')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
@@ -18,12 +21,22 @@ class AnnonceController extends Controller
         $current_user = $request->user();
         $annonces = Annonce::where('statut', 'validé')->get();
 
-        return view('private_layouts.annonces_folder.list_des_annonces', compact("current_user", "autorisation", "annonces", "autorisation_speciale"));
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/annonces/list'), 'label'=>"Annonces", 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.annonces_folder.list_des_annonces', compact("current_user",
+        "autorisation", "annonces", "autorisation_speciale", "breadcrumbs"));
     }
 
     public function nouvelle_annonce(Request $request):View
     {
-        return view('private_layouts.annonces_folder.ajouter_une_annonce', ['current_user' => $request->user()]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/annonces/list'), 'label'=>"Annonces", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/annonces/nouvelle_annonce'), 'label'=>"Ajouter", 'icon'=>'bi-plus-circle fs-5'],
+        ];
+        return view('private_layouts.annonces_folder.ajouter_une_annonce', ['current_user' => $request->user(), 'breadcrumbs'=>$breadcrumbs]);
     }
 
 
@@ -33,7 +46,14 @@ class AnnonceController extends Controller
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'annonces')->where('user_id', $request->user()->id)->first();
         $annonces = Annonce::where('statut', 'draft')->where('annonceur_id', $request->user()->id)->get();
         $current_user = $request->user();
-        return view('private_layouts.annonces_folder.list_des_annonces', compact("current_user", "autorisation", "annonces", "autorisation_speciale"));
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/annonces/list'), 'label'=>"Annonces", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/annonces/voir_mes_drafts'), 'label'=>"Mes drafs", 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.annonces_folder.list_des_annonces', compact("current_user",
+        "autorisation", "annonces", "autorisation_speciale", "breadcrumbs"));
     }
 
 
@@ -43,7 +63,14 @@ class AnnonceController extends Controller
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'annonces')->where('user_id', $request->user()->id)->first();
         $annonces = Annonce::where('statut', 'en attente de validation')->get();
         $current_user = $request->user();
-        return view('private_layouts.annonces_folder.list_des_annonces',compact("current_user", "autorisation", "annonces", "autorisation_speciale") );
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/annonces/list'), 'label'=>"Annonces", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/annonces/voir_les_attentes_en_validation'), 'label'=>"Annonces en attente", 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.annonces_folder.list_des_annonces',compact("current_user",
+        "autorisation", "annonces", "autorisation_speciale", "breadcrumbs") );
     }
 
     public function save_annonce(Request $request)
@@ -53,11 +80,11 @@ class AnnonceController extends Controller
             'titre'=>['required'],
             'description'=>['required'],
         ],
-            [
-                'date.required'=>'ce champs est obligatoire',
-                'titre.required'=>'ce champs est obligatoire',
-                'description.required'=>'ce champs est obligatoire',
-            ]);
+        [
+            'date.required'=>'ce champs est obligatoire',
+            'titre.required'=>'ce champs est obligatoire',
+            'description.required'=>'ce champs est obligatoire',
+        ]);
 
 
         $photo = "";
@@ -89,6 +116,15 @@ class AnnonceController extends Controller
             'statut'=>$statut,
         ]);
 
+        if ($statut === "en attente de validation") {
+            $users = User::all();
+            foreach ($users as $user) {
+                if (in_array("peux valider", json_decode($user->autorisation_speciale, true))) {
+                    $this->triggerNotification($annonce, 'Annonce')
+                }
+            }
+        }
+
         return redirect()->route('annonce.list_des_annonces')->with('success', $message);
     }
 
@@ -97,7 +133,15 @@ class AnnonceController extends Controller
         $autorisation = Autorisations::where('table_name', 'annonces')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisationspeciales = AutorisationSpeciale::where('table_name', 'annonces')->where('user_id', $request->user()->id)->first();
         $annonce = Annonce::with('annonceur')->find($annonce_id);
-        return view('private_layouts.annonces_folder.afficher_annonce', ['annonce'=>$annonce, 'current_user'=>$request->user(), 'autorisation'=>$autorisation, 'autorisation_speciale'=>$autorisationspeciales]);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/annonces/list'), 'label'=>"Annonces", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/annonces/afficher_une_annonce'), 'label'=>"Afficher une annonce", 'icon'=>'bi-eye fs-5'],
+        ];
+        return view('private_layouts.annonces_folder.afficher_annonce', ['annonce'=>$annonce,
+        'current_user'=>$request->user(), 'autorisation'=>$autorisation,
+        'autorisation_speciale'=>$autorisationspeciales, 'breadcrumbs'=>$breadcrumbs]);
     }
 
 
@@ -143,7 +187,14 @@ class AnnonceController extends Controller
     {
         $autorisation = Autorisations::where('table_name', 'annonces')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $annonce = Annonce::find($annonce_id);
-        return view('private_layouts.annonces_folder.editer_une_annonce', ['annonce'=>$annonce, 'current_user'=>$request->user(), 'autorisation'=>$autorisation]);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/annonces/list'), 'label'=>"Annonces", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/annonces/edit_une_annonce'), 'label'=>"Editer une annonce", 'icon'=>'bi-pencil-square fs-5'],
+        ];
+        return view('private_layouts.annonces_folder.editer_une_annonce', ['annonce'=>$annonce,
+        'current_user'=>$request->user(), 'autorisation'=>$autorisation, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_edition_annonce($annonce_id, Request $request)

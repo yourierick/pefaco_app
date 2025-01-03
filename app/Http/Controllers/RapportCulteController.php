@@ -26,7 +26,15 @@ class RapportCulteController extends Controller
                 }
             }
         }
-        return view('private_layouts.rapport_de_culte_folder.list_des_rapports', ['current_user'=>$request->user(), 'rapports'=>$rapports, 'autorisation'=>$autorisation, 'autorisation_speciale'=>$autorisation_speciale]);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('rapportculte/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+        ];
+
+        return view('private_layouts.rapport_de_culte_folder.list_des_rapports', ['current_user'=>$request->user(), 
+        'rapports'=>$rapports, 'autorisation'=>$autorisation, 
+        'autorisation_speciale'=>$autorisation_speciale, 'breadcrumbs'=>$breadcrumbs]);
     }
 
     public function voir_mes_drafts(Request $request):View
@@ -35,7 +43,15 @@ class RapportCulteController extends Controller
         $rapports = RapportDeCulte::where('statut', 'draft')->where('rapporteur_id', $request->user()->id)->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_cultes')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_de_culte_folder.list_des_rapports', compact("autorisation", "rapports", "current_user", "autorisation_speciale"));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('rapportculte/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('rapportculte/voir_mes_drafts'), 'label'=>'Mes drafts', 'icon'=>'bi-list fs-5'],
+        ];
+
+        return view('private_layouts.rapport_de_culte_folder.list_des_rapports', compact("autorisation", "rapports", 
+        "current_user", "autorisation_speciale", "breadcrumbs"));
     }
 
     public function les_attentes_en_completion(Request $request):View
@@ -44,7 +60,15 @@ class RapportCulteController extends Controller
         $rapports = RapportDeCulte::where('statut', 'en attente de completion')->where('departement_id', $request->user()->departement_id)->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_cultes')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_de_culte_folder.list_des_rapports', compact("rapports", "autorisation", "current_user", "autorisation_speciale"));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('rapportculte/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportculte/les_attentes_en_completion'), 'label'=>'Rapports en attente', 'icon'=>'bi-list fs-5'],
+        ];
+
+        return view('private_layouts.rapport_de_culte_folder.list_des_rapports', compact("rapports", "autorisation", 
+        "current_user", "autorisation_speciale", "breadcrumbs"));
     }
 
     public function les_attentes_en_validation(Request $request):View
@@ -53,7 +77,15 @@ class RapportCulteController extends Controller
         $rapports = RapportDeCulte::where('statut', 'en attente de validation')->where('departement_id', $request->user()->departement_id)->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_cultes')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_de_culte_folder.list_des_rapports', compact("autorisation_speciale", "autorisation", "current_user", "rapports"));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('rapportculte/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportculte/les_attentes_en_validation'), 'label'=>'Rapports en attente', 'icon'=>'bi-list fs-5'],
+        ];
+
+        return view('private_layouts.rapport_de_culte_folder.list_des_rapports', compact("autorisation_speciale", 
+        "autorisation", "current_user", "rapports", "breadcrumbs"));
     }
 
     public function ajouter_nouveau_rapport(Request $request):View
@@ -61,7 +93,14 @@ class RapportCulteController extends Controller
         $current_user = $request->user();
         $autorisation = Autorisations::where('table_name', 'rapport_de_cultes')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_cultes')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_de_culte_folder.ajouter_un_rapport', compact("current_user", "autorisation_speciale", 'autorisation'));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('rapportculte/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportculte/ajouter_nouveau_rapport'), 'label'=>'Ajouter', 'icon'=>'bi-plus-circle fs-5'],
+        ];
+        return view('private_layouts.rapport_de_culte_folder.ajouter_un_rapport', compact("current_user", 
+        "autorisation_speciale", 'autorisation', 'breadcrumbs'));
     }
 
     public function sauvegarder_le_rapport(Request $request)
@@ -214,7 +253,16 @@ class RapportCulteController extends Controller
         $autorisationspeciales = AutorisationSpeciale::where('table_name',
             'rapport_de_cultes')->where('user_id', $request->user()->id)->first();
         $rapport = RapportDeCulte::with("departement", "user_rapporteur")->find($rapport_id);
-        return view('private_layouts.rapport_de_culte_folder.afficher_un_rapport', ['rapport'=>$rapport, 'current_user'=>$request->user(), 'autorisation'=>$autorisation, 'autorisation_speciale'=>$autorisationspeciales]);
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('rapportculte/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportculte/afficher_rapport_culte'), 'label'=>'Afficher', 'icon'=>'bi-eye fs-5'],
+        ];
+
+        return view('private_layouts.rapport_de_culte_folder.afficher_un_rapport', ['rapport'=>$rapport, 
+        'current_user'=>$request->user(), 'autorisation'=>$autorisation, 
+        'autorisation_speciale'=>$autorisationspeciales, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function traitement_du_rapport($rapport_id, Request $request)
@@ -251,7 +299,15 @@ class RapportCulteController extends Controller
             "comité d'assistance et vie sociale")->where("designation", "!=", "protocole")->where("designation", "!=",
             "coordination provinciale")->get();
         $current_user = $request->user();
-        return view('private_layouts.rapport_de_culte_folder.editer_un_rapport', compact("rapport", "autorisation", "autorisation_speciale", "current_user", "departements"));
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('rapportculte/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportculte/edit_le_rapport'), 'label'=>'Editer', 'icon'=>'bi-pencil-square fs-5'],
+        ];
+
+        return view('private_layouts.rapport_de_culte_folder.editer_un_rapport', compact("rapport", 
+        "autorisation", "autorisation_speciale", "current_user", "departements", "breadcrumbs"));
     }
 
     public function save_edition_rapport($rapport_id, Request $request)

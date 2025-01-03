@@ -2,7 +2,7 @@
 @section('page_title', 'Dashboard')
 @section('titre', '#EGLISE PEFACO')
 @section('content')
-    <div class="app-card alert alert-dismissible shadow-sm mb-4 border-left-decoration" style="background: linear-gradient(70deg, #dadaf5, #f6f6f6);" role="alert">
+    <div class="mt-4 app-card alert alert-dismissible shadow-sm mb-4 border-left-decoration" style="background: linear-gradient(70deg, #dadaf5, #f6f6f6);" role="alert">
         <div class="inner">
             <div class="app-card-body p-3 p-lg-4">
                 <div>
@@ -133,13 +133,13 @@
                             @if($autorisation_speciale->autorisation_speciale)
                                 @if(in_array('peux voir la partie financiere du rapport', json_decode($autorisation_speciale->autorisation_speciale, true)))
                                     <div class="chart-container">
-                                        <span style="color: orangered">Total Offrande:</span> {{ $rapport_de_culte->total_offrande }}
+                                        <span class="fw-bold" style="color: orangered; text-transform: uppercase">Total Offrande:</span> <span class="fw-bold">{{ $rapport_de_culte->total_offrande }} {{ $parametre_devise }}</span>
                                     </div>
                                 @endif
                             @endif
                         @endif
                         <div class="chart-container">
-                            <span style="color: dodgerblue">Autres offrandes:</span>
+                            <span style="color: dodgerblue; text-transform: uppercase" class="fw-bold">Autres offrandes:</span>
                             @foreach(json_decode($rapport_de_culte->don_special, true) as $value)
                                 <br>* <span>{{ $value }}</span>
                             @endforeach

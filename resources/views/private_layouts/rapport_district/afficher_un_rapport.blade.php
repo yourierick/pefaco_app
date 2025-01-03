@@ -138,7 +138,7 @@
                             <p>Mois de rapportage: {{ $rapport->mois->translatedFormat("F Y") }}</p>
                             <p>Date de rapportage: {{ $rapport->created_at->format("d-m-Y") }}</p>
                             <p style="margin: 0"><span style="color: black">Zone concernée:</span> {{ $rapport->zone }}</p>
-                            <p style="margin: 0"><span style="color: black">Paroisses concernées:</span> {{ $rapport->paroisses_concernees }}</p>
+                            <p style="margin: 0; text-decoration: underline"><span style="color: black; font-weight: 500">Paroisses concernées:</span> <span class="fst-italic">{{ $rapport->paroisses_concernees }}</span></p>
                             <p style="margin: 0; color: red">Statut du rapport: {{ $rapport->statut }}</p>
                         </div>
                     </div>
@@ -264,28 +264,28 @@
                                         <tbody>
                                             @if($current_user->id == $rapport->rapporteur_id)
                                                 <tr>
-                                                    <td class="cell"> {{ $rapport->dime_des_dimes }} FC</td>
-                                                    <td class="cell"> {{ $rapport->total_offrande }} FC</td>
+                                                    <td class="cell"> {{ $rapport->dime_des_dimes }} {{ $parametre_devise }}</td>
+                                                    <td class="cell"> {{ $rapport->total_offrande }} {{ $parametre_devise }}</td>
                                                     <td class="cell"> {{ $rapport->autres_contributions_a_renseigner }} personnes</td>
                                                 </tr>
                                             @elseif(!is_null($autorisation_speciale))
                                                 @if(in_array('peux voir la partie financière du rapport', json_decode($autorisation_speciale->autorisation_speciale, true)))
                                                     <tr>
-                                                        <td class="cell"> {{ $rapport->dime_des_dimes }} FC</td>
-                                                        <td class="cell"> {{ $rapport->total_offrande }} FC</td>
+                                                        <td class="cell"> {{ $rapport->dime_des_dimes }} {{ $parametre_devise }}</td>
+                                                        <td class="cell"> {{ $rapport->total_offrande }} {{ $parametre_devise }}</td>
                                                         <td class="cell"> {{ $rapport->autres_contributions_a_renseigner }}</td>
                                                     </tr>
                                                 @else
                                                     <tr>
-                                                        <td class="cell"> 0 FC</td>
-                                                        <td class="cell"> 0 FC</td>
+                                                        <td class="cell"> 0 {{ $parametre_devise }}</td>
+                                                        <td class="cell"> 0 {{ $parametre_devise }}</td>
                                                         <td class="cell"> RAS</td>
                                                     </tr>
                                                 @endif
                                             @else
                                                 <tr>
-                                                    <td class="cell"> 0 FC</td>
-                                                    <td class="cell"> 0 FC</td>
+                                                    <td class="cell"> 0 {{ $parametre_devise }}</td>
+                                                    <td class="cell"> 0 {{ $parametre_devise }}</td>
                                                     <td class="cell"> RAS</td>
                                                 </tr>
                                             @endif

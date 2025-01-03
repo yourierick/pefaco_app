@@ -36,7 +36,7 @@
 </head>
 <body>
     <div id="form_display">
-        <a class="app-logo" href="{{ route('home') }}"><img class="logo-icon me-2" style="width: 130px; height: 80px" src="{{ asset('css/images/logo.jpg') }}" alt="logo"></a>
+        <a class="app-logo" href="{{ route('home') }}"><img class="logo-icon me-2" style="width: 130px; height: 80px" src="/storage/{{ $parametre_logo }}" alt="logo"></a>
         <hr style="border: 2px solid #095ba9; width: 100%">
         <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
             {{ __("Vous avez oublié votre mot de passe? Pas de problème. Laissez-nous connaitre votre adresse email, on vous enverra un lien qui vous permettra d'en choisir un nouveau.") }}

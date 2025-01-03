@@ -1,7 +1,7 @@
 @extends('base_dashboard')
 @section('page_title', 'Pefaco Universelle')
 @section('content')
-    <div class="py-12">
+    <div class="py-12 mt-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg shadow mb-3">
                 <div class="max-w-xl">
@@ -27,7 +27,7 @@
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('motif')"/>
                                 </div>
                                 <div class="form-group-kaiadmin form-group-default-kaiadmin">   
-                                    <label class="text-secondary">Montant</label>
+                                    <label class="text-secondary">Montant (en {{ $parametre_devise }})</label>
                                     <input name="montant" type="number" value="{{ old('montant') }}" placeholder="montant" step="any" class="form-control mt-2">
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('montant')"/>
                                 </div>

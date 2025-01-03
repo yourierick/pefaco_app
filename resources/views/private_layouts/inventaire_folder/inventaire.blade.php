@@ -82,7 +82,7 @@
                                                         <td class="cell" style="font-size: 10pt">{{ $loop->iteration }}</td>
                                                         <td class="cell" style="font-size: 10pt">{{ $bien->designation }}</td>
                                                         <td class="cell" style="font-size: 10pt">{{ $bien->date_acquisition ? $bien->date_acquisition->format('d-m-Y'): "" }}</td>
-                                                        <td class="cell" style="font-size: 10pt">{{ $bien->prix_unitaire }} FC</td>
+                                                        <td class="cell" style="font-size: 10pt">{{ $bien->prix_unitaire }} {{ $parametre_devise }}</td>
                                                         <td class="cell" style="font-size: 10pt">{{ $bien->quantite }}</td>
                                                         <td class="cell" style="font-size: 10pt">{{ $bien->affectation }}</td>
                                                         <td class="cell" style="font-size: 10pt">{{ $bien->etat }}</td>

@@ -230,7 +230,7 @@
                                         <div class="p-1 mb-2" style="background: #17675e; border-radius: 9px"><p style="font-size: 12pt; font-weight: bold; color: whitesmoke"><span class="fa fa-file-word-o"></span> FINANCES</p></div>
                                         <div class="mb-3">
                                             <div class="form-group-kaiadmin form-group-default-kaiadmin" style="background-color: #f3f3f3!important;">
-                                                <label for="id_situation_caisse" style="color: #818183">Situation actuelle de la caisse</label>
+                                                <label for="id_situation_caisse" style="color: #818183">Situation actuelle de la caisse (en {{ $parametre_devise }})</label>
                                                 <input class="form-control" style="color: #3aa103" type="number" name="situation_caisse" id="id_situation_caisse" value="{{ old('situation_caisse', 0) }}">
                                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('situation_caisse')"/>
                                             </div>

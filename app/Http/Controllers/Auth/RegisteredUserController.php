@@ -22,13 +22,13 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/manage_user'), 'label'=>"Profiles", 'icon'=>'bi-people fs-5'],
+            ['url'=>url('register'), 'label'=>"Ajouter", 'icon'=>'bi-pencil-square fs-5'],
+        ];
         $current_user = Auth::user();
-        if ($current_user){
-            return view('auth.register', ['current_user'=>$current_user]);
-        }
-        else{
-            return to_route('login')->with('error_msg', "Ce compte est désactivé")->onlyInput('email');
-        }
+        return view('auth.register', ['current_user'=>$current_user, "breadcrumbs"=>$breadcrumbs]);
     }
 
     #Ajax::load qualites
@@ -95,6 +95,11 @@ class RegisteredUserController extends Controller
             'serviteurs', 'zones', 'users', 'cotisations', 'inventaires', 'message_et_commentaires',
             'don_specials', 'caisses', 'bulletin_infos', 'autorisation_speciales', 'agendas'];
 
+        AutorisationSpeciale::create([
+            'user_id' => $user_id,
+            'table_name' => 'paramètres généraux'
+        ]);
+        
         foreach ($tableNames as $tableName) {
             if (!in_array($tableName, $tablesAIgnorer)) {
                 AutorisationSpeciale::create([

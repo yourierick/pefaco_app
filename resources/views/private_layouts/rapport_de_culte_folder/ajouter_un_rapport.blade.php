@@ -141,7 +141,7 @@
                                     @if(in_array('peux voir la partie financiere du rapport', json_decode($autorisation_speciale->autorisation_speciale, true)))
                                         <div class="mb-3">
                                             <div class="form-group-kaiadmin form-group-default-kaiadmin" style="background-color: #ffe2a6">
-                                                <label style="color: #818183">Offrande du jour/FINANCE</label>
+                                                <label style="color: #818183">Offrande du jour/FINANCE (en {{ $parametre_devise }})</label>
                                                 <input class="form-control mb-2" type="number" name="offrande" step="any" placeholder="Veuillez renseigner l'offrande du jour" required value="{{ old("offrande") }}">
                                             </div>
                                         </div>

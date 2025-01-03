@@ -68,19 +68,28 @@
                         <h2>Semaine du lundi {{ $horaire->date_debut->format('d/m/Y') }} au dimanche {{ $horaire->date_fin->format('d/m/Y') }}</h2>
                         <div class="app-card app-card-orders-table shadow-sm mb-5">
                             <div class="app-card-body table-responsive">
-                                <br><table class="table table-striped w-100 mb-0 text-left">
+                                <br><table class="table table-striped w-100 mb-0 text-left" id="multi-filter-select">
                                     <thead>
                                         <tr>
                                             <th class="cell">N°</th>
+                                            <th class="cell">Département</th>
                                             <th class="cell">Jour</th>
                                             <th class="cell">Programme</th>
                                             <th class="cell"></th>
                                         </tr>
                                     </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th class="cell">N°</th>
+                                            <th class="cell">Département</th>
+                                            <th class="cell">Jour</th>
+                                        </tr>
+                                    </tfoot>
                                     <tbody>
                                     @foreach($programmes as $programme)
                                         <tr>
                                             <td style="vertical-align: top; font-weight: bold">{{ $loop->iteration }}</td>
+                                            <td style="vertical-align: top; font-weight: bold; background-color: #d2ecff">{{ $programme->departement }}</td>
                                             <td style="vertical-align: top; font-weight: bold; background-color: #d2ecff">{{ $programme->jour }}</td>
                                             <td style="vertical-align: top">
                                                 @foreach(json_decode($programme->programme, true) as $value)

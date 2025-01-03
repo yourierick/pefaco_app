@@ -82,7 +82,7 @@
                                                         <td class="cell" style="font-size: 10pt">{{ $cotisation->date_debut->format('d-m-Y') }}</td>
                                                         <td class="cell" style="font-size: 10pt">{{ $cotisation->date_fin->format('d-m-Y') }}</td>
                                                         <td class="cell" style="font-size: 10pt">{{ $cotisation->statut }}</td>
-                                                        <td class="cell" style="font-size: 10pt">{{ $cotisation->montant_total_net }} FC</td>
+                                                        <td class="cell" style="font-size: 10pt">{{ $cotisation->montant_total_net }} {{ $parametre_devise }}</td>
                                                         <td class="cell">
                                                             <a class="btn-sm app-btn-secondary" href="{{ route('cotisation.afficher', $cotisation->id) }}"><span class="bi-eye-fill"></span></a>
                                                             @if($autorisation->autorisation_en_ecriture)

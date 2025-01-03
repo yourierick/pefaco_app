@@ -10,7 +10,7 @@
     </style>
 @endsection
 @section('content')
-    <div>
+    <div class="mt-4">
         <form method="post" enctype="multipart/form-data" class="shadow p-3" id="formulaire"
               action="{{ route('register') }}">
             @csrf

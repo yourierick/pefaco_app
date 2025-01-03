@@ -158,7 +158,7 @@
                                         <div class="p-1 mb-2" style="background: #17675e; border-radius: 9px"><p style="font-size: 12pt; font-weight: bold; color: whitesmoke"><span class="fa fa-file-word-o"></span> FINANCES</p></div>
                                         <div class="mb-3">
                                             <div class="form-group-kaiadmin form-group-default-kaiadmin" style="background-color: #ffe2a6">
-                                                <label for="id_tot_offrande" style="color: #818183">Offrandes reçues</label>
+                                                <label for="id_tot_offrande" style="color: #818183">Offrandes reçues (en {{ $parametre_devise }})</label>
                                                 <input class="form-control" type="number" step="any" name="total_offrande" id="id_tot_offrande" value="{{ $rapport->total_offrande }}">
                                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('total_offrande')"/>
                                             </div>

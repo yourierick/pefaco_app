@@ -14,12 +14,24 @@ class InventaireController extends Controller
     {
         $autorisation = Autorisations::where('table_name', 'inventaires')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $biens = Inventaire::all();
-        return view('private_layouts.inventaire_folder.inventaire', ['biens' => $biens, 'current_user' => $request->user(), 'autorisation'=>$autorisation]);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/inventaire/list'), 'label'=>"Liste Inventaire", 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.inventaire_folder.inventaire', ['biens' => $biens, 
+        'current_user' => $request->user(), 'autorisation'=>$autorisation, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function ajouter_nouveau_bien(Request $request): View
     {
-        return view('private_layouts.inventaire_folder.ajouter_bien', ['current_user' => $request->user()]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/inventaire/list'), 'label'=>"Liste Inventaire", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/inventaire/ajouter_nouveau'), 'label'=>"Ajouter", 'icon'=>'bi-plus-circle fs-5'],
+        ];
+        return view('private_layouts.inventaire_folder.ajouter_bien', ['current_user' => $request->user(), 
+        "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function sauvegarder_le_bien(Request $request)
@@ -58,8 +70,15 @@ class InventaireController extends Controller
     public function edit_bien($bien_id, Request $request): View
     {
         $bien = Inventaire::find($bien_id);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/inventaire/list'), 'label'=>"Liste Inventaire", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/inventaire/edit_bien'), 'label'=>"Editer", 'icon'=>'bi-pencil-square fs-5'],
+        ];
+
         return view('private_layouts.inventaire_folder.edit_bien',
-            ['bien'=>$bien, 'current_user'=>$request->user()]);
+            ['bien'=>$bien, 'current_user'=>$request->user(), "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_edition_bien($bien_id, Request $request)

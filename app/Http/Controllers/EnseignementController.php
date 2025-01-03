@@ -26,12 +26,26 @@ class EnseignementController extends Controller
             }
         }
 
-        return view('private_layouts.enseignements_folder.list_des_enseignements', ['current_user'=>$request->user(), 'enseignements'=>$enseignements, 'autorisation'=>$autorisation, 'autorisation_speciale'=>$autorisation_speciale]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/enseignement/list'), 'label'=>"Liste d'enseignements", 'icon'=>'bi-list fs-5'],
+        ];
+
+        return view('private_layouts.enseignements_folder.list_des_enseignements', ['current_user'=>$request->user(), 
+        'enseignements'=>$enseignements, 'autorisation'=>$autorisation, 
+        'autorisation_speciale'=>$autorisation_speciale, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function nouvel_enseignement(Request $request):View
     {
-        return view('private_layouts.enseignements_folder.ajouter_un_enseignement', ['current_user' => $request->user()]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/enseignement/list'), 'label'=>"Liste d'enseignements", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/enseignement/nouvel_enseignement'), 'label'=>"Ajouter", 'icon'=>'bi-plus-circle fs-5'],
+        ];
+
+        return view('private_layouts.enseignements_folder.ajouter_un_enseignement', ['current_user'=>$request->user(),
+        "breadcrumbs"=>$breadcrumbs]);
     }
 
 
@@ -40,7 +54,15 @@ class EnseignementController extends Controller
         $autorisation = Autorisations::where('table_name', 'enseignements')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'enseignements')->where('user_id', $request->user()->id)->first();
         $enseignements = Enseignement::with('auteur')->where('statut', 'draft')->where('auteur_id', $request->user()->id)->get();
-        return view('private_layouts.enseignements_folder.list_des_enseignements', ['current_user'=>$request->user(), 'enseignements'=>$enseignements, 'autorisation'=>$autorisation, "autorisation_speciale"=>$autorisation_speciale]);
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/enseignement/list'), 'label'=>"Liste d'enseignements", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/enseignement/voir_mes_drafts_enseignement'), 'label'=>"Mes drafts", 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.enseignements_folder.list_des_enseignements', ['current_user'=>$request->user(), 
+        'enseignements'=>$enseignements, 'autorisation'=>$autorisation, 
+        "autorisation_speciale"=>$autorisation_speciale, "breadcrumbs"=>$breadcrumbs]);
     }
 
 
@@ -49,7 +71,15 @@ class EnseignementController extends Controller
         $autorisation = Autorisations::where('table_name', 'enseignements')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'enseignements')->where('user_id', $request->user()->id)->first();
         $enseignements = Enseignement::with('auteur')->where('statut', 'en attente de validation')->get();
-        return view('private_layouts.enseignements_folder.list_des_enseignements', ['current_user'=>$request->user(), 'enseignements'=>$enseignements, 'autorisation'=>$autorisation, 'autorisation_speciale'=>$autorisation_speciale]);
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/enseignement/list'), 'label'=>"Liste d'enseignements", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/enseignement/voir_les_attentes_en_validation'), 'label'=>"Rapports en attente", 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.enseignements_folder.list_des_enseignements', ['current_user'=>$request->user(), 
+        'enseignements'=>$enseignements, 'autorisation'=>$autorisation, 
+        'autorisation_speciale'=>$autorisation_speciale, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_enseignement(Request $request)
@@ -58,10 +88,13 @@ class EnseignementController extends Controller
             [
                 'titre'=>['required'],
                 'reference'=>['required'],
+                'enseignement'=>['required'],
+                'affiche_photo'=>'nullable|file|mimes:jpg, jpeg, png|max:2048',
             ],
             [
                 'titre.required'=>'ce champs est obligatoire',
                 'reference.required'=>'ce champs est obligatoire',
+                'enseignement.required'=>'ce champs est obligatoire',
             ]
         );
 
@@ -114,7 +147,15 @@ class EnseignementController extends Controller
         $autorisation = Autorisations::where('table_name', 'enseignements')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisationspeciales = AutorisationSpeciale::where('table_name', 'enseignements')->where('user_id', $request->user()->id)->first();
         $enseignement = Enseignement::with('auteur')->find($enseignement_id);
-        return view('private_layouts.enseignements_folder.afficher_enseignement', ['enseignement'=>$enseignement, 'current_user'=>$request->user(), 'autorisation'=>$autorisation, 'autorisation_speciale'=>$autorisationspeciales]);
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/enseignement/list'), 'label'=>"Liste d'enseignements", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/enseignement/afficher_un_enseignement'), 'label'=>"Afficher", 'icon'=>'bi-eye fs-5'],
+        ];
+        return view('private_layouts.enseignements_folder.afficher_enseignement', ['enseignement'=>$enseignement, 
+        'current_user'=>$request->user(), 'autorisation'=>$autorisation, 
+        'autorisation_speciale'=>$autorisationspeciales, "breadcrumbs"=>$breadcrumbs]);
     }
 
 
@@ -160,7 +201,13 @@ class EnseignementController extends Controller
     {
         $autorisation = Autorisations::where('table_name', 'enseignements')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $enseignement = Enseignement::find($enseignement_id);
-        return view('private_layouts.enseignements_folder.editer_un_enseignement', ['enseignement'=>$enseignement, 'current_user'=>$request->user(), 'autorisation'=>$autorisation]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/enseignement/list'), 'label'=>"Liste d'enseignements", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/enseignement/edit_un_enseignement'), 'label'=>"Editer", 'icon'=>'bi-pencil-square fs-5'],
+        ];
+        return view('private_layouts.enseignements_folder.editer_un_enseignement', ['enseignement'=>$enseignement, 
+        'current_user'=>$request->user(), 'autorisation'=>$autorisation, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_edition_enseignement($enseignement_id, Request $request)

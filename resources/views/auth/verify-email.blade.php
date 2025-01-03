@@ -36,7 +36,7 @@
 </head>
 <body>
     <div id="form_display">
-        <img class="logo-icon me-2" style="width: 130px; height: 80px" src="{{ asset('css/images/logo.jpg') }}" alt="logo">
+        <img class="logo-icon me-2" style="width: 130px; height: 80px" src="/storage/{{ $parametre_logo }}" alt="logo">
         <hr style="border: 2px solid #095ba9; width: 100%">
         <div class="dark:text-gray-400">
             <p>{{ __("Nous sommes content de vous voir! avant de commencer, pouvez-vous vérifier votre adresse mail en cliquant sur le lien qu'on vient de partager sur votre boite? si vous ne l'avez pas reçu, nous serons heureux de vous le renvoyer") }}</p>
@@ -49,7 +49,7 @@
         @endif
 
         <div style="display: flex; flex-direction: row; gap: 3px">
-            <form>
+            <form method="POST" action="{{ route('verification.send') }}">
                 @csrf
                 <div>
                     <button class="btn btn-primary">Renvoyer</button>

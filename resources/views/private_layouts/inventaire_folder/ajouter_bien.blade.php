@@ -21,7 +21,7 @@
                                     <x-input-error style="color: orangered" class="mt-2 text-danger" :messages="$errors->get('date_acquisition')"/>
                                 </div>
                                 <div class="form-group-kaiadmin form-group-default-kaiadmin">
-                                    <label class="text-secondary">Prix unitaire</label>
+                                    <label class="text-secondary">Prix unitaire (en {{ $parametre_devise }})</label>
                                     <input name="prix_unitaire" placeholder="prix unitaire" value="{{ old('prix_unitaire') }}" type="number" step="any" class="form-control mt-2">
                                     <x-input-error style="color: orangered" class="mt-2 text-danger" :messages="$errors->get('prix_unitaire')"/>
                                 </div>

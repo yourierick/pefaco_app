@@ -31,8 +31,14 @@ class RapportMensuelController extends Controller
                 }
             }
         }
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportmensuel/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+        ];
+
         return view('private_layouts.rapport_mensuel.list_des_rapports', compact("autorisation",
-            "current_user", "autorisation_speciale", "rapports"));
+            "current_user", "autorisation_speciale", "rapports", "breadcrumbs"));
     }
 
     public function voir_mes_drafts(Request $request):View
@@ -41,7 +47,14 @@ class RapportMensuelController extends Controller
         $rapports = RapportMensuel::with("user", "departement")->where('statut', 'draft')->where('rapporteur_principal_id', $request->user()->id)->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_mensuel.list_des_rapports', compact("autorisation", "rapports", "current_user", "autorisation_speciale"));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportmensuel/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportmensuel/voir_mes_drafts'), 'label'=>'Mes drafts', 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.rapport_mensuel.list_des_rapports', compact("autorisation", 
+        "rapports", "current_user", "autorisation_speciale", "breadcrumbs"));
     }
 
     public function les_attentes_en_completion(Request $request):View
@@ -50,7 +63,14 @@ class RapportMensuelController extends Controller
         $rapports = RapportMensuel::with("user", "departement")->where('statut', 'en attente de completion')->where('departement_id', $request->user()->departement_id)->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_mensuel.list_des_rapports', compact("rapports", "autorisation", "current_user", "autorisation_speciale"));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportmensuel/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportmensuel/les_attentes_en_completion'), 'label'=>'Rapports en attente', 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.rapport_mensuel.list_des_rapports', compact("rapports", 
+        "autorisation", "current_user", "autorisation_speciale", "breadcrumbs"));
     }
 
     public function les_attentes_en_validation(Request $request):View
@@ -59,7 +79,14 @@ class RapportMensuelController extends Controller
         $rapports = RapportMensuel::where('statut', 'en attente de validation')->where('departement_id', $request->user()->departement_id)->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_mensuel.list_des_rapports', compact("autorisation_speciale", "autorisation", "current_user", "rapports"));
+       
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportmensuel/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportmensuel/les_attentes_en_validation'), 'label'=>'Rapports en attente', 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.rapport_mensuel.list_des_rapports', compact("autorisation_speciale", 
+        "autorisation", "current_user", "rapports", "breadcrumbs"));
     }
 
     public function ajouter_nouveau_rapport(Request $request):View
@@ -67,7 +94,14 @@ class RapportMensuelController extends Controller
         $current_user = $request->user();
         $autorisation = Autorisations::where('table_name', 'rapport_mensuels')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_mensuel.ajouter_un_rapport', compact("current_user", "autorisation_speciale", 'autorisation'));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportmensuel/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('rapportmensuel/ajouter_nouveau_rapport'), 'label'=>'Ajouter', 'icon'=>'bi-plus-circle fs-5'],
+        ];
+        return view('private_layouts.rapport_mensuel.ajouter_un_rapport', compact("current_user", 
+        "autorisation_speciale", 'autorisation', "breadcrumbs"));
     }
 
     public function chargement_rapport_semaine_et_caisse($mois, $departement_id) {
@@ -264,8 +298,14 @@ class RapportMensuelController extends Controller
         }
         
         $current_user = $request->user();
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportmensuel/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportmensuel/afficher_rapport_mensuel'), 'label'=>'Afficher', 'icon'=>'bi-eye fs-5'],
+        ];
         return view('private_layouts.rapport_mensuel.afficher_un_rapport', compact("autorisation", "autorisation_speciale",
-        "rapport", "caisse", "releve_des_transactions_mensuelles", "current_user"));
+        "rapport", "caisse", "releve_des_transactions_mensuelles", "current_user", "breadcrumbs"));
     }
 
     public function edit_le_rapport($rapport_id, Request $request):View
@@ -274,7 +314,14 @@ class RapportMensuelController extends Controller
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
         $rapport = RapportMensuel::find($rapport_id);
         $current_user = $request->user();
-        return view('private_layouts.rapport_mensuel.editer_un_rapport', compact("rapport", "autorisation", "autorisation_speciale", "current_user"));
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportmensuel/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportmensuel/edit_le_rapport'), 'label'=>'Editer', 'icon'=>'bi-pencil-square fs-5'],
+        ];
+        return view('private_layouts.rapport_mensuel.editer_un_rapport', compact("rapport", 
+        "autorisation", "autorisation_speciale", "current_user", "breadcrumbs"));
     }
 
 

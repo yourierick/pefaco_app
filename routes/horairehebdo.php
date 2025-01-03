@@ -20,7 +20,7 @@ Route::middleware('auth')->name('horairehebdo.')->group(function () {
         'save_edition_horaire'])->name('save_edition_horaire');
     Route::get('/horairehebdo/editer_programme/{horaire_id}', [HoraireHebdoController::class,
         'editer_programme'])->name('editer_programme');
-    Route::put('/horairehebdo/save_edition_programme/{horaire_id}', [HoraireHebdoController::class,
+    Route::put('/horairehebdo/save_edition_programme/{programme_id}', [HoraireHebdoController::class,
         'save_edition_programme'])->name('save_edition_programme');
 });
 

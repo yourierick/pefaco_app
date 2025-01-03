@@ -11,7 +11,9 @@ class Programme extends Model
 
     protected $fillable = [
         'horaire_id',
+        'departement',
         'jour',
         'programme',
     ];
+
 }

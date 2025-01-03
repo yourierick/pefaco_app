@@ -52,7 +52,7 @@
                                                         </td>
                                                         <td class="cell">
                                                             <span style="font-weight: normal">
-                                                                {{ $ligne->montant }}
+                                                                {{ $ligne->montant }} {{ $parametre_devise }}
                                                             </span>
                                                         </td>
                                                         <td class="cell">

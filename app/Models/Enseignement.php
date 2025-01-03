@@ -46,4 +46,8 @@ class Enseignement extends Model
 
         return parent::delete();
     }
+
+    public function commentaires() {
+        return $this->hasMany(CommentEnseign::class);
+    }
 }

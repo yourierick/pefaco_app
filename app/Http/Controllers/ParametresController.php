@@ -7,10 +7,12 @@ use App\Models\AutorisationSpeciale;
 use App\Models\GroupesUtilisateurs;
 use App\Models\Departements;
 use App\Models\Paroisses;
+use GuzzleHttp\Psr7\UploadedFile;
 use App\Models\Qualites;
 use App\Models\ProgrammeDeCulte;
 use App\Models\ProgrammeDuPasteur;
 use App\Models\Zones;
+use App\Models\BulletinInfo;
 use App\Models\ConfigurationGenerale;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -19,6 +21,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
+
+use App\Jobs\PrincipalSendMailJob;
 
 
 class ParametresController extends Controller
@@ -34,7 +39,8 @@ class ParametresController extends Controller
         $qualites = Qualites::with('departement')->get();
         $configuration_generale = ConfigurationGenerale::first();
         $current_user = $request->user();
-        return view('private_layouts.parametres.parametres', compact('users_group', 'configuration_generale', 
+        $autorisation_parametre = AutorisationSpeciale::where('table_name', 'paramètres généraux')->where('user_id', $current_user->id)->first();
+        return view('private_layouts.parametres.parametres', compact('users_group', 'configuration_generale', 'autorisation_parametre', 
         'current_user', 'departements', 'qualites', 'zones', 'paroisses', 'programmedeculte', 'programmedupasteur'));
     }
 
@@ -69,10 +75,7 @@ class ParametresController extends Controller
             'serviteurs', 'zones', 'communiques', 'users', 'autorisation_speciales', 'custom_notifications', 'membres', 'invites', 'baptises', 
             'configuration_generales'];
 
-        Autorisations::create([
-            'groupe_id' => $groupe_id,
-            'table_name' => 'paramètres généraux'
-        ]);
+        
         foreach ($tableNames as $tableName) {
             if (!in_array($tableName, $tablesAIgnorer)) {
                 Autorisations::create([
@@ -195,6 +198,10 @@ class ParametresController extends Controller
             $configuration_generale->nom_du_pasteur = $request->get('nom_du_pasteur');
 
             $configuration_generale->update();
+
+            Cache::put('parametre_devise', $configuration_generale->devise, 60);
+            Cache::put('parametre_pourcentage', $configuration_generale->pourcentage_eglise, 60);
+            Cache::put('parametre_logo', $configuration_generale->parametre_logo, 60);
         } else {
             if ($request->hasFile('logo')) {
                 /** @var UploadedFile $photo */
@@ -223,6 +230,10 @@ class ParametresController extends Controller
                 'nom_du_pasteur'=>$request->get('nom_du_pasteur'),
                 'photo_du_pasteur_responsable'=>$imagePathPhoto,
             ]);
+
+            Cache::put('parametre_devise', $configuration_generale->devise, 60);
+            Cache::put('parametre_pourcentage', $configuration_generale->pourcentage_eglise, 60);
+            Cache::put('parametre_logo', $configuration_generale->parametre_logo, 60);
         }
 
         return redirect()->back()->with('success', 'enregistré');
@@ -450,5 +461,29 @@ class ParametresController extends Controller
         $programmedupasteur->delete();
 
         return redirect()->back()->with('success', 'le programme a été supprimé');
+    }
+
+    public function diffuser_un_message(Request $request) {
+        $request->validate([
+            'message' => 'required',
+            'subject' => 'required',
+            'piece_jointe' => 'nullable|file|mimes:jpg,jpeg,png,pdf,docx|max:5120'
+        ]);
+
+        $destinataires = BulletinInfo::pluck('email');
+        $details = [
+            'title' => $request->get('subject'),
+            'subject' => "Bulletin d'information",
+            'body' => $request->get('message'),
+        ];
+
+        $attachmentPath = null;
+        if ($request->hasFile('piece_jointe')) {
+            /** @var UploadedFile $photo */
+            $attachmentPath = $request->file('piece_jointe')->store('attachments', 'public');
+        }
+        PrincipalSendMailJob::dispatch($destinataires, $details, $attachmentPath);
+        
+        return redirect()->back()->with("success", "le message a été diffusé");
     }
 }

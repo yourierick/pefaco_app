@@ -2,7 +2,7 @@
 @section('page_title', 'Pefaco Universelle')
 @section('titre', '#Editer la cotisation')
 @section('content')
-    <div class="py-12 mt-2">
+    <div class="py-12 mt-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg shadow mb-3">
                 <div class="max-w-xl">
@@ -15,7 +15,7 @@
                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('cotisant')"/>
                             </div>
                             <div class="form-group-kaiadmin form-group-default-kaiadmin">
-                                <label for="id_montant" class="text-secondary">Montant</label>
+                                <label for="id_montant" class="text-secondary">Montant (en {{ $parametre_devise }})</label>
                                 <input type="number" step="any" value="{{ $cotisation_account->montant }}" class="form-control" id="id_montant" name="montant" placeholder="montant de cotisation">
                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('montant')"/>
                             </div>

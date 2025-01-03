@@ -274,9 +274,10 @@
                                         </span>
                                     </label>
                                     <select name="devise" id="id_devise" class="form-control">
-                                        <option @if(($configuration_generale ? $configuration_generale->devise: "") === "FC (Francs congolais)") selected @endif value="FC (Francs congolais)">FC (Francs congolais)</option>
-                                        <option @if(($configuration_generale ? $configuration_generale->devise: "") === "$ (Dollars)") selected @endif value="$ (Dollars)">$ (Dollars)</option>
-                                        <option @if(($configuration_generale ? $configuration_generale->devise: "") === "£ (Euros)") selected @endif value="£ (Euros)">£ (Euros)</option>
+                                        <option @if(($configuration_generale ? $configuration_generale->devise: "") === "FC") selected @endif value="FC">FC (Francs congolais)</option>
+                                        <option @if(($configuration_generale ? $configuration_generale->devise: "") === "$") selected @endif value="$">$ (Dollars)</option>
+                                        <option @if(($configuration_generale ? $configuration_generale->devise: "") === "£") selected @endif value="£">£ (Livre)</option>
+                                        <option @if(($configuration_generale ? $configuration_generale->devise: "") === "€") selected @endif value="€">€ (Euros)</option>
                                     </select>
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('devise')"/>
                                 </div>
@@ -400,8 +401,13 @@
                                     <input class="form-control" type="file" name="photo_du_pasteur_responsable" id="id_photo_du_pasteur_responsable" value="{{ old('photo_du_pasteur_responsable', $configuration_generale ? $configuration_generale->photo_du_pasteur_responsable: "") }}">
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('photo_du_pasteur_responsable')"/>
                                 </div>
-                                
-                                <button type="submit" class="btn btn-primary text-light" style="font-weight: normal">Enregistrer les modifications</button>
+                                @if(!is_null($autorisation_parametre))
+                                    @if($autorisation_parametre->autorisation_speciale)
+                                        @if(in_array('ecriture', json_decode($autorisation_parametre->autorisation_speciale, true)))
+                                            <button type="submit" class="btn btn-primary text-light" style="font-weight: normal">Enregistrer les modifications</button>
+                                        @endif
+                                    @endif
+                                @endif
                             </form>
                         </div><!--//app-card-body-->
 
@@ -420,7 +426,13 @@
                         <div class="app-card-body">
                             <div class="d-flex row">
                                 <div class="col-7"><h4>Départements</h4></div>
-                                <div class="col-5"><a href="#" style="float: right" class="btn text-secondary" data-bs-target="#modal-add-departement" data-bs-toggle="modal"><span class="bi-plus-circle-fill text-info"></span> ajouter un département</a></div>
+                                @if(!is_null($autorisation_parametre))
+                                    @if($autorisation_parametre->autorisation_speciale)
+                                        @if(in_array('ecriture', json_decode($autorisation_parametre->autorisation_speciale, true)))
+                                            <div class="col-5"><a href="#" style="float: right" class="btn text-secondary" data-bs-target="#modal-add-departement" data-bs-toggle="modal"><span class="bi-plus-circle-fill text-info"></span> ajouter un département</a></div>
+                                        @endif
+                                    @endif
+                                @endif
                             </div>
                             <div class="modal fade" id='modal-add-departement'>
                                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -473,8 +485,14 @@
                                                     <td><input type="hidden" name="id" class="form-control" style="border: none; background: transparent" value="{{ $loop->iteration }}">{{ $loop->iteration }}</td>
                                                     <td style="font-size: 0!important"><input type="text" name="designation" value="{{ $departement->designation }}" class="form-control" style="border: none; background: transparent">{{ $departement->designation }}</td>
                                                     <td class="d-flex">
-                                                        <button type="submit" class="btn"><span class="bi-pencil-square text-info"></span></button>
-                                                        <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#modaldeletedepartement" data-role="{{ $departement->id }}" onclick="loadiddepartement(this)"><span class="bi-trash-fill text-danger"></span></a>
+                                                        @if(!is_null($autorisation_parametre))
+                                                            @if($autorisation_parametre->autorisation_speciale)
+                                                                @if(in_array('ecriture', json_decode($autorisation_parametre->autorisation_speciale, true)))
+                                                                    <button type="submit" class="btn"><span class="bi-pencil-square text-info"></span></button>
+                                                                    <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#modaldeletedepartement" data-role="{{ $departement->id }}" onclick="loadiddepartement(this)"><span class="bi-trash-fill text-danger"></span></a>
+                                                                @endif
+                                                            @endif
+                                                        @endif
                                                     </td>
                                                 </form>
                                             @else
@@ -502,7 +520,13 @@
                         <div class="app-card-body">
                             <div class="d-flex row">
                                 <div class="col-8"><h4>Zones</h4></div>
-                                <div class="col-4"><a href="#" style="float: right" class="btn text-secondary" data-bs-target="#modal-add-zone" data-bs-toggle="modal"><span class="bi-plus-circle-fill text-info"></span> ajouter une zone</a></div>
+                                @if(!is_null($autorisation_parametre))
+                                    @if($autorisation_parametre->autorisation_speciale)
+                                        @if(in_array('ecriture', json_decode($autorisation_parametre->autorisation_speciale, true)))
+                                            <div class="col-4"><a href="#" style="float: right" class="btn text-secondary" data-bs-target="#modal-add-zone" data-bs-toggle="modal"><span class="bi-plus-circle-fill text-info"></span> ajouter une zone</a></div>
+                                        @endif
+                                    @endif
+                                @endif
                             </div>
                             <div class="modal fade" id='modal-add-zone'>
                                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -551,8 +575,14 @@
                                                     <td><input type="hidden" name="id" value="{{ $zone->id }}" style="border: none; background: transparent">{{ $loop->iteration }}</td>
                                                     <td style="font-size: 0!important"><input type="text" name="designation" class="form-control" style="border: none; background: transparent" value="{{ $zone->designation }}">{{ $zone->designation }}</td>
                                                     <td class="d-flex">
-                                                        <button type="submit" class="btn"><span class="bi-pencil-square text-info"></span></button>
-                                                        <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#modaldeletezone" data-role="{{ $zone->id }}" onclick="loadidzone(this)"><span class="bi-trash-fill text-danger"></span></a>
+                                                        @if(!is_null($autorisation_parametre))
+                                                            @if($autorisation_parametre->autorisation_speciale)
+                                                                @if(in_array('ecriture', json_decode($autorisation_parametre->autorisation_speciale, true)))
+                                                                    <button type="submit" class="btn"><span class="bi-pencil-square text-info"></span></button>
+                                                                    <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#modaldeletezone" data-role="{{ $zone->id }}" onclick="loadidzone(this)"><span class="bi-trash-fill text-danger"></span></a>
+                                                                @endif
+                                                            @endif
+                                                        @endif
                                                     </td>
                                                 </form>
                                             </tr>
@@ -576,7 +606,13 @@
                         <div class="app-card-body">
                             <div class="d-flex row">
                                 <div class="col-7"><h4>Paroisses</h4></div>
-                                <div class="col-5"><a href="#" style="float: right" class="btn text-secondary" data-bs-target="#modal-add-paroisse" data-bs-toggle="modal"><span class="bi-plus-circle-fill text-info"></span> ajouter une paroisse</a></div>
+                                @if(!is_null($autorisation_parametre))
+                                    @if($autorisation_parametre->autorisation_speciale)
+                                        @if(in_array('ecriture', json_decode($autorisation_parametre->autorisation_speciale, true)))
+                                            <div class="col-5"><a href="#" style="float: right" class="btn text-secondary" data-bs-target="#modal-add-paroisse" data-bs-toggle="modal"><span class="bi-plus-circle-fill text-info"></span> ajouter une paroisse</a></div>
+                                        @endif
+                                    @endif
+                                @endif
                             </div>
                             <div class="modal fade" id='modal-add-paroisse'>
                                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -655,8 +691,14 @@
                                                     <td style="font-size: 0!important"><input class="form-control" style="border: none; background: transparent" type="text" name="designation" value="{{ $paroisse->designation }}">{{ $paroisse->designation }}</td>
                                                     <td style="font-size: 0!important"><input class="form-control" style="border: none; background: transparent" type="text" name="localisation" value="{{ $paroisse->localisation }}">{{ $paroisse->localisation }}</td>
                                                     <td class="d-flex">
-                                                        <button type="submit" class="btn"><span class="bi-pencil-square text-info"></span></button>
-                                                        <a href="#" class="btn" data-bs-target="#modaldeleteparoisse" data-bs-toggle="modal" data-role="{{ $paroisse->id }}" onclick="loadidparoisse(this)"><span class="bi-trash-fill text-danger"></span></a>
+                                                        @if(!is_null($autorisation_parametre))
+                                                            @if($autorisation_parametre->autorisation_speciale)
+                                                                @if(in_array('ecriture', json_decode($autorisation_parametre->autorisation_speciale, true)))
+                                                                    <button type="submit" class="btn"><span class="bi-pencil-square text-info"></span></button>
+                                                                    <a href="#" class="btn" data-bs-target="#modaldeleteparoisse" data-bs-toggle="modal" data-role="{{ $paroisse->id }}" onclick="loadidparoisse(this)"><span class="bi-trash-fill text-danger"></span></a>
+                                                                @endif
+                                                            @endif
+                                                        @endif
                                                     </td>
                                                 </form>
                                             </tr>
@@ -680,7 +722,13 @@
                         <div class="app-card-body">
                             <div class="d-flex row">
                                 <div class="col-7"><h4>Qualités</h4></div>
-                                <div class="col-5"><a href="#" style="float: right; font-weight: normal" class="btn text-secondary" data-bs-target="#modal-add-qualite" data-bs-toggle="modal"><span class="bi-plus-circle-fill text-info"></span> ajouter une qualité</a></div>
+                                @if(!is_null($autorisation_parametre))
+                                    @if($autorisation_parametre->autorisation_speciale)
+                                        @if(in_array('ecriture', json_decode($autorisation_parametre->autorisation_speciale, true)))
+                                            <div class="col-5"><a href="#" style="float: right; font-weight: normal" class="btn text-secondary" data-bs-target="#modal-add-qualite" data-bs-toggle="modal"><span class="bi-plus-circle-fill text-info"></span> ajouter une qualité</a></div>
+                                        @endif
+                                    @endif
+                                @endif
                             </div>
                             <div class="modal fade" id='modal-add-qualite'>
                                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -743,8 +791,14 @@
                                                 <td style="font-size: 0!important"><input type="text" name="departement_id" value="{{ $qualite->departement_id }}" class="form-control" style="border: none; background: transparent">{{ $qualite->departement->designation }}</td>
                                                 <td style="font-size: 0!important"><input type="text" name="designation" value="{{ $qualite->designation }}" class="form-control" style="border: none; background: transparent">{{ $qualite->designation }}</td>
                                                 <td class="d-flex">
-                                                    <button type="submit" class="btn"><span class="bi-pencil-square text-info"></span></button>
-                                                    <a href="#" class="btn" data-bs-target="#modaldeletequalite" data-bs-toggle="modal" data-role="{{ $qualite->id }}" onclick="loadidqualite(this)"><span class="bi-trash-fill text-danger"></span></a>
+                                                    @if(!is_null($autorisation_parametre))
+                                                        @if($autorisation_parametre->autorisation_speciale)
+                                                            @if(in_array('ecriture', json_decode($autorisation_parametre->autorisation_speciale, true)))
+                                                                <button type="submit" class="btn"><span class="bi-pencil-square text-info"></span></button>
+                                                                <a href="#" class="btn" data-bs-target="#modaldeletequalite" data-bs-toggle="modal" data-role="{{ $qualite->id }}" onclick="loadidqualite(this)"><span class="bi-trash-fill text-danger"></span></a>
+                                                            @endif
+                                                        @endif
+                                                    @endif
                                                 </td>
                                             </form>
                                         </tr>
@@ -767,7 +821,13 @@
                         <div class="app-card-body">
                             <div class="d-flex row">
                                 <div class="col-7"><h5>Programme de culte</h5></div>
-                                <div class="col-5"><a href="#" style="float: right; font-weight: normal" class="btn text-secondary" data-bs-target="#modal-add-programmedeculte" data-bs-toggle="modal"><span class="bi-plus-circle-fill text-info"></span> ajouter un programme</a></div>
+                                @if(!is_null($autorisation_parametre))
+                                    @if($autorisation_parametre->autorisation_speciale)
+                                        @if(in_array('ecriture', json_decode($autorisation_parametre->autorisation_speciale, true)))
+                                            <div class="col-5"><a href="#" style="float: right; font-weight: normal" class="btn text-secondary" data-bs-target="#modal-add-programmedeculte" data-bs-toggle="modal"><span class="bi-plus-circle-fill text-info"></span> ajouter un programme</a></div>
+                                        @endif
+                                    @endif
+                                @endif
                             </div>
                             <div class="modal fade" id='modal-add-programmedeculte'>
                                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -834,8 +894,14 @@
                                                 <td style="font-size: 0!important"><input type="text" name="interval_de_temps" value="{{ $programme->interval_de_temps }}" class="form-control" style="border: none; background: transparent">{{ $programme->interval_de_temps }}</td>
                                                 <td style="font-size: 0!important"><input type="text" name="programme" value="{{ $programme->programme }}" class="form-control" style="border: none; background: transparent">{{ $programme->programme }}</td>
                                                 <td class="d-flex">
-                                                    <button type="submit" class="btn"><span class="bi-pencil-square text-info"></span></button>
-                                                    <a href="#" class="btn" data-bs-target="#modaldeleteprogrammedeculte" data-bs-toggle="modal" data-role="{{ $programme->id }}" onclick="loadidprogrammedeculte(this)"><span class="bi-trash-fill text-danger"></span></a>
+                                                    @if(!is_null($autorisation_parametre))
+                                                        @if($autorisation_parametre->autorisation_speciale)
+                                                            @if(in_array('ecriture', json_decode($autorisation_parametre->autorisation_speciale, true)))
+                                                                <button type="submit" class="btn"><span class="bi-pencil-square text-info"></span></button>
+                                                                <a href="#" class="btn" data-bs-target="#modaldeleteprogrammedeculte" data-bs-toggle="modal" data-role="{{ $programme->id }}" onclick="loadidprogrammedeculte(this)"><span class="bi-trash-fill text-danger"></span></a>
+                                                            @endif
+                                                        @endif
+                                                    @endif
                                                 </td>
                                             </form>
                                         </tr>
@@ -858,7 +924,13 @@
                         <div class="app-card-body">
                             <div class="d-flex row">
                                 <div class="col-7"><h5>Programme de disponibilité du pasteur</h5></div>
-                                <div class="col-5"><a href="#" style="float: right; font-weight: normal" class="btn text-secondary" data-bs-target="#modal-add-programmedupasteur" data-bs-toggle="modal"><span class="bi-plus-circle-fill text-info"></span> ajouter un programme</a></div>
+                                @if(!is_null($autorisation_parametre))
+                                    @if($autorisation_parametre->autorisation_speciale)
+                                        @if(in_array('ecriture', json_decode($autorisation_parametre->autorisation_speciale, true)))
+                                            <div class="col-5"><a href="#" style="float: right; font-weight: normal" class="btn text-secondary" data-bs-target="#modal-add-programmedupasteur" data-bs-toggle="modal"><span class="bi-plus-circle-fill text-info"></span> ajouter un programme</a></div>
+                                        @endif
+                                    @endif
+                                @endif
                             </div>
                             <div class="modal fade" id='modal-add-programmedupasteur'>
                                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -927,8 +999,14 @@
                                                 <td style="font-size: 0!important"><input type="text" name="jour" value="{{ $programme->jour }}" class="form-control" style="border: none; background: transparent">{{ $programme->jour }}</td>
                                                 <td style="font-size: 0!important"><input type="text" name="interval_de_temps" value="{{ $programme->interval_de_temps }}" class="form-control" style="border: none; background: transparent">{{ $programme->interval_de_temps }}</td>
                                                 <td class="d-flex">
-                                                    <button type="submit" class="btn"><span class="bi-pencil-square text-info"></span></button>
-                                                    <a href="#" class="btn" data-bs-target="#modaldeleteprogrammedupasteur" data-bs-toggle="modal" data-role="{{ $programme->id }}" onclick="loadidprogrammedupasteur(this)"><span class="bi-trash-fill text-danger"></span></a>
+                                                    @if(!is_null($autorisation_parametre))
+                                                        @if($autorisation_parametre->autorisation_speciale)
+                                                            @if(in_array('ecriture', json_decode($autorisation_parametre->autorisation_speciale, true)))
+                                                                <button type="submit" class="btn"><span class="bi-pencil-square text-info"></span></button>
+                                                                <a href="#" class="btn" data-bs-target="#modaldeleteprogrammedupasteur" data-bs-toggle="modal" data-role="{{ $programme->id }}" onclick="loadidprogrammedupasteur(this)"><span class="bi-trash-fill text-danger"></span></a>
+                                                            @endif
+                                                        @endif
+                                                    @endif
                                                 </td>
                                             </form>
                                         </tr>
@@ -949,7 +1027,6 @@
                 </div>
                 <div class="col-12 col-md-8">
                     <div class="app-card app-card-settings shadow-sm p-4">
-
                         <div class="app-card-body table-responsive">
                             <table class="table app-table-hover mb-0 text-left">
                                 <thead>
@@ -958,7 +1035,13 @@
                                         <th class="cell">Groupe utilisateurs</th>
                                         <th class="cell" style="text-align: right">
                                             <div class="col-auto">
-                                                <a href="#" class="btn-sm app-text-primary" data-bs-toggle="modal"  data-bs-target='#modal'><i class='bx bxs-plus-circle' style="font-size: 11pt"><span style="font-size: 10pt; vertical-align: top">ajouter un groupe</span></i></a>
+                                                @if(!is_null($autorisation_parametre))
+                                                    @if($autorisation_parametre->autorisation_speciale)
+                                                        @if(in_array('ecriture', json_decode($autorisation_parametre->autorisation_speciale, true)))
+                                                            <a href="#" class="btn-sm app-text-primary" data-bs-toggle="modal"  data-bs-target='#modal'><i class='bx bxs-plus-circle' style="font-size: 11pt"><span style="font-size: 10pt; vertical-align: top">ajouter un groupe</span></i></a>
+                                                        @endif
+                                                    @endif
+                                                @endif
                                                 <div class="modal fade" id='modal'>
                                                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                                                         <div class="modal-content">
@@ -998,7 +1081,13 @@
                                             <td class="cell">{{ $loop->iteration }}</td>
                                             <td class="cell">{{ $group->groupe }}</td>
                                             <td class="cell" style="text-align: right">
-                                                <a class="btn-sm text-secondary" href="{{ route('parametres.autorisations', $group->id) }}"><i class='bx bxs-edit-alt' style="font-size: 12pt"></i></a>
+                                                @if(!is_null($autorisation_parametre))
+                                                    @if($autorisation_parametre->autorisation_speciale)
+                                                        @if(in_array('ecriture', json_decode($autorisation_parametre->autorisation_speciale, true)))
+                                                            <a class="btn-sm text-secondary" href="{{ route('parametres.autorisations', $group->id) }}"><i class='bx bxs-edit-alt' style="font-size: 12pt"></i></a>
+                                                        @endif
+                                                    @endif
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -1020,10 +1109,22 @@
                 <div class="col-12 col-md-8">
                     <div class="app-card app-card-settings shadow-sm p-4">
                         <div class="app-card-body">
-                            <form class="settings-form">
+                            <form class="settings-form" action="{{ route('parametres.diffuser_un_message') }}" method="post" enctype="multipart/form-data">
+                                @csrf
                                 <div>
-                                    <textarea name="message" class="form-control" id="id_message" cols="30" rows="10" placeholder="Entrez le message à diffuser"></textarea>
-                                    <button class="bi-send btn btn-primary mt-2 text-light"> Diffuser ce message</button>
+                                    <input value="{{ old('subject') }}" type="text" placeholder="Sujet" name="subject" class="form-control mb-2" required>
+                                    <x-input-error class="mt-2 text-danger" :messages="$errors->get('subject')"/>
+                                    <textarea name="message" class="form-control" id="id_message" cols="30" rows="10" placeholder="Entrez le message à diffuser" required>{{ old('message') }}</textarea>
+                                    <x-input-error class="mt-2 text-danger" :messages="$errors->get('message')"/>
+                                    <input type="file" style="border: none" name="piece_jointe" class="form-control" title="joindre un fichier">
+                                    <x-input-error class="mt-2 text-danger" :messages="$errors->get('piece_jointe')"/>
+                                    @if(!is_null($autorisation_parametre))
+                                        @if($autorisation_parametre->autorisation_speciale)
+                                            @if(in_array('ecriture', json_decode($autorisation_parametre->autorisation_speciale, true)))
+                                                <button class="bi-send btn btn-primary mt-2 text-light" type="submit"> Diffuser ce message</button>
+                                            @endif
+                                        @endif
+                                    @endif
                                 </div>
                             </form>
                         </div><!--//app-card-body-->

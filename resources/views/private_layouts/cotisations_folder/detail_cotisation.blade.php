@@ -33,7 +33,7 @@
                             <form method="post" action="{{ route('cotisation.lancer_la_cotisation', $cotisation->id) }}">
                                 @csrf
                                 @method('put')
-                                <button type="submit" class="dropdown-item btn btn-outline-secondary perso"><span class="text-light"> lancer la cotisation</span></button>
+                                <button type="submit" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-check-square text-dark"> lancer la cotisation</span></button>
                             </form>
                         @endif
                     @endif
@@ -106,7 +106,7 @@
                                                         <td class="cell" style="font-size: 10pt">{{ $loop->iteration }}</td>
                                                         <td class="cell" style="font-size: 10pt">{{ $cotisation_account->created_at->format('d-m-Y') }}</td>
                                                         <td class="cell" style="font-size: 10pt">{{ $cotisation_account->cotisant }}</td>
-                                                        <td class="cell" style="font-size: 10pt">{{ $cotisation_account->montant }} FC</td>
+                                                        <td class="cell" style="font-size: 10pt">{{ $cotisation_account->montant }} {{ $parametre_devise }}</td>
                                                         <td class="cell">
                                                             @if(in_array('peux modifier', json_decode($autorisation->autorisation_en_ecriture, true)))
                                                                 <a href="{{ route('cotisation.edit_cotisation_account', $cotisation_account->id) }}" class="btn-sm app-btn-secondary"><span class="bi-pencil-square text-primary"></span></a>

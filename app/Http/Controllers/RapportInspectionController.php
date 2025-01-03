@@ -15,7 +15,14 @@ class RapportInspectionController extends Controller
         $autorisation = Autorisations::where('table_name', 'rapport_inspections')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_inspections')->where('user_id', $request->user()->id)->first();
         $rapports = RapportInspection::with('rapporteur')->where('statut', 'validé')->get();
-        return view('private_layouts.rapport_inspection.list_des_rapports', ['current_user'=>$request->user(), 'rapports'=>$rapports, 'autorisation'=>$autorisation, 'autorisation_speciale'=>$autorisation_speciale]);
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportinspection/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.rapport_inspection.list_des_rapports', ['current_user'=>$request->user(), 
+        'rapports'=>$rapports, 'autorisation'=>$autorisation, 
+        'autorisation_speciale'=>$autorisation_speciale, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function voir_mes_drafts(Request $request):View
@@ -24,7 +31,14 @@ class RapportInspectionController extends Controller
         $rapports = RapportInspection::with('rapporteur')->where('statut', 'draft')->where('rapporteur_id', $request->user()->id)->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_inspections')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_inspection.list_des_rapports', compact("autorisation", "rapports", "current_user", "autorisation_speciale"));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportinspection/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportinspection/voir_mes_drafts'), 'label'=>'Mes drafts', 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.rapport_inspection.list_des_rapports', compact("autorisation", 
+        "rapports", "current_user", "autorisation_speciale", "breadcrumbs"));
     }
 
     public function les_attentes_en_validation(Request $request):View
@@ -33,7 +47,14 @@ class RapportInspectionController extends Controller
         $rapports = RapportInspection::with('rapporteur')->where('statut', 'en attente de validation')->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_inspections')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_inspection.list_des_rapports', compact("autorisation_speciale", "autorisation", "current_user", "rapports"));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportinspection/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportinspection/les_attentes_en_validation'), 'label'=>'Rapports en attente', 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.rapport_inspection.list_des_rapports', compact("autorisation_speciale", 
+        "autorisation", "current_user", "rapports", "breadcrumbs"));
     }
 
     public function ajouter_nouveau_rapport(Request $request):View
@@ -41,7 +62,14 @@ class RapportInspectionController extends Controller
         $current_user = $request->user();
         $autorisation = Autorisations::where('table_name', 'rapport_inspections')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_inspections')->where('user_id', $request->user()->id)->first();
-        return view('private_layouts.rapport_inspection.ajouter_un_rapport', compact("current_user", "autorisation_speciale", 'autorisation'));
+        
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportinspection/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportinspection/ajouter_nouveau_rapport'), 'label'=>'Ajouter', 'icon'=>'bi-plus-circle fs-5'],
+        ];
+        return view('private_layouts.rapport_inspection.ajouter_un_rapport', compact("current_user", 
+        "autorisation_speciale", 'autorisation', "breadcrumbs"));
     }
 
     public function sauvegarder_le_rapport(Request $request)
@@ -99,7 +127,14 @@ class RapportInspectionController extends Controller
         $autorisationspeciales = AutorisationSpeciale::where('table_name',
             'rapport_inspections')->where('user_id', $request->user()->id)->first();
         $rapport = RapportInspection::with("rapporteur")->find($rapport_id);
-        return view('private_layouts.rapport_inspection.afficher_un_rapport', ['rapport'=>$rapport, 'current_user'=>$request->user(), 'autorisation'=>$autorisation, 'autorisation_speciale'=>$autorisationspeciales]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportinspection/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportinspection/afficher_rapport'), 'label'=>'Afficher', 'icon'=>'bi-eye fs-5'],
+        ];
+        return view('private_layouts.rapport_inspection.afficher_un_rapport', ['rapport'=>$rapport, 
+        'current_user'=>$request->user(), 'autorisation'=>$autorisation, 
+        'autorisation_speciale'=>$autorisationspeciales, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function traitement_du_rapport($rapport_id, Request $request)
@@ -129,7 +164,14 @@ class RapportInspectionController extends Controller
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_inspections')->where('user_id', $request->user()->id)->first();
         $rapport = RapportInspection::find($rapport_id);
         $current_user = $request->user();
-        return view('private_layouts.rapport_inspection.editer_un_rapport', compact("rapport", "autorisation", "autorisation_speciale", "current_user"));
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/rapportinspection/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/rapportinspection/edit_le_rapport'), 'label'=>'Editer', 'icon'=>'bi-pencil-square fs-5'],
+        ];
+        return view('private_layouts.rapport_inspection.editer_un_rapport', compact("rapport", 
+        "autorisation", "autorisation_speciale", "current_user", "breadcrumbs"));
     }
 
     public function save_edition_rapport($rapport_id, Request $request)

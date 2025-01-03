@@ -54,4 +54,8 @@ class Articles extends Model
 
         return parent::delete();
     }
+
+    public function commentaires() {
+        return $this->hasMany(CommentaireArticles::class);
+    }
 }

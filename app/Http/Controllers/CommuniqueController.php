@@ -14,12 +14,23 @@ class CommuniqueController extends Controller
         $autorisationspeciales = AutorisationSpeciale::where('table_name', 'communiques')->where('user_id', $request->user()->id)->first();
         $communiques = Communique::with("communiquant")->get();
 
-        return view('private_layouts.communiques_folder.list_des_communiques', ['current_user'=>$request->user(), 'communiques'=>$communiques, 'autorisationspeciales'=>$autorisationspeciales]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/communique/list'), 'label'=>'Liste des communiqués', 'icon'=>'bi-list fs-5'],
+        ];
+        return view('private_layouts.communiques_folder.list_des_communiques', ['current_user'=>$request->user(), 
+        'communiques'=>$communiques, 'autorisationspeciales'=>$autorisationspeciales, "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function nouveau_communique(Request $request):View
     {
-        return view('private_layouts.communiques_folder.ajouter_un_communique', ['current_user' => $request->user()]);
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/communique/list'), 'label'=>'Liste des communiqués', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/communique/nouveau_communique'), 'label'=>'Ajouter', 'icon'=>'bi-plus-circle fs-5'],
+        ];
+        return view('private_layouts.communiques_folder.ajouter_un_communique', ['current_user' => $request->user(), 
+        "breadcrumbs"=>$breadcrumbs]);
     }
 
 
@@ -68,7 +79,15 @@ class CommuniqueController extends Controller
                 $communique->update();
             }
         }
-        return view('private_layouts.communiques_folder.afficher_communique', ['communique'=>$communique, 'current_user'=>$request->user(), 'autorisationspeciales'=>$autorisationspeciales]);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/communique/list'), 'label'=>'Liste des communiqués', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/communique/afficher_un_communique'), 'label'=>'Afficher', 'icon'=>'bi-eye fs-5'],
+        ];
+
+        return view('private_layouts.communiques_folder.afficher_communique', ['communique'=>$communique, 
+        'current_user'=>$request->user(), 'autorisationspeciales'=>$autorisationspeciales, "breadcrumbs"=>$breadcrumbs]);
     }
 
 
@@ -85,7 +104,14 @@ class CommuniqueController extends Controller
     public function edit_un_communique($communique_id, Request $request):View
     {
         $communique = Communique::find($communique_id);
-        return view('private_layouts.communiques_folder.editer_un_communique', ['communique'=>$communique, 'current_user'=>$request->user()]);
+
+        $breadcrumbs = [
+            ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
+            ['url'=>url('/communique/list'), 'label'=>'Liste des communiqués', 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/communique/edit_un_enseignement'), 'label'=>'Editer', 'icon'=>'bi-pencil-square fs-5'],
+        ];
+        return view('private_layouts.communiques_folder.editer_un_communique', ['communique'=>$communique, 
+        'current_user'=>$request->user(), "breadcrumbs"=>$breadcrumbs]);
     }
 
     public function save_edition_communique($communique_id, Request $request)

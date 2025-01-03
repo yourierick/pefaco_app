@@ -2,7 +2,7 @@
 @section('page_title', 'Pefaco Universelle')
 @section('titre', '#Modifier un utilisateur')
 @section('content')
-    <div class="py-12">
+    <div class="py-12 mt-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 sm:rounded-lg shadow mb-3">
                 <div class="max-w-xl">
@@ -282,6 +282,15 @@
                         <div class="row g-4 settings-section">
                             <div class="col-12 col-md-4">
                                 <span style="color: dodgerblue">Activer ou désactiver ce compte</span>
+                                @php
+                                    $autorisations = \App\Models\AutorisationSpeciale::where('user_id', $user->id)->get();
+                                @endphp
+                                @if ($autorisations->isEmpty())
+                                    <form method="post" action="{{ route('manageprofile.load_autorisation_speciales', $user->id) }}">
+                                        @csrf
+                                        <button type="submit" class="btn-sm text-light">charger les autorisations</button>
+                                    </form>
+                                @endif
                             </div>
                             <div class="col-12 col-md-8">
                                 <div class="app-card app-card-settings p-3">
@@ -355,6 +364,28 @@
                                                 </div>
                                             </div><!--//app-card-->
                                         </div>
+                                    @elseif($autorisation->table_name === 'paramètres généraux')
+                                        <div class="col-12 col-md-8">
+                                            <div class="app-card app-card-settings p-4">
+                                                <div class="app-card-body">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" value="lecture" name="autorisation_speciale[]" id="rpt_checkbox-1-{{ $autorisation->id }}" @if($autorisation->autorisation_speciale !== null) @if(in_array('lecture', json_decode($autorisation->autorisation_speciale, true))) checked @endif @endif>
+                                                        <label class="form-check-label" for="rpt_checkbox-1-{{ $autorisation->id }}">
+                                                            lecture
+                                                        </label>
+                                                    </div><!--//form-check-->
+                                                    <div class="form-check">
+                                                        <input type="checkbox" value="ecriture" name="autorisation_speciale[]" id="rpt_checkbox-2-{{ $autorisation->id }}" @if($autorisation->autorisation_speciale !== null) @if(in_array('ecriture', json_decode($autorisation->autorisation_speciale, true))) checked @endif @endif>
+                                                        <label class="form-check-label" for="rpt_checkbox-2-{{ $autorisation->id }}">
+                                                            écriture
+                                                        </label>
+                                                    </div><!--//form-check-->
+                                                </div><!--//app-card-body-->
+                                                <div class="mt-3">
+                                                    <button type="submit" class="btn btn-primary text-light" >Enregistrer</button>
+                                                </div>
+                                            </div><!--//app-card-->
+                                        </div>
                                     @elseif ($autorisation->table_name === 'rapport_de_cultes')
                                         <div class="col-12 col-md-8">
                                             <div class="app-card app-card-settings p-4">
@@ -411,6 +442,28 @@
                                                             peux voir la partie financière du rapport
                                                         </label>
                                                     </div><!--//form-check-->
+                                                </div><!--//app-card-body-->
+                                                <div class="mt-3">
+                                                    <button type="submit" class="btn btn-primary text-light" >Enregistrer</button>
+                                                </div>
+                                            </div><!--//app-card-->
+                                        </div>
+                                    @elseif ($autorisation->table_name === "message_et_commentaires")
+                                        <div class="col-12 col-md-8">
+                                            <div class="app-card app-card-settings p-4">
+                                                <div class="app-card-body">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" value="lecture" name="autorisation_speciale[]" id="rpt_checkbox-1-{{ $autorisation->id }}" @if($autorisation->autorisation_speciale !== null) @if(in_array('lecture', json_decode($autorisation->autorisation_speciale, true))) checked @endif @endif>
+                                                        <label class="form-check-label" for="rpt_checkbox-1-{{ $autorisation->id }}">
+                                                            lecture
+                                                        </label>
+                                                    </div><!--//form-check-->
+                                                    <div class="form-check">
+                                                        <input type="checkbox" value="ecriture" name="autorisation_speciale[]" id="rpt_checkbox-2-{{ $autorisation->id }}" @if($autorisation->autorisation_speciale !== null) @if(in_array('ecriture', json_decode($autorisation->autorisation_speciale, true))) checked @endif @endif>
+                                                        <label class="form-check-label" for="rpt_checkbox-2-{{ $autorisation->id }}">
+                                                            écriture
+                                                        </label>
+                                                    </div>
                                                 </div><!--//app-card-body-->
                                                 <div class="mt-3">
                                                     <button type="submit" class="btn btn-primary text-light" >Enregistrer</button>
