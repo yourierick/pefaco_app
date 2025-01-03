@@ -118,7 +118,7 @@
                                                         <td class="cell" style="font-size: 10pt">{{ $rapport->zone }}</td>
                                                         <td class="cell" style="font-size: 10pt">{{ $rapport->paroisses_concernees }}</td>
                                                         <td class="cell" style="font-size: 10pt">{{ $rapport->statut }}</td>
-                                                        <td class="cell">
+                                                        <td class="cell d-flex gap-1">
                                                             <a class="btn-sm app-btn-secondary" href="{{ route('rapportdistrict.afficher_rapport', $rapport->id) }}"><span class="bi-pencil-square text-primary"></span></a>
                                                             @if($autorisation)
                                                                 @if($autorisation->autorisation_en_ecriture)

@@ -17,7 +17,7 @@ Route::middleware('auth')->name('rapportdistrict.')->group(function () {
          'ajouter_nouveau_rapport'])->name('ajouter_nouveau_rapport');
     Route::post('/rapportdistrict/sauvegarder_le_rapport', [RapportDistrictController::class,
          'sauvegarder_le_rapport'])->name('sauvegarder_le_rapport');
-    Route::get('/rapportdistrict/afficher_rapport/{rapport_id}', [RapportDistrictController::class,
+    Route::get('/rapportdistrict/afficher_rapport/{rapport_id}/{notification_id?}', [RapportDistrictController::class,
          'afficher_rapport'])->name('afficher_rapport');
     Route::get('/rapportdistrict/edit_le_rapport/{rapport_id}', [RapportDistrictController::class,
         'edit_le_rapport'])->name('edit_le_rapport');

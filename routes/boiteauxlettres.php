@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BoiteAuxLettresController;
 
 Route::middleware('auth')->name('boite.')->group(function () {
-    Route::get('/boiteauxlettres/list', [BoiteAuxLettresController::class,
+    Route::get('/boiteauxlettres/list/{notification_id?}', [BoiteAuxLettresController::class,
         'list_des_lettres'])->name('list_des_lettres');
     Route::delete('/boiteauxlettres/supprimer_message', [BoiteAuxLettresController::class,
         'supprimer_message'])->name('supprimer_message');

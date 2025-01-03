@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AutorisationSpeciale;
+use App\Models\User;
 use App\Models\Communique;
 use Illuminate\View\View;
+use App\CustomSystemNotificationTrait;
 
 class CommuniqueController extends Controller
 {
+    use CustomSystemNotificationTrait;
     public function list_des_communiques(Request $request):View
     {
         $autorisationspeciales = AutorisationSpeciale::where('table_name', 'communiques')->where('user_id', $request->user()->id)->first();
@@ -18,7 +21,9 @@ class CommuniqueController extends Controller
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
             ['url'=>url('/communique/list'), 'label'=>'Liste des communiqués', 'icon'=>'bi-list fs-5'],
         ];
-        return view('private_layouts.communiques_folder.list_des_communiques', ['current_user'=>$request->user(), 
+
+
+        return view('private_layouts.communiques_folder.list_des_communiques', ['current_user'=>$request->user(),
         'communiques'=>$communiques, 'autorisationspeciales'=>$autorisationspeciales, "breadcrumbs"=>$breadcrumbs]);
     }
 
@@ -29,7 +34,7 @@ class CommuniqueController extends Controller
             ['url'=>url('/communique/list'), 'label'=>'Liste des communiqués', 'icon'=>'bi-list fs-5'],
             ['url'=>url('/communique/nouveau_communique'), 'label'=>'Ajouter', 'icon'=>'bi-plus-circle fs-5'],
         ];
-        return view('private_layouts.communiques_folder.ajouter_un_communique', ['current_user' => $request->user(), 
+        return view('private_layouts.communiques_folder.ajouter_un_communique', ['current_user' => $request->user(),
         "breadcrumbs"=>$breadcrumbs]);
     }
 
@@ -63,6 +68,25 @@ class CommuniqueController extends Controller
             'contenu'=>json_encode($communiques),
         ]);
 
+        $autorisations = AutorisationSpeciale::where('table_name', 'communiques')->get();
+
+        $userstonotify = [];
+        foreach ($autorisations as $autorisation) {
+            $autorisations_speciales = json_decode($autorisation->autorisation_speciale);
+            if (!is_null($autorisations_speciales)) {
+                if (in_array("peux lire", $autorisations_speciales)) {
+                    $userstonotify[] = User::find($autorisation->user_id);
+                }
+            }
+        }
+
+        $url = route('communique.afficher_un_communique', $communique->id);
+
+        if ($userstonotify) {
+            $this->triggerNotification($communique, 'App\Models\Communique', 'Communiqué 00'. $communique->id,
+        "Un nouveau communiqué a été publié, cliquez pour voir ",$url, $userstonotify) ;
+        }
+
         return redirect()->route('communique.list_des_communiques')->with('success', "le communiqué a été partagé");
     }
 
@@ -86,7 +110,26 @@ class CommuniqueController extends Controller
             ['url'=>url('/communique/afficher_un_communique'), 'label'=>'Afficher', 'icon'=>'bi-eye fs-5'],
         ];
 
-        return view('private_layouts.communiques_folder.afficher_communique', ['communique'=>$communique, 
+        $notification_id = $request->query('notification_id');
+        //Si notification_id a été fournie, alors marqué la notification comme lue
+        if ($notification_id) {
+            $notification = auth()->user()->notifications()->find($notification_id);
+            if ($notification) {
+                $notification->markAsRead();
+            }
+        }else {
+
+            //si pas de notification_id, chercher une notification liée à cet objet
+            $notification = auth()->user()->unreadNotifications()
+                ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.object_id')) COLLATE utf8_general_ci = ?", [$communique_id])
+                ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.object_type')) COLLATE utf8_general_ci = ?", get_class($communique))->first();
+
+            if ($notification) {
+                $notification->markAsRead();
+            }
+        }
+
+        return view('private_layouts.communiques_folder.afficher_communique', ['communique'=>$communique,
         'current_user'=>$request->user(), 'autorisationspeciales'=>$autorisationspeciales, "breadcrumbs"=>$breadcrumbs]);
     }
 
@@ -110,7 +153,27 @@ class CommuniqueController extends Controller
             ['url'=>url('/communique/list'), 'label'=>'Liste des communiqués', 'icon'=>'bi-list fs-5'],
             ['url'=>url('/communique/edit_un_enseignement'), 'label'=>'Editer', 'icon'=>'bi-pencil-square fs-5'],
         ];
-        return view('private_layouts.communiques_folder.editer_un_communique', ['communique'=>$communique, 
+
+        $autorisations = AutorisationSpeciale::where('table_name', 'communiques')->get();
+
+        $userstonotify = [];
+        foreach ($autorisations as $autorisation) {
+            $autorisations_speciales = json_decode($autorisation->autorisation_speciale);
+            if (!is_null($autorisations_speciales)) {
+                if (in_array("peux lire", $autorisations_speciales)) {
+                    $userstonotify[] = User::find($autorisation->user_id);
+                }
+            }
+        }
+
+        $url = route('communique.afficher_un_communique', $communique->id);
+
+        if ($userstonotify) {
+            $this->triggerNotification($communique, 'App\Models\Communique', 'Communiqué 00'. $communique->id,
+        "Le communiqué a été modifié, cliquez pour voir ",$url, $userstonotify) ;
+        }
+
+        return view('private_layouts.communiques_folder.editer_un_communique', ['communique'=>$communique,
         'current_user'=>$request->user(), "breadcrumbs"=>$breadcrumbs]);
     }
 

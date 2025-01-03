@@ -3,7 +3,7 @@
 @endsection
 @section('container')
 <br>
-<h3 class="mt-5 ml-5 fw-normal"><span class="fa fa-bible fs-3"></span> Enseignements</h5>
+<h4 class="mt-5 ml-5 fw-normal"><span class="fa fa-bible fs-4"></span> Enseignements</h5>
 <hr>
 <div class="articles p-3">
     @foreach($enseignements as $enseignement)

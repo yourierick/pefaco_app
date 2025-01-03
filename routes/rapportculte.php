@@ -10,7 +10,7 @@ Route::middleware('auth')->name('rapportculte.')->group(function () {
         'ajouter_nouveau_rapport'])->name('ajouter_nouveau_rapport');
     Route::post('/rapportculte/sauvegarder_le_rapport', [RapportCulteController::class,
         'sauvegarder_le_rapport'])->name('sauvegarder_le_rapport');
-    Route::get('/rapportculte/afficher_rapport_culte/{rapport_id}', [RapportCulteController::class,
+    Route::get('/rapportculte/afficher_rapport_culte/{rapport_id}/{notification_id?}', [RapportCulteController::class,
         'afficher_rapport_culte'])->name('afficher_rapport_culte');
     Route::get('/rapportculte/edit_le_rapport/{rapport_id}', [RapportCulteController::class,
         'edit_le_rapport'])->name('edit_le_rapport');
@@ -20,7 +20,7 @@ Route::middleware('auth')->name('rapportculte.')->group(function () {
         'save_completion_offrande'])->name('save_completion_offrande');
     Route::delete('/rapportculte/supp_rapport', [RapportCulteController::class,
         'supprimer_rapport'])->name('supprimer_rapport');
-    Route::get('/rapportculte/voir_mes_drafts', [RapportCulteController::class,  
+    Route::get('/rapportculte/voir_mes_drafts', [RapportCulteController::class,
         'voir_mes_drafts'])->name('voir_mes_drafts');
     Route::get('/rapportculte/les_attentes_en_completion', [RapportCulteController::class,
         'les_attentes_en_completion'])->name('les_attentes_en_completion');

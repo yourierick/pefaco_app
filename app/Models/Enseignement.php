@@ -50,4 +50,13 @@ class Enseignement extends Model
     public function commentaires() {
         return $this->hasMany(CommentEnseign::class);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($enseignement) {
+            event(new \App\Events\ObjectDeleted($enseignement));
+        });
+    }
 }

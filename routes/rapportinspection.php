@@ -10,7 +10,7 @@ Route::middleware('auth')->name('rapportinspection.')->group(function () {
         'ajouter_nouveau_rapport'])->name('ajouter_nouveau_rapport');
     Route::post('/rapportinspection/sauvegarder_le_rapport', [RapportInspectionController::class,
         'sauvegarder_le_rapport'])->name('sauvegarder_le_rapport');
-    Route::get('/rapportinspection/afficher_rapport/{rapport_id}', [RapportInspectionController::class,
+    Route::get('/rapportinspection/afficher_rapport/{rapport_id}/{notification_id?}', [RapportInspectionController::class,
         'afficher_rapport'])->name('afficher_rapport');
     Route::get('/rapportinspection/edit_le_rapport/{rapport_id}', [RapportInspectionController::class,
         'edit_le_rapport'])->name('edit_le_rapport');

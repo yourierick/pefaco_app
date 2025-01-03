@@ -8,6 +8,7 @@
     <meta name="description" content="">
     <meta name='copyright' content=''>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Eglise Pefaco Universelle</title>
 
     <link rel="stylesheet" href="{{ asset("new_styles_and_scripts/css/css_bootstrap/bootstrap-icons/bootstrap-icons.css") }}"/>
     <script defer src="{{ asset("assets/plugins/fontawesome/js/all.min.js") }}"></script>
@@ -173,8 +174,8 @@
                                             <li><a href="{{ route('home') }}#accueil">accueil</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="#section_apropos">A propos de nous! </a></li>
-                                    <li><a href="#section_communique">Communiqués </a></li>
+                                    <li><a href="{{ route('home') }}#section_apropos">A propos de nous! </a></li>
+                                    <li><a href="{{ route('home') }}#section_communique">Communiqués </a></li>
                                     <li><a style="cursor: pointer">Actualités <i class="icofont-rounded-down"></i></a>
                                         <ul class="dropdown">
                                             <li><a href="{{ route('home') }}#annonces_et_publicites">Annonces et publicités</a></li>

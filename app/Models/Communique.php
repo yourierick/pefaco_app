@@ -27,4 +27,13 @@ class Communique extends Model
     public function communiquant() {
         return $this->belongsTo(User::class, "communiquant_id");
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($communique) {
+            event(new \App\Events\ObjectDeleted($communique));
+        });
+    }
 }

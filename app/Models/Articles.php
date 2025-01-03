@@ -58,4 +58,13 @@ class Articles extends Model
     public function commentaires() {
         return $this->hasMany(CommentaireArticles::class);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($article) {
+            event(new \App\Events\ObjectDeleted($article));
+        });
+    }
 }

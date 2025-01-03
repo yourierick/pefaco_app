@@ -15,4 +15,13 @@ class MessageEtCommentaire extends Model
         'telephone',
         'message',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($message_commentaire) {
+            event(new \App\Events\ObjectDeleted($message_commentaire));
+        });
+    }
 }

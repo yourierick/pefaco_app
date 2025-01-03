@@ -14,7 +14,7 @@ Route::middleware('auth')->name('article.')->group(function () {
         'voir_les_attentes_en_validation'])->name('voir_les_attentes_en_validation');
     Route::post('article/save_article', [ArticlesController::class,
         'save_article'])->name('save_article');
-    Route::get('/article/afficher_article/{article_id}', [ArticlesController::class,
+    Route::get('/article/afficher_article/{article_id}/{notification_id?}', [ArticlesController::class,
         'afficher_article'])->name('afficher_article');
     Route::delete('/article/supprimer_article', [ArticlesController::class,
         'supprimer_article'])->name('supprimer_article');

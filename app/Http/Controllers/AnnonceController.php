@@ -78,12 +78,14 @@ class AnnonceController extends Controller
         $request->validate([
             'date'=>['required'],
             'titre'=>['required'],
+            'photo_descriptive'=>'required|file|mimes:jpg, jpeg, png, jfif|max:102400',
             'description'=>['required'],
         ],
         [
             'date.required'=>'ce champs est obligatoire',
             'titre.required'=>'ce champs est obligatoire',
             'description.required'=>'ce champs est obligatoire',
+            'photo_descriptive.required'=>'ce champs est obligatoire',
         ]);
 
 
@@ -117,11 +119,26 @@ class AnnonceController extends Controller
         ]);
 
         if ($statut === "en attente de validation") {
-            $users = User::all();
-            foreach ($users as $user) {
-                if (in_array("peux valider", json_decode($user->autorisation_speciale, true))) {
-                    $this->triggerNotification($annonce, 'Annonce')
+            $autorisations = AutorisationSpeciale::all();
+
+            $userstonotify = [];
+            foreach ($autorisations as $autorisation) {
+                $autorisations_speciales = json_decode($autorisation->autorisation_speciale);
+                if ($autorisation->table_name === "annonces") {
+                    if (!is_null($autorisations_speciales)) {
+                        if (in_array("peux valider", $autorisations_speciales)) {
+                            $userstonotify[] = User::find($autorisation->user_id);
+                        }
+                    }
                 }
+            }
+
+            $url = route('annonce.afficher_annonce', $annonce->id);
+
+            if ($userstonotify) {
+                $this->triggerNotification($annonce, 'App\Models\Annonce', 'Demande de validation',
+            "L'annonce titrée : " . $annonce->titre . "est en attente de validation",
+            $url, $userstonotify) ;
             }
         }
 
@@ -139,6 +156,26 @@ class AnnonceController extends Controller
             ['url'=>url('/annonces/list'), 'label'=>"Annonces", 'icon'=>'bi-list fs-5'],
             ['url'=>url('/annonces/afficher_une_annonce'), 'label'=>"Afficher une annonce", 'icon'=>'bi-eye fs-5'],
         ];
+
+        $notification_id = $request->query('notification_id');
+        //Si notification_id a été fournie, alors marqué la notification comme lue
+        if ($notification_id) {
+            $notification = auth()->user()->notifications()->find($notification_id);
+            if ($notification) {
+                $notification->markAsRead();
+            }
+        }else {
+
+            //si pas de notification_id, chercher une notification liée à cet objet
+            $notification = auth()->user()->unreadNotifications()
+                ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.object_id')) COLLATE utf8_general_ci = ?", [$annonce_id])
+                ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.object_type')) COLLATE utf8_general_ci = ?", get_class($annonce))->first();
+
+            if ($notification) {
+                $notification->markAsRead();
+            }
+        }
+
         return view('private_layouts.annonces_folder.afficher_annonce', ['annonce'=>$annonce,
         'current_user'=>$request->user(), 'autorisation'=>$autorisation,
         'autorisation_speciale'=>$autorisationspeciales, 'breadcrumbs'=>$breadcrumbs]);
@@ -167,9 +204,49 @@ class AnnonceController extends Controller
         if ($action === "soumission") {
             $annonce->statut = "en attente de validation";
             $annonce->update();
+
+            $autorisations = AutorisationSpeciale::all();
+            $userstonotify = [];
+            foreach ($autorisations as $autorisation) {
+                $autorisations_speciales = json_decode($autorisation->autorisation_speciale);
+                if ($autorisation->table_name === "annonces") {
+                    if (!is_null($autorisations_speciales)) {
+                        if (in_array("peux valider", $autorisations_speciales)) {
+                            $userstonotify[] = User::find($autorisation->user_id);
+                        }
+                    }
+                }
+            }
+
+            $url = route('annonce.afficher_annonce', $annonce->id);
+
+            if ($userstonotify) {
+                $this->triggerNotification($annonce, 'App\Models\Annonce', 'Demande de validation',
+            "L'annonce titrée : " . $annonce->titre . "est en attente de validation",
+            $url, $userstonotify) ;
+            }
+
+
         }elseif ($action === 'validation') {
             $annonce->statut = "validé";
             $annonce->update();
+
+            try {
+                $user = User::find($annonce->annonceur_id);
+                $userstonotify[] = $user;
+
+                $url = route('annonce.afficher_annonce', $annonce->id);
+
+                if ($userstonotify) {
+                    $this->triggerNotification($annonce, 'App\Models\Annonce', 'Validation',
+                "Votre annonce titrée : " . $annonce->titre . "a été validé",
+                $url, $userstonotify) ;
+                }
+            } catch (\Exception $e) {
+                return response()->json([
+                    "error"=> $e->getMessage(),
+                ]);
+            }
         }elseif ($action === 'publication') {
             $annonce->audience = "public";
             $annonce->update();

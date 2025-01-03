@@ -230,14 +230,14 @@
 
     <div class="shadow p-4 mt-4" style="background-color: #FFFFFF">
         <div class="max-w-xl">
-            <h5 class="text-primary" style="font-weight: bold; margin: 0"> Eglise pefaco universelle|  <span style="color: gray; font-size: 11pt">Code de la Dépense: {{ $depense->code_de_depense }}</span></h5>
+            <h5 class="text-primary" style="font-weight: bold; margin: 0"> Eglise pefaco universelle|  <span style="color: gray; font-size: 11pt; font-weight: 500; color: black">Code de la Dépense: {{ $depense->code_de_depense }}</span></h5>
             <p style="margin: 0">Département: {{ $depense->departement->designation }}</p>
         </div>
         <div class="dropdown-divider"></div>
         <div class="row mt-5">
             <div class="col-12 col-md-2">
                 <div class="mt-4">
-                    <div style="background-color: rgb(127, 128, 131); box-shadow: 4px 0 0 orangered; padding-right: 10px; max-height: 160px; max-width: 150px; min-height: 120px" class="p-2 text-light"><span style="font-weight: 600; color: whitesmoke">CODE DE LA DEPENSE:</span> {{ $depense->code_de_depense }}</div>
+                    <div class="shadow p-2" style="box-shadow: 4px 0 0 orangered; padding-right: 10px; max-height: 160px; max-width: 150px; min-height: 120px" class="p-2 text-light"><span style="font-weight: 600; color: rgb(0, 0, 0)">CODE DE LA DEPENSE:</span> {{ $depense->code_de_depense }}</div>
                 </div>
             </div>
             <div class="col-12 col-md-8" style="align-content: center">
@@ -247,6 +247,7 @@
                     <p class="text-primary" style="font-size: 14pt"> {{ $depense->requerant }}</p>
                     <p class="mb-0">Date de création de la dépense: {{ $depense->created_at->format("d-m-Y") }}</p>
                     <p>Source à imputer: caisse du {{ $depense->caisse->departement->designation }}</p>
+                    <p><span class="fw-bold">Statut de la dépense : </span><span style="color: red; font-weight: 500">{{ $depense->statut }}</span></p>
                 </div>
             </div>
             <div class="col-12 col-md-2 position-relative d-none d-md-block">
@@ -255,15 +256,13 @@
         </div>
         <hr>
         <div class="p-3">
-            <label>1. Context</label>
+            <label class="fw-bold">1. Context</label>
             <p class="ml-3">{{ $depense->context }}</p>
-            <label>2. Motif</label>
+            <label class="fw-bold">2. Motif</label>
             <p class="ml-3">{{ $depense->motif }}</p>
             <hr>
-            <label>3. Montant démandé</label>
+            <label class="fw-bold">3. Montant démandé</label>
             <p class="ml-3">{{ $depense->montant }} {{ $parametre_devise }}</p>
-            <label>4. Statut de la dépense</label>
-            <p class="ml-3 text-danger">{{ $depense->statut }}</p>
         </div>
     </div><!--//table-responsive-->
 @endsection

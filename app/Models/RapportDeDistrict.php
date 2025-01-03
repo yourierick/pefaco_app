@@ -39,4 +39,13 @@ class RapportDeDistrict extends Model
     public function rapporteur() {
         return $this->belongsTo(User::class, 'rapporteur_id');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($rapport) {
+            event(new \App\Events\ObjectDeleted($rapport));
+        });
+    }
 }

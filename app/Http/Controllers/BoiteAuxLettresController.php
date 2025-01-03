@@ -15,10 +15,29 @@ use App\Jobs\SendMailBoiteAuxLettreJob;
 class BoiteAuxLettresController extends Controller
 {
     public function list_des_lettres(Request $request) {
-        $liste_des_lettres = MessageEtCommentaire::orderBy('id', 'desc')->get(); 
-        $current_user = $request->user();   
-        $autorisationspeciales = AutorisationSpeciale::where('table_name', 'message_et_commentaires')->where('user_id', $request->user()->id)->first(); 
-        return view('private_layouts.boites_aux_lettres.boite_aux_lettres', compact('liste_des_lettres', 'autorisationspeciales', 'current_user'));  
+        $liste_des_lettres = MessageEtCommentaire::orderBy('id', 'desc')->get();
+        $current_user = $request->user();
+        $autorisationspeciales = AutorisationSpeciale::where('table_name', 'message_et_commentaires')->where('user_id', $request->user()->id)->first();
+
+        $notification_id = $request->query('notification_id');
+        //Si notification_id a été fournie, alors marqué la notification comme lue
+        if ($notification_id) {
+            $notification = auth()->user()->notifications()->find($notification_id);
+            if ($notification) {
+                $notification->markAsRead();
+            }
+        }else {
+
+            //si pas de notification_id, chercher une notification liée à cet objet
+            $notification = auth()->user()->unreadNotifications()
+                ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.object_type')) COLLATE utf8_general_ci = ?", "MessageEtCommentaire")->first();
+
+            if ($notification) {
+                $notification->markAsRead();
+            }
+        }
+
+        return view('private_layouts.boites_aux_lettres.boite_aux_lettres', compact('liste_des_lettres', 'autorisationspeciales', 'current_user'));
     }
 
     public function supprimer_message(Request $request) {
@@ -57,7 +76,7 @@ class BoiteAuxLettresController extends Controller
         }
 
         SendMailBoiteAuxLettreJob::dispatch($destinataire, $details, $attachmentPath);
-        
+
         return redirect()->back()->with("success", "le mail a été envoyé");
     }
 }

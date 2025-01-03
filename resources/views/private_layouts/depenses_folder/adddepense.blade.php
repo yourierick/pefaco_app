@@ -16,17 +16,17 @@
                                     <input id="text_code_depense" type="text" value="{{ old('code_de_depense') }}" name="code_de_depense" class="form-control mb-2" readonly>
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('code_de_depense')"/>
                                 </div>
-                                <div class="form-group-kaiadmin form-group-default-kaiadmin"> 
+                                <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                     <label class="text-secondary">Contexte</label>
                                     <textarea name="context" class="form-control">{{ old('context') }}</textarea>
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('context')"/>
                                 </div>
-                                <div class="form-group-kaiadmin form-group-default-kaiadmin"> 
+                                <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                     <label class="text-secondary">Motif</label>
                                     <textarea name="motif" class="form-control mt-2">{{ old('motif') }}</textarea>
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('motif')"/>
                                 </div>
-                                <div class="form-group-kaiadmin form-group-default-kaiadmin">   
+                                <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                     <label class="text-secondary">Montant (en {{ $parametre_devise }})</label>
                                     <input name="montant" type="number" value="{{ old('montant') }}" placeholder="montant" step="any" class="form-control mt-2">
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('montant')"/>
@@ -40,8 +40,7 @@
                                     <x-input-error class="mt-2 text-danger" :messages="$errors->get('source_a_imputer_id')"/>
                                 </div>
                                 <div class="d-flex gap-2">
-                                    <button class="btn btn-primary mt-2 text-light" type="submit" name="action" value="soumission">Soumettre</button>
-                                    <button class="btn btn-primary mt-2 text-light" type="submit" name="action" value="draft">Enregistrer comme draft</button>
+                                    <button class="btn btn-primary mt-2 text-light" type="submit">Soumettre</button>
                                 </div>
                             </div>
                         </form>

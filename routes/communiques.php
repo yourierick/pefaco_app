@@ -10,7 +10,7 @@ Route::middleware('auth')->name('communique.')->group(function () {
         'nouveau_communique'])->name('nouveau_communique');
     Route::post('communique/save_communique', [CommuniqueController::class,
         'save_communique'])->name('save_communique');
-    Route::get('/communique/afficher_un_communique/{communique_id}', [CommuniqueController::class,
+    Route::get('/communique/afficher_un_communique/{communique_id}/{notification_id?}', [CommuniqueController::class,
         'afficher_un_communique'])->name('afficher_un_communique');
     Route::delete('/communique/supprimer_un_communique', [CommuniqueController::class,
         'supprimer_un_communique'])->name('supprimer_un_communique');

@@ -17,7 +17,7 @@ Route::middleware('auth')->name('rapportmensuel.')->group(function () {
         'sauvegarder_le_rapport'])->name('sauvegarder_le_rapport');
     Route::get("ajax_requete_load/{mois}/{departement_id}", [RapportMensuelController::class,
         'chargement_rapport_semaine_et_caisse'])->name("chargement_rapport_semaine_et_caisse");
-    Route::get('/rapportmensuel/afficher_rapport_mensuel/{rapport_id}', [RapportMensuelController::class,
+    Route::get('/rapportmensuel/afficher_rapport_mensuel/{rapport_id}/{notification_id?}', [RapportMensuelController::class,
         'afficher_rapport_mensuel'])->name('afficher_rapport_mensuel');
     Route::get('/rapportmensuel/edit_le_rapport/{rapport_id}', [RapportMensuelController::class,
         'edit_le_rapport'])->name('edit_le_rapport');

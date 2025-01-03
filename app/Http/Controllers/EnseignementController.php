@@ -6,11 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\Autorisations;
 use App\Models\AutorisationSpeciale;
 use App\Models\Enseignement;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use App\CustomSystemNotificationTrait;
 
 class EnseignementController extends Controller
 {
+    use CustomSystemNotificationTrait;
     public function list_des_enseignements(Request $request):View
     {
         $autorisation = Autorisations::where('table_name', 'enseignements')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
@@ -31,8 +34,8 @@ class EnseignementController extends Controller
             ['url'=>url('/enseignement/list'), 'label'=>"Liste d'enseignements", 'icon'=>'bi-list fs-5'],
         ];
 
-        return view('private_layouts.enseignements_folder.list_des_enseignements', ['current_user'=>$request->user(), 
-        'enseignements'=>$enseignements, 'autorisation'=>$autorisation, 
+        return view('private_layouts.enseignements_folder.list_des_enseignements', ['current_user'=>$request->user(),
+        'enseignements'=>$enseignements, 'autorisation'=>$autorisation,
         'autorisation_speciale'=>$autorisation_speciale, "breadcrumbs"=>$breadcrumbs]);
     }
 
@@ -54,14 +57,14 @@ class EnseignementController extends Controller
         $autorisation = Autorisations::where('table_name', 'enseignements')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'enseignements')->where('user_id', $request->user()->id)->first();
         $enseignements = Enseignement::with('auteur')->where('statut', 'draft')->where('auteur_id', $request->user()->id)->get();
-        
+
         $breadcrumbs = [
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
             ['url'=>url('/enseignement/list'), 'label'=>"Liste d'enseignements", 'icon'=>'bi-list fs-5'],
             ['url'=>url('/enseignement/voir_mes_drafts_enseignement'), 'label'=>"Mes drafts", 'icon'=>'bi-list fs-5'],
         ];
-        return view('private_layouts.enseignements_folder.list_des_enseignements', ['current_user'=>$request->user(), 
-        'enseignements'=>$enseignements, 'autorisation'=>$autorisation, 
+        return view('private_layouts.enseignements_folder.list_des_enseignements', ['current_user'=>$request->user(),
+        'enseignements'=>$enseignements, 'autorisation'=>$autorisation,
         "autorisation_speciale"=>$autorisation_speciale, "breadcrumbs"=>$breadcrumbs]);
     }
 
@@ -71,14 +74,14 @@ class EnseignementController extends Controller
         $autorisation = Autorisations::where('table_name', 'enseignements')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'enseignements')->where('user_id', $request->user()->id)->first();
         $enseignements = Enseignement::with('auteur')->where('statut', 'en attente de validation')->get();
-        
+
         $breadcrumbs = [
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
             ['url'=>url('/enseignement/list'), 'label'=>"Liste d'enseignements", 'icon'=>'bi-list fs-5'],
             ['url'=>url('/enseignement/voir_les_attentes_en_validation'), 'label'=>"Rapports en attente", 'icon'=>'bi-list fs-5'],
         ];
-        return view('private_layouts.enseignements_folder.list_des_enseignements', ['current_user'=>$request->user(), 
-        'enseignements'=>$enseignements, 'autorisation'=>$autorisation, 
+        return view('private_layouts.enseignements_folder.list_des_enseignements', ['current_user'=>$request->user(),
+        'enseignements'=>$enseignements, 'autorisation'=>$autorisation,
         'autorisation_speciale'=>$autorisation_speciale, "breadcrumbs"=>$breadcrumbs]);
     }
 
@@ -139,6 +142,27 @@ class EnseignementController extends Controller
             'statut'=>$statut,
         ]);
 
+        if ($statut === "en attente de validation") {
+            $autorisations = AutorisationSpeciale::where('table_name', 'enseignements')->get();
+
+            $userstonotify = [];
+            foreach ($autorisations as $autorisation) {
+                $autorisations_speciales = json_decode($autorisation->autorisation_speciale);
+                if (!is_null($autorisations_speciales)) {
+                    if (in_array("peux valider", $autorisations_speciales)) {
+                        $userstonotify[] = User::find($autorisation->user_id);
+                    }
+                }
+            }
+
+            $url = route('enseignement.afficher_un_enseignement', $enseignement->id);
+
+            if ($userstonotify) {
+                $this->triggerNotification($enseignement, 'App\Models\Enseignement', 'Demande de validation',
+            "Un nouvel enseignement a été enregistré et est en attente de validation ",$url, $userstonotify) ;
+            }
+        }
+
         return redirect()->route('enseignement.list_des_enseignements')->with('success', $message);
     }
 
@@ -147,21 +171,41 @@ class EnseignementController extends Controller
         $autorisation = Autorisations::where('table_name', 'enseignements')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisationspeciales = AutorisationSpeciale::where('table_name', 'enseignements')->where('user_id', $request->user()->id)->first();
         $enseignement = Enseignement::with('auteur')->find($enseignement_id);
-        
+
         $breadcrumbs = [
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
             ['url'=>url('/enseignement/list'), 'label'=>"Liste d'enseignements", 'icon'=>'bi-list fs-5'],
             ['url'=>url('/enseignement/afficher_un_enseignement'), 'label'=>"Afficher", 'icon'=>'bi-eye fs-5'],
         ];
-        return view('private_layouts.enseignements_folder.afficher_enseignement', ['enseignement'=>$enseignement, 
-        'current_user'=>$request->user(), 'autorisation'=>$autorisation, 
+
+        $notification_id = $request->query('notification_id');
+        //Si notification_id a été fournie, alors marqué la notification comme lue
+        if ($notification_id) {
+            $notification = auth()->user()->notifications()->find($notification_id);
+            if ($notification) {
+                $notification->markAsRead();
+            }
+        }else {
+
+            //si pas de notification_id, chercher une notification liée à cet objet
+            $notification = auth()->user()->unreadNotifications()
+                ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.object_id')) COLLATE utf8_general_ci = ?", [$enseignement_id])
+                ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.object_type')) COLLATE utf8_general_ci = ?", get_class($enseignement))->first();
+
+            if ($notification) {
+                $notification->markAsRead();
+            }
+        }
+
+        return view('private_layouts.enseignements_folder.afficher_enseignement', ['enseignement'=>$enseignement,
+        'current_user'=>$request->user(), 'autorisation'=>$autorisation,
         'autorisation_speciale'=>$autorisationspeciales, "breadcrumbs"=>$breadcrumbs]);
     }
 
 
     public function supprimer_un_enseignement(Request $request)
     {
-        $enseignement = $request->get('enseignement_id');
+        $enseignement_id = $request->get('enseignement_id');
         $enseignement = Enseignement::find($enseignement_id);
         $enseignement->delete();
 
@@ -181,9 +225,40 @@ class EnseignementController extends Controller
         if ($action === "soumission") {
             $enseignement->statut = "en attente de validation";
             $enseignement->update();
+
+            $autorisations = AutorisationSpeciale::where('table_name', 'enseignements')->get();
+
+            $userstonotify = [];
+            foreach ($autorisations as $autorisation) {
+                $autorisations_speciales = json_decode($autorisation->autorisation_speciale);
+                if (!is_null($autorisations_speciales)) {
+                    if (in_array("peux valider", $autorisations_speciales)) {
+                        $userstonotify[] = User::find($autorisation->user_id);
+                    }
+                }
+            }
+
+            $url = route('enseignement.afficher_un_enseignement', $enseignement->id);
+
+            if ($userstonotify) {
+                $this->triggerNotification($enseignement, 'App\Models\Enseignement', 'Demande de validation',
+            "Un nouvel enseignement a été enregistré et est en attente de validation ",$url, $userstonotify) ;
+            }
         }elseif ($action === 'validation') {
             $enseignement->statut = "validé";
             $enseignement->update();
+
+            $autorisations = AutorisationSpeciale::where('table_name', 'enseignements')->get();
+
+            $userstonotify = [];
+            $userstonotify[] = User::find($enseignement->auteur_id);
+
+            $url = route('enseignement.afficher_un_enseignement', $enseignement->id);
+
+            if ($userstonotify) {
+                $this->triggerNotification($enseignement, 'App\Models\Enseignement', 'Confirmation de validation',
+            "Votre enseignement a été validé",$url, $userstonotify) ;
+            }
         }elseif ($action === 'publication') {
             $enseignement->audience = "public";
             $enseignement->update();
@@ -206,7 +281,7 @@ class EnseignementController extends Controller
             ['url'=>url('/enseignement/list'), 'label'=>"Liste d'enseignements", 'icon'=>'bi-list fs-5'],
             ['url'=>url('/enseignement/edit_un_enseignement'), 'label'=>"Editer", 'icon'=>'bi-pencil-square fs-5'],
         ];
-        return view('private_layouts.enseignements_folder.editer_un_enseignement', ['enseignement'=>$enseignement, 
+        return view('private_layouts.enseignements_folder.editer_un_enseignement', ['enseignement'=>$enseignement,
         'current_user'=>$request->user(), 'autorisation'=>$autorisation, "breadcrumbs"=>$breadcrumbs]);
     }
 

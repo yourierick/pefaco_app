@@ -97,7 +97,7 @@
                                                         <td class="cell">{{ $enseignement->reference }}</td>
                                                         <td class="cell">{{ $enseignement->statut }}</td>
                                                         <td class="cell">{{ $enseignement->audience }}</td>
-                                                        <td>
+                                                        <td class="d-flex">
                                                             <a class="btn-sm" href="{{ route('enseignement.afficher_un_enseignement', $enseignement->id) }}"><span class="bi-eye text-secondary"></span></a>
                                                             @if($autorisation)
                                                                 @if($autorisation->autorisation_en_ecriture)

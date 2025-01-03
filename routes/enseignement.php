@@ -14,7 +14,7 @@ Route::middleware('auth')->name('enseignement.')->group(function () {
         'voir_les_attentes_en_validation'])->name('voir_les_attentes_en_validation');
     Route::post('enseignement/save_enseignement', [EnseignementController::class,
         'save_enseignement'])->name('save_enseignement');
-    Route::get('/enseignement/afficher_un_enseignement/{enseignement_id}', [EnseignementController::class,
+    Route::get('/enseignement/afficher_un_enseignement/{enseignement_id}/{notification_id?}', [EnseignementController::class,
         'afficher_un_enseignement'])->name('afficher_un_enseignement');
     Route::delete('/enseignement/supprimer_un_enseignement', [EnseignementController::class,
         'supprimer_un_enseignement'])->name('supprimer_un_enseignement');

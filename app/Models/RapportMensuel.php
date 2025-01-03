@@ -57,4 +57,13 @@ class RapportMensuel extends Model
     {
         return $this->belongsTo(Departements::class, "departement_id");
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($rapport) {
+            event(new \App\Events\ObjectDeleted($rapport));
+        });
+    }
 }

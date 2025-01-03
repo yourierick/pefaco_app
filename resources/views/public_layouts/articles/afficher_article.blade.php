@@ -51,11 +51,11 @@
                         </form>
                     </header>
                     <!-- Preview image figure-->
-                    <figure class="mb-4 w-100"><img class="img-fluid rounded" style="height: 100%!important" src="/storage/{{ $bibliothequephoto[0] }}" alt="..." /></figure>
+                    <figure class="mb-4 w-100"><img class="img-fluid rounded w-100" style="height: 100%!important" src="/storage/{{ $bibliothequephoto[0] }}" alt="..." /></figure>
                     <!-- Post content-->
                     <section class="mb-5 p-2">
                         <p class="mb-4" style="text-align: justify">{{ $article->description }}</p>
-                        
+
                         <h2 class="fw-bolder mb-4 mt-5">Related</h2>
                         <div class="row">
                             <div class="col-12">
@@ -69,17 +69,21 @@
                                             </div>
                                         </div>
                                     @endforeach
+                                    @if ($article->video)
+                                        <div class="single-pf shadow">
+                                            <div class="d-block">
+                                                <video class="shadow-sm" loop controls style="height: 140px; width: 100%">
+                                                    <source src="/storage/{{ $article->video }}" type="video/mp4" />
+                                                </video>
+                                                <div class="details">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                         <hr>
-                        @if ($article->video)
-                            <div class="col-lg-12 col-md-8 col-sm-12 p-0">
-                                <video class="w-100" loop controls style="max-height: 500px">
-                                <source src="/storage/{{ $article->video }}" type="video/mp4" />
-                                </video>
-                            </div>
-                        @endif
                     </section>
                 </article>
             </div>
@@ -165,9 +169,9 @@
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
         <hr>
-    </div> 
+    </div>
 @endsection
 @section('scripts')
     <script>

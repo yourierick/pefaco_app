@@ -76,7 +76,7 @@
                         @csrf
                         @method('put')
                         @if($rapport->statut === 'draft')
-                            <button style="font-weight: normal" name="action" value="soumettre_pour_approbation" class="dropdown-item btn btn-outline-secondary perso" type="submit"><span class="bi-check-circle-fill text-success"></span>soumettre pour approbation</button>
+                            <button style="font-weight: normal" name="action" value="soumettre_pour_approbation" class="dropdown-item btn btn-outline-secondary perso" type="submit"><span class="bi-check-circle-fill text-success"></span> soumettre pour approbation</button>
                         @endif
                         @if(!is_null($autorisation_speciale))
                             @if($rapport->statut === "en attente d'approbation")
@@ -85,12 +85,12 @@
                                 @endif
                             @endif
                             @if($rapport->statut === 'en attente de validation')
-                                @if(in_array('peux valider un rapport', json_decode($autorisation_speciale->autorisation_speciale, true)))    
+                                @if(in_array('peux valider un rapport', json_decode($autorisation_speciale->autorisation_speciale, true)))
                                     <button style="font-weight: normal" data-bs-toggle="modal" data-bs-target='#modal' class="dropdown-item btn btn-outline-secondary perso" type="button"><span class="bi-check-circle-fill text-success"></span> soumettre pour confirmation</button>
                                 @endif
                             @endif
                             @if($rapport->statut === 'en attente de confirmation')
-                                @if(in_array('peux confirmer un rapport', json_decode($autorisation_speciale->autorisation_speciale, true)))    
+                                @if(in_array('peux confirmer un rapport', json_decode($autorisation_speciale->autorisation_speciale, true)))
                                     <button style="font-weight: normal" name="action" value="valider" class="dropdown-item btn btn-outline-secondary perso" type="submit"><span class="bi-check-circle-fill text-success"></span> valider</button>
                                 @endif
                             @endif

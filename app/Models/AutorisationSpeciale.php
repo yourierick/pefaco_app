@@ -14,4 +14,9 @@ class AutorisationSpeciale extends Model
         'autorisation_speciale',
         'table_name',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, "user_id");
+    }
 }

@@ -15,6 +15,7 @@ class Depense extends Model
      */
     protected $fillable = [
         'departement_id',
+        'requerant_id',
         'requerant',
         'source_a_imputer_id',
         'context',
@@ -27,12 +28,21 @@ class Depense extends Model
         'notif',
         'code_de_depense'
     ];
-    
+
     public function departement() {
         return $this->belongsTo(Departements::class, 'departement_id');
     }
-    
+
     public function caisse() {
         return $this->belongsTo(Caisse::class, 'source_a_imputer_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($depense) {
+            event(new \App\Events\ObjectDeleted($depense));
+        });
     }
 }

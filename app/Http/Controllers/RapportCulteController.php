@@ -6,12 +6,15 @@ use App\Models\Autorisations;
 use App\Models\AutorisationSpeciale;
 use App\Models\Departements;
 use App\Models\RapportDeCulte;
+use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Mockery\Exception;
+use App\CustomSystemNotificationTrait;
 
 class RapportCulteController extends Controller
 {
+    use CustomSystemNotificationTrait;
     public function list_des_rapports(Request $request):View
     {
         $autorisation = Autorisations::where('table_name', 'rapport_de_cultes')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
@@ -32,8 +35,8 @@ class RapportCulteController extends Controller
             ['url'=>url('rapportculte/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
         ];
 
-        return view('private_layouts.rapport_de_culte_folder.list_des_rapports', ['current_user'=>$request->user(), 
-        'rapports'=>$rapports, 'autorisation'=>$autorisation, 
+        return view('private_layouts.rapport_de_culte_folder.list_des_rapports', ['current_user'=>$request->user(),
+        'rapports'=>$rapports, 'autorisation'=>$autorisation,
         'autorisation_speciale'=>$autorisation_speciale, 'breadcrumbs'=>$breadcrumbs]);
     }
 
@@ -43,14 +46,14 @@ class RapportCulteController extends Controller
         $rapports = RapportDeCulte::where('statut', 'draft')->where('rapporteur_id', $request->user()->id)->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_cultes')->where('user_id', $request->user()->id)->first();
-        
+
         $breadcrumbs = [
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
             ['url'=>url('rapportculte/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
             ['url'=>url('rapportculte/voir_mes_drafts'), 'label'=>'Mes drafts', 'icon'=>'bi-list fs-5'],
         ];
 
-        return view('private_layouts.rapport_de_culte_folder.list_des_rapports', compact("autorisation", "rapports", 
+        return view('private_layouts.rapport_de_culte_folder.list_des_rapports', compact("autorisation", "rapports",
         "current_user", "autorisation_speciale", "breadcrumbs"));
     }
 
@@ -60,14 +63,14 @@ class RapportCulteController extends Controller
         $rapports = RapportDeCulte::where('statut', 'en attente de completion')->where('departement_id', $request->user()->departement_id)->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_cultes')->where('user_id', $request->user()->id)->first();
-        
+
         $breadcrumbs = [
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
             ['url'=>url('rapportculte/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
             ['url'=>url('/rapportculte/les_attentes_en_completion'), 'label'=>'Rapports en attente', 'icon'=>'bi-list fs-5'],
         ];
 
-        return view('private_layouts.rapport_de_culte_folder.list_des_rapports', compact("rapports", "autorisation", 
+        return view('private_layouts.rapport_de_culte_folder.list_des_rapports', compact("rapports", "autorisation",
         "current_user", "autorisation_speciale", "breadcrumbs"));
     }
 
@@ -77,14 +80,14 @@ class RapportCulteController extends Controller
         $rapports = RapportDeCulte::where('statut', 'en attente de validation')->where('departement_id', $request->user()->departement_id)->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_cultes')->where('user_id', $request->user()->id)->first();
-        
+
         $breadcrumbs = [
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
             ['url'=>url('rapportculte/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
             ['url'=>url('/rapportculte/les_attentes_en_validation'), 'label'=>'Rapports en attente', 'icon'=>'bi-list fs-5'],
         ];
 
-        return view('private_layouts.rapport_de_culte_folder.list_des_rapports', compact("autorisation_speciale", 
+        return view('private_layouts.rapport_de_culte_folder.list_des_rapports', compact("autorisation_speciale",
         "autorisation", "current_user", "rapports", "breadcrumbs"));
     }
 
@@ -93,13 +96,13 @@ class RapportCulteController extends Controller
         $current_user = $request->user();
         $autorisation = Autorisations::where('table_name', 'rapport_de_cultes')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_de_cultes')->where('user_id', $request->user()->id)->first();
-        
+
         $breadcrumbs = [
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
             ['url'=>url('rapportculte/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
             ['url'=>url('/rapportculte/ajouter_nouveau_rapport'), 'label'=>'Ajouter', 'icon'=>'bi-plus-circle fs-5'],
         ];
-        return view('private_layouts.rapport_de_culte_folder.ajouter_un_rapport', compact("current_user", 
+        return view('private_layouts.rapport_de_culte_folder.ajouter_un_rapport', compact("current_user",
         "autorisation_speciale", 'autorisation', 'breadcrumbs'));
     }
 
@@ -193,6 +196,28 @@ class RapportCulteController extends Controller
                 'statut'=>"en attente de validation",
             ]);
             $message = 'Le rapport a été soumis et est en attente de validation';
+
+            $autorisations = AutorisationSpeciale::where('table_name', 'rapport_de_cultes')->get();
+
+            $userstonotify = [];
+            foreach ($autorisations as $autorisation) {
+                $autorisations_speciales = json_decode($autorisation->autorisation_speciale);
+                if (!is_null($autorisations_speciales)) {
+                    if (in_array("peux valider", $autorisations_speciales)) {
+                        $user = User::find($autorisation->user_id);
+                        if ($user->departement_id == $rapport->departement_id) {
+                            $userstonotify[] = $user;
+                        }
+                    }
+                }
+            }
+
+            $url = route('rapportculte.afficher_rapport_culte', $rapport->id);
+
+            if ($userstonotify) {
+                $this->triggerNotification($rapport, 'App\Models\RapportDeCulte', 'Demande de validation',
+            "Vous avez un nouveau rapport de culte en attente de validation",$url, $userstonotify) ;
+            }
         }else {
             if ($action === 'soumission_completion') {
                 $message = 'Le rapport a été soumis à la caisse pour sa complétion';
@@ -218,6 +243,28 @@ class RapportCulteController extends Controller
                 ]);
 
                 $message = 'Le rapport a été soumis et est en attente de complétion';
+
+                $autorisations = AutorisationSpeciale::where('table_name', 'rapport_de_cultes')->get();
+
+                $userstonotify = [];
+                foreach ($autorisations as $autorisation) {
+                    $autorisations_speciales = json_decode($autorisation->autorisation_speciale);
+                    if (!is_null($autorisations_speciales)) {
+                        if (in_array("peux voir la partie financiere du rapport", $autorisations_speciales)) {
+                            $user = User::find($autorisation->user_id);
+                            if ($user->departement_id == $rapport->departement_id) {
+                                $userstonotify[] = $user;
+                            }
+                        }
+                    }
+                }
+
+                $url = route('rapportculte.afficher_rapport_culte', $rapport->id);
+
+                if ($userstonotify) {
+                    $this->triggerNotification($rapport, 'App\Models\RapportDeCulte', 'Demande de complétion',
+                "Vous avez un nouveau rapport de culte en attente de complétion",$url, $userstonotify) ;
+                }
             }else {
                 $rapport = RapportDeCulte::create([
                     'date'=>$request->get('date'),
@@ -253,15 +300,34 @@ class RapportCulteController extends Controller
         $autorisationspeciales = AutorisationSpeciale::where('table_name',
             'rapport_de_cultes')->where('user_id', $request->user()->id)->first();
         $rapport = RapportDeCulte::with("departement", "user_rapporteur")->find($rapport_id);
-        
+
         $breadcrumbs = [
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
             ['url'=>url('rapportculte/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
             ['url'=>url('/rapportculte/afficher_rapport_culte'), 'label'=>'Afficher', 'icon'=>'bi-eye fs-5'],
         ];
 
-        return view('private_layouts.rapport_de_culte_folder.afficher_un_rapport', ['rapport'=>$rapport, 
-        'current_user'=>$request->user(), 'autorisation'=>$autorisation, 
+        $notification_id = $request->query('notification_id');
+        //Si notification_id a été fournie, alors marqué la notification comme lue
+        if ($notification_id) {
+            $notification = auth()->user()->notifications()->find($notification_id);
+            if ($notification) {
+                $notification->markAsRead();
+            }
+        }else {
+
+            //si pas de notification_id, chercher une notification liée à cet objet
+            $notification = auth()->user()->unreadNotifications()
+                ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.object_id')) COLLATE utf8_general_ci = ?", [$rapport_id])
+                ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.object_type')) COLLATE utf8_general_ci = ?", get_class($rapport))->first();
+
+            if ($notification) {
+                $notification->markAsRead();
+            }
+        }
+
+        return view('private_layouts.rapport_de_culte_folder.afficher_un_rapport', ['rapport'=>$rapport,
+        'current_user'=>$request->user(), 'autorisation'=>$autorisation,
         'autorisation_speciale'=>$autorisationspeciales, "breadcrumbs"=>$breadcrumbs]);
     }
 
@@ -274,16 +340,76 @@ class RapportCulteController extends Controller
         if ($action == 'soumission') {
             $statut = 'en attente de complétion';
             $message = 'Le rapport a été soumis à la caisse pour sa complétion';
+
+            $autorisations = AutorisationSpeciale::where('table_name', 'rapport_de_cultes')->get();
+
+            $userstonotify = [];
+            foreach ($autorisations as $autorisation) {
+                $autorisations_speciales = json_decode($autorisation->autorisation_speciale);
+                if (!is_null($autorisations_speciales)) {
+                    if (in_array("peux voir la partie financiere du rapport", $autorisations_speciales)) {
+                        $user = User::find($autorisation->user_id);
+                        if ($user->departement_id == $rapport->departement_id) {
+                            $userstonotify[] = $user;
+                        }
+                    }
+                }
+            }
+
+            $url = route('rapportculte.afficher_rapport_culte', $rapport->id);
+
+            if ($userstonotify) {
+                $this->triggerNotification($rapport, 'App\Models\RapportDeCulte', 'Demande de complétion',
+            "Vous avez un nouveau rapport de culte en attente de complétion",$url, $userstonotify) ;
+            }
         }
 
         if ($action == 'validation') {
             $statut = 'validé';
             $message = 'Le rapport a été validé';
+
+            $autorisations = AutorisationSpeciale::where('table_name', 'rapport_de_cultes')->get();
+
+            $userstonotify = [];
+            $user = User::find($rapport->rapporteur_id);
+
+            if (!is_null($user)) {
+                $userstonotify[] = $user;
+            }
+
+            $url = route('rapportculte.afficher_rapport_culte', $rapport->id);
+
+            if ($userstonotify) {
+                $this->triggerNotification($rapport, 'App\Models\RapportDeCulte', 'Confirmation de validation',
+            "Votre rapport de culte du ". $rapport->date->format('d/m/Y') . " a été validé",$url, $userstonotify) ;
+            }
         }
 
         if ($action == 'soumettre_pour_validation') {
             $statut = 'en attente de validation';
             $message = 'Le rapport a été soumis et est en attente de validation';
+
+            $autorisations = AutorisationSpeciale::where('table_name', 'rapport_de_cultes')->get();
+
+            $userstonotify = [];
+            foreach ($autorisations as $autorisation) {
+                $autorisations_speciales = json_decode($autorisation->autorisation_speciale);
+                if (!is_null($autorisations_speciales)) {
+                    if (in_array("peux valider", $autorisations_speciales)) {
+                        $user = User::find($autorisation->user_id);
+                        if ($user->departement_id == $rapport->departement_id) {
+                            $userstonotify[] = $user;
+                        }
+                    }
+                }
+            }
+
+            $url = route('rapportculte.afficher_rapport_culte', $rapport->id);
+
+            if ($userstonotify) {
+                $this->triggerNotification($rapport, 'App\Models\RapportDeCulte', 'Demande de validation',
+            "Vous avez un nouveau rapport de culte en attente de validation",$url, $userstonotify) ;
+            }
         }
         $rapport->statut = $statut;
         $rapport->update();
@@ -306,7 +432,7 @@ class RapportCulteController extends Controller
             ['url'=>url('/rapportculte/edit_le_rapport'), 'label'=>'Editer', 'icon'=>'bi-pencil-square fs-5'],
         ];
 
-        return view('private_layouts.rapport_de_culte_folder.editer_un_rapport', compact("rapport", 
+        return view('private_layouts.rapport_de_culte_folder.editer_un_rapport', compact("rapport",
         "autorisation", "autorisation_speciale", "current_user", "departements", "breadcrumbs"));
     }
 

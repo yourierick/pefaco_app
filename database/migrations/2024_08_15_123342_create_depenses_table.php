@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('departement_id');
             $table->foreign('departement_id')->references('id')->on('departements')->onDelete("cascade");
+            $table->unsignedBigInteger('requerant_id')->nullable();
+            $table->foreign('requerant_id')->references('id')->on('users')->onDelete("set null");
             $table->string('requerant');
             $table->unsignedBigInteger('source_a_imputer_id')->nullable();
             $table->foreign('source_a_imputer_id')->references('id')->on('caisses')->onDelete("set null");

@@ -14,7 +14,7 @@ Route::middleware('auth')->name('annonce.')->group(function () {
         'voir_les_attentes_en_validation'])->name('voir_les_attentes_en_validation');
     Route::post('annonces/save_annonce', [AnnonceController::class,
         'save_annonce'])->name('save_annonce');
-    Route::get('/annonces/afficher_une_annonce/{annonce_id}', [AnnonceController::class,
+    Route::get('/annonces/afficher_une_annonce/{annonce_id}/{notification_id?}', [AnnonceController::class,
         'afficher_annonce'])->name('afficher_annonce');
     Route::delete('/annonces/supprimer_une_annonce', [AnnonceController::class,
         'supprimer_une_annonce'])->name('supprimer_une_annonce');

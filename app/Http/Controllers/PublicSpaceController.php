@@ -17,11 +17,15 @@ use App\Models\CommentaireArticles;
 use App\Models\CommentaireArticlesChild;
 use App\Models\CommentEnseign;
 use App\Models\ChildCommentens;
+use App\Models\AutorisationSpeciale;
+use App\Models\User;
+use App\CustomSystemNotificationTrait;
 
 
 
 class PublicSpaceController extends Controller
 {
+    use CustomSystemNotificationTrait;
     public function home()
     {
         $parametres = ConfigurationGenerale::first();
@@ -31,7 +35,7 @@ class PublicSpaceController extends Controller
         $lastest_articles = [];
         $latestarticle = $articles->first();
         for ($i = 1; $i < $articles->count(); $i++) {
-            if ($i < 3) {
+            if ($i <= 3) {
                 $lastest_articles[] = $articles[$i];
             }else {
                 break;
@@ -52,7 +56,7 @@ class PublicSpaceController extends Controller
         }
 
         $enseignements = $latestenseignements;
-        
+
         return view('public_layouts.index', compact('parametres', 'programmedeculte', 'enseignements',
         'programmedupasteur', 'articles', 'latestarticle', 'annonces', 'communiques', 'serviteurs'));
     }
@@ -90,6 +94,26 @@ class PublicSpaceController extends Controller
         ]);
 
         $message = "merci pour votre message";
+
+        $autorisations = AutorisationSpeciale::where('table_name', 'message_et_commentaires')->get();
+
+        $userstonotify = [];
+        foreach ($autorisations as $autorisation) {
+            $autorisations_speciales = json_decode($autorisation->autorisation_speciale);
+            if (!is_null($autorisations_speciales)) {
+                if (in_array("lecture", $autorisations_speciales)) {
+                    $userstonotify[] = User::find($autorisation->user_id);
+                }
+            }
+        }
+
+        $url = route('boite.list_des_lettres');
+
+        if ($userstonotify) {
+            $this->triggerNotification($message_commentaire, 'App\Models\MessageEtCommentaire', 'Boite aux lettres',
+        "Vous avez reçu une nouvelle lettre de ". $message_commentaire->nom ." dans la boite",
+        $url, $userstonotify) ;
+        }
 
         return redirect()->back()->with('success', $message);
     }
@@ -154,17 +178,17 @@ class PublicSpaceController extends Controller
         }elseif ($action === "disliker") {
             $article->dislike += 1;
         }
-        
+
         $article->update();
         $countlike = $article->like;
         $countdislike = $article->dislike;
-        
+
         return response()->json(["likes"=>$countlike, "dislikes"=>$countdislike]);
     }
 
 
     public function list_des_articles() {
-        $articles = Articles::orderBy('id', 'desc')->paginate(3);
+        $articles = Articles::where('statut', 'validé')->orderBy('id', 'desc')->paginate(3);
         $parametres = ConfigurationGenerale::first();
         $programmedeculte = ProgrammeDeCulte::all();
         return view('public_layouts.articles.list_articles', compact('articles', 'parametres', 'programmedeculte'));
@@ -232,17 +256,17 @@ class PublicSpaceController extends Controller
         }elseif ($action === "disliker") {
             $enseignement->dislike += 1;
         }
-        
+
         $enseignement->update();
         $countlike = $enseignement->like;
         $countdislike = $enseignement->dislike;
-        
+
         return response()->json(["likes"=>$countlike, "dislikes"=>$countdislike]);
     }
 
 
     public function list_des_enseignements() {
-        $enseignements = Enseignement::orderBy('id', 'desc')->paginate(3);
+        $enseignements = Enseignement::where('statut', 'validé')->orderBy('id', 'desc')->paginate(3);
         $parametres = ConfigurationGenerale::first();
         $programmedeculte = ProgrammeDeCulte::all();
         return view('public_layouts.enseignements.list_enseignements', compact('enseignements', 'parametres', 'programmedeculte'));

@@ -26,7 +26,7 @@ class Annonce extends Model
             'date' => 'datetime',
         ];
     }
-    
+
     public function annonceur() {
         return $this->belongsTo(User::class, "annonceur_id");
     }
@@ -37,5 +37,14 @@ class Annonce extends Model
         }
 
         return parent::delete();
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($annonce) {
+            event(new \App\Events\ObjectDeleted($annonce));
+        });
     }
 }

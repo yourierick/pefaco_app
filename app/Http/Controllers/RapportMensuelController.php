@@ -13,9 +13,11 @@ use App\Models\Transactions;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\CustomSystemNotificationTrait;
 
 class RapportMensuelController extends Controller
 {
+    use CustomSystemNotificationTrait;
     public function list_des_rapports(Request $request):View
     {
         $autorisation = Autorisations::where('table_name', 'rapport_mensuels')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
@@ -47,13 +49,13 @@ class RapportMensuelController extends Controller
         $rapports = RapportMensuel::with("user", "departement")->where('statut', 'draft')->where('rapporteur_principal_id', $request->user()->id)->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-        
+
         $breadcrumbs = [
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
             ['url'=>url('/rapportmensuel/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
             ['url'=>url('/rapportmensuel/voir_mes_drafts'), 'label'=>'Mes drafts', 'icon'=>'bi-list fs-5'],
         ];
-        return view('private_layouts.rapport_mensuel.list_des_rapports', compact("autorisation", 
+        return view('private_layouts.rapport_mensuel.list_des_rapports', compact("autorisation",
         "rapports", "current_user", "autorisation_speciale", "breadcrumbs"));
     }
 
@@ -63,13 +65,13 @@ class RapportMensuelController extends Controller
         $rapports = RapportMensuel::with("user", "departement")->where('statut', 'en attente de completion')->where('departement_id', $request->user()->departement_id)->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-        
+
         $breadcrumbs = [
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
             ['url'=>url('/rapportmensuel/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
             ['url'=>url('/rapportmensuel/les_attentes_en_completion'), 'label'=>'Rapports en attente', 'icon'=>'bi-list fs-5'],
         ];
-        return view('private_layouts.rapport_mensuel.list_des_rapports', compact("rapports", 
+        return view('private_layouts.rapport_mensuel.list_des_rapports', compact("rapports",
         "autorisation", "current_user", "autorisation_speciale", "breadcrumbs"));
     }
 
@@ -79,13 +81,13 @@ class RapportMensuelController extends Controller
         $rapports = RapportMensuel::where('statut', 'en attente de validation')->where('departement_id', $request->user()->departement_id)->get();
         $current_user = $request->user();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-       
+
         $breadcrumbs = [
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
             ['url'=>url('/rapportmensuel/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
             ['url'=>url('/rapportmensuel/les_attentes_en_validation'), 'label'=>'Rapports en attente', 'icon'=>'bi-list fs-5'],
         ];
-        return view('private_layouts.rapport_mensuel.list_des_rapports', compact("autorisation_speciale", 
+        return view('private_layouts.rapport_mensuel.list_des_rapports', compact("autorisation_speciale",
         "autorisation", "current_user", "rapports", "breadcrumbs"));
     }
 
@@ -94,13 +96,13 @@ class RapportMensuelController extends Controller
         $current_user = $request->user();
         $autorisation = Autorisations::where('table_name', 'rapport_mensuels')->where('groupe_id', $request->user()->groupe_utilisateur_id)->first();
         $autorisation_speciale = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->where('user_id', $request->user()->id)->first();
-        
+
         $breadcrumbs = [
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
             ['url'=>url('/rapportmensuel/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
             ['url'=>url('rapportmensuel/ajouter_nouveau_rapport'), 'label'=>'Ajouter', 'icon'=>'bi-plus-circle fs-5'],
         ];
-        return view('private_layouts.rapport_mensuel.ajouter_un_rapport', compact("current_user", 
+        return view('private_layouts.rapport_mensuel.ajouter_un_rapport', compact("current_user",
         "autorisation_speciale", 'autorisation', "breadcrumbs"));
     }
 
@@ -199,7 +201,7 @@ class RapportMensuelController extends Controller
         if (is_null($scan)) {
             if ($action == 'soumission_validation') {
                 $statut = 'en attente de validation';
-    
+
                 $rapport = RapportMensuel::create([
                     'departement_id'=>$request->get('departement_id'),
                     'mois_de_rapportage'=>$date,
@@ -232,6 +234,28 @@ class RapportMensuelController extends Controller
                     'statut'=>$statut,
                 ]);
                 $message = 'Le rapport a été soumis et est en attente de validation';
+
+                $autorisations = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->get();
+
+                $userstonotify = [];
+                foreach ($autorisations as $autorisation) {
+                    $autorisations_speciales = json_decode($autorisation->autorisation_speciale);
+                    if (!is_null($autorisations_speciales)) {
+                        if (in_array("peux valider", $autorisations_speciales)) {
+                            $user = User::find($autorisation->user_id);
+                            if ($user->departement_id == $rapport->departement_id) {
+                                $userstonotify[] = $user;
+                            }
+                        }
+                    }
+                }
+
+                $url = route('rapportmensuel.afficher_rapport_mensuel', $rapport->id);
+
+                if ($userstonotify) {
+                    $this->triggerNotification($rapport, 'App\Models\RapportMensuel', 'Demande de validation',
+                "Vous avez un nouveau rapport mensuel en attente de validation",$url, $userstonotify) ;
+                }
             }else {
                 if ($action == 'soumission_completion') {
                     $statut = 'en attente de complétion';
@@ -241,7 +265,7 @@ class RapportMensuelController extends Controller
                     $statut = 'draft';
                     $message = 'Le rapport a été enregistré en tant que draft';
                 }
-    
+
                 $rapport = RapportMensuel::create([
                     'departement_id'=>$request->get('departement_id'),
                     'mois_de_rapportage'=>$date,
@@ -271,11 +295,33 @@ class RapportMensuelController extends Controller
                     'previsions_mois_prochain'=>json_encode($previsions_mois_prochain),
                     'statut'=>$statut,
                 ]);
+
+                $autorisations = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->get();
+
+                $userstonotify = [];
+                foreach ($autorisations as $autorisation) {
+                    $autorisations_speciales = json_decode($autorisation->autorisation_speciale);
+                    if (!is_null($autorisations_speciales)) {
+                        if (in_array("peux voir la partie financiere du rapport", $autorisations_speciales)) {
+                            $user = User::find($autorisation->user_id);
+                            if ($user->departement_id == $rapport->departement_id) {
+                                $userstonotify[] = $user;
+                            }
+                        }
+                    }
+                }
+
+                $url = route('rapportmensuel.afficher_rapport_mensuel', $rapport->id);
+
+                if ($userstonotify) {
+                    $this->triggerNotification($rapport, 'App\Models\RapportMensuel', 'Demande de complétion',
+                "Vous avez un nouveau rapport mensuel en attente de complétion",$url, $userstonotify) ;
+                }
             }
         }else {
             return redirect()->back()->with('error', "ce mois a déjà été rapporté");
         }
-        
+
         return redirect()->route('rapportmensuel.list_des_rapports')->with('success', $message);
     }
 
@@ -296,7 +342,7 @@ class RapportMensuelController extends Controller
         if (!is_null($caisse)) {
             $releve_des_transactions_mensuelles = Transactions::where("caisse_id", $caisse->id)->whereYear('date_de_la_transaction', $annee)->whereMonth('date_de_la_transaction', $mois)->get();
         }
-        
+
         $current_user = $request->user();
 
         $breadcrumbs = [
@@ -304,6 +350,26 @@ class RapportMensuelController extends Controller
             ['url'=>url('/rapportmensuel/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
             ['url'=>url('/rapportmensuel/afficher_rapport_mensuel'), 'label'=>'Afficher', 'icon'=>'bi-eye fs-5'],
         ];
+
+        $notification_id = $request->query('notification_id');
+        //Si notification_id a été fournie, alors marqué la notification comme lue
+        if ($notification_id) {
+            $notification = auth()->user()->notifications()->find($notification_id);
+            if ($notification) {
+                $notification->markAsRead();
+            }
+        }else {
+
+            //si pas de notification_id, chercher une notification liée à cet objet
+            $notification = auth()->user()->unreadNotifications()
+                ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.object_id')) COLLATE utf8_general_ci = ?", [$rapport_id])
+                ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.object_type')) COLLATE utf8_general_ci = ?", get_class($rapport))->first();
+
+            if ($notification) {
+                $notification->markAsRead();
+            }
+        }
+
         return view('private_layouts.rapport_mensuel.afficher_un_rapport', compact("autorisation", "autorisation_speciale",
         "rapport", "caisse", "releve_des_transactions_mensuelles", "current_user", "breadcrumbs"));
     }
@@ -320,7 +386,7 @@ class RapportMensuelController extends Controller
             ['url'=>url('/rapportmensuel/list'), 'label'=>'Rapports validés', 'icon'=>'bi-list fs-5'],
             ['url'=>url('/rapportmensuel/edit_le_rapport'), 'label'=>'Editer', 'icon'=>'bi-pencil-square fs-5'],
         ];
-        return view('private_layouts.rapport_mensuel.editer_un_rapport', compact("rapport", 
+        return view('private_layouts.rapport_mensuel.editer_un_rapport', compact("rapport",
         "autorisation", "autorisation_speciale", "current_user", "breadcrumbs"));
     }
 
@@ -434,19 +500,86 @@ class RapportMensuelController extends Controller
         if ($action == 'soumission') {
             $statut = 'en attente de complétion';
             $message = 'Le rapport a été soumis à la caisse pour sa complétion';
+
+            $rapport->statut = $statut;
+            $rapport->update();
+
+            $autorisations = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->get();
+
+            $userstonotify = [];
+            foreach ($autorisations as $autorisation) {
+                $autorisations_speciales = json_decode($autorisation->autorisation_speciale);
+                if (!is_null($autorisations_speciales)) {
+                    if (in_array("peux voir la partie financiere du rapport", $autorisations_speciales)) {
+                        $user = User::find($autorisation->user_id);
+                        if ($user->departement_id == $rapport->departement_id) {
+                            $userstonotify[] = $user;
+                        }
+                    }
+                }
+            }
+
+            $url = route('rapportmensuel.afficher_rapport_mensuel', $rapport->id);
+
+            if ($userstonotify) {
+                $this->triggerNotification($rapport, 'App\Models\RapportMensuel', 'Demande de complétion',
+            "Vous avez un nouveau rapport mensuel en attente de complétion",$url, $userstonotify) ;
+            }
         }
 
         if ($action == 'validation') {
             $statut = 'validé';
             $message = 'Le rapport a été validé';
+
+            $rapport->statut = $statut;
+            $rapport->update();
+
+            $autorisations = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->get();
+
+            $userstonotify = [];
+            $user = User::find($rapport->rapporteur_principal_id);
+
+            if (!is_null($user)) {
+                $userstonotify[] = $user;
+            }
+
+            $url = route('rapportmensuel.afficher_rapport_mensuel', $rapport->id);
+
+            if ($userstonotify) {
+                $this->triggerNotification($rapport, 'App\Models\RapportMensuel', 'Demande de validation',
+            "Votre rapport mensuel a été validé, cliquez pour voir",$url, $userstonotify) ;
+            }
         }
 
         if ($action == 'soumettre_pour_validation') {
             $statut = 'en attente de validation';
             $message = 'Le rapport a été soumis et est en attente de validation';
+
+            $rapport->statut = $statut;
+            $rapport->update();
+
+            $autorisations = AutorisationSpeciale::where('table_name', 'rapport_mensuels')->get();
+
+            $userstonotify = [];
+            foreach ($autorisations as $autorisation) {
+                $autorisations_speciales = json_decode($autorisation->autorisation_speciale);
+                if (!is_null($autorisations_speciales)) {
+                    if (in_array("peux valider", $autorisations_speciales)) {
+                        $user = User::find($autorisation->user_id);
+                        if ($user->departement_id == $rapport->departement_id) {
+                            $userstonotify[] = $user;
+                        }
+                    }
+                }
+            }
+
+            $url = route('rapportmensuel.afficher_rapport_mensuel', $rapport->id);
+
+            if ($userstonotify) {
+                $this->triggerNotification($rapport, 'App\Models\RapportMensuel', 'Demande de validation',
+            "Vous avez un nouveau rapport mensuel en attente de validation",$url, $userstonotify) ;
+            }
         }
-        $rapport->statut = $statut;
-        $rapport->update();
         return redirect()->back()->with('success', $message);
     }
 

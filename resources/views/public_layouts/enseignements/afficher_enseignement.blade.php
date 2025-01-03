@@ -33,7 +33,7 @@
         }
 
         /*---------------------------------------------------------------------*/
-     
+
 
         .audio-container {
             position: relative;
@@ -104,9 +104,9 @@
                         </audio>
                     </div>
                     <!-- Post content-->
-                    <section class="mb-5 p-2">
+                    <section class="mb-5 p-2 mt-3">
                         <p class="mb-4" style="text-align: justify">{{ $enseignement->enseignement }}</p>
-                        
+
                         <h2 class="fw-bolder mb-4 mt-5">Related</h2>
                         <hr>
                         @if ($enseignement->video)
@@ -205,9 +205,9 @@
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
         <hr>
-    </div> 
+    </div>
 @endsection
 @section('scripts')
     <script>
