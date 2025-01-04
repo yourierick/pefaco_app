@@ -143,6 +143,11 @@ class UserController extends Controller
             'table_name' => 'paramètres généraux'
         ]);
 
+        AutorisationSpeciale::create([
+            'user_id' => $user_id,
+            'table_name' => 'gestion des utilisateurs'
+        ]);
+
         foreach ($tableNames as $tableName) {
             if (!in_array($tableName, $tablesAIgnorer)) {
                 AutorisationSpeciale::create([

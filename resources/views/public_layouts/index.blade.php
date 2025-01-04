@@ -68,7 +68,7 @@
                                     <span>Localisation de l'église</span>
                                     <h4 style="font-weight: bold;">Position géographique</h4>
                                     <hr style="border: 1px solid #1A76D1">
-                                    <p>Notre église est située à : {{ $parametres->localisation }}</p>
+                                    <p>Notre église est située à : {{ $parametres ? $parametres->localisation : "" }}</p>
                                 </div>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                                     <span>Numéros de téléphone</span>
                                     <h4 style="font-weight: bold;">Nos contacts</h4>
                                     <hr style="border: 1px solid #1A76D1">
-                                    <p>{{ $parametres->contacts }}</p>
+                                    <p>{{ $parametres  ? $parametres->contacts : "" }}</p>
                                 </div>
                             </div>
                         </div>
@@ -348,7 +348,7 @@
                 <div class="col-lg-12">
                     <div class="section-title">
                         <h2>A propos de nous!</h2>
-                        <p id="aproposdenous" style="text-align: justify">{{ $parametres->a_propos_de_nous }}</p>
+                        <p id="aproposdenous" style="text-align: justify">{{ $parametres  ? $parametres->a_propos_de_nous : "" }}</p>
                         <a id="toggleButtonApropos" class="apropos mt-2 text-primary" style="text-decoration: none; cursor: pointer">voir plus</a>
                     </div>
                 </div>
@@ -360,7 +360,7 @@
                     <div class="single-service">
                         <i class="icofont icofont-prescription fs-3"></i>
                         <h4><a href="#">Historique</a></h4>
-                        <p id="historique" style="text-align: justify">{{ $parametres->historique }}</p>
+                        <p id="historique" style="text-align: justify">{{ $parametres ? $parametres->historique : "" }}</p>
                         <a id="toggleButtonHistorique" class="apropos mt-2 text-primary" style="text-decoration: none; cursor: pointer">voir plus</a>
                     </div>
                     <!-- End Single Service -->
@@ -370,7 +370,7 @@
                     <div class="single-service">
                         <i class='bx bx-bible fs-3'></i>
                         <h4><a href="#">Notre mission</a></h4>
-                        <p id="mission" style="text-align: justify">{{ $parametres->notre_mission }}</p>
+                        <p id="mission" style="text-align: justify">{{ $parametres ? $parametres->notre_mission : "" }}</p>
                         <a id="toggleButtonMission" class="apropos mt-2 text-primary" style="text-decoration: none; cursor: pointer">voir plus</a>
                     </div>
                     <!-- End Single Service -->
@@ -382,7 +382,7 @@
                     <div class="single-service">
                         <i class="icofont icofont-eye-alt fs-3"></i>
                         <h4><a href="#">Notre vision</a></h4>
-                        <p id="vision" style="text-align: justify">{{ $parametres->notre_vision }}</p>
+                        <p id="vision" style="text-align: justify">{{ $parametres ? $parametres->notre_vision : "" }}</p>
                         <a id="toggleButtonVision" class="apropos mt-2 text-primary" style="text-decoration: none; cursor: pointer">voir plus</a>
                     </div>
                     <!-- End Single Service -->
@@ -392,7 +392,7 @@
                     <div class="single-service">
                         <i class='bx bxs-church fs-3'></i>
                         <h4><a href="#">Notre communauté</a></h4>
-                        <p id="communaute" style="text-align: justify">{{ $parametres->notre_communaute }}</p>
+                        <p id="communaute" style="text-align: justify">{{ $parametres ? $parametres->notre_communaute : "" }}</p>
                         <a id="toggleButtonCommunaute" class="apropos mt-2 text-primary" style="text-decoration: none; cursor: pointer">voir plus</a>
                     </div>
                     <!-- End Single Service -->
@@ -404,10 +404,10 @@
                     <div class="col-lg-12">
                         <div class="section-title">
                             <h2 class="mb-4">Pasteur Responsable</h2>
-                            <img style="border-radius: 50%; height: 250px; width: 250px" class="shadow" src="/storage/{{ $parametres->photo_du_pasteur_responsable }}" alt="..."><br>
+                            <img style="border-radius: 50%; height: 250px; width: 250px" class="shadow" src="/storage/{{ $parametres ? $parametres->photo_du_pasteur_responsable : "" }}" alt="..."><br>
                             <i class="bx bxs-quote-alt-left quote-icon-left fs-2 mt-2"></i>
-                            <p class="mb-2" style="font-weight: 500; text-transform:capitalize; font-size: 13pt">Révérend pasteur {{ $parametres->nom_du_pasteur }}</p>
-                            <p style="text-align: justify">{{ $parametres->pasteur_responsable }}</p>
+                            <p class="mb-2" style="font-weight: 500; text-transform:capitalize; font-size: 13pt">Révérend pasteur {{ $parametres ? $parametres->nom_du_pasteur : "" }}</p>
+                            <p style="text-align: justify">{{ $parametres ? $parametres->pasteur_responsable : "" }}</p>
                             <i class="bx bxs-quote-alt-right quote-icon-right fs-2"></i>
                         </div>
                     </div>

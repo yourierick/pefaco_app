@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
@@ -99,6 +100,11 @@ class RegisteredUserController extends Controller
         AutorisationSpeciale::create([
             'user_id' => $user->id,
             'table_name' => 'paramètres généraux'
+        ]);
+
+        AutorisationSpeciale::create([
+            'user_id' => $user->id,
+            'table_name' => 'gestion des utilisateurs'
         ]);
 
         foreach ($tableNames as $tableName) {

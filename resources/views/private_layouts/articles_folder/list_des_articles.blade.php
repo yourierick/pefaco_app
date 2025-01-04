@@ -15,14 +15,14 @@
                     @if($autorisation_speciale)
                         @if($autorisation_speciale->autorisation_speciale)
                             @if(in_array('peux valider', json_decode($autorisation_speciale->autorisation_speciale, true)))
-                                <a href="{{ route('article.voir_les_attentes_en_validation') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-file-word-fill text-primary"></span> en validation</a>    
+                                <a href="{{ route('article.voir_les_attentes_en_validation') }}" class="dropdown-item btn btn-outline-secondary perso"><span class="bi-file-word-fill text-primary"></span> en validation</a>
                             @endif
                         @endif
                     @endif
                     @if($autorisation)
                         @if($autorisation->autorisation_en_ecriture)
                             @if(in_array('peux ajouter', json_decode($autorisation->autorisation_en_ecriture, true)))
-                                <a href="{{ route('article.nouvel_article') }}" class="dropdown-item btn btn-outline-secondary perso" title="nouvel article"><span class="bi-plus-circle-fill text-danger"></span> nouvel article</a>    
+                                <a href="{{ route('article.nouvel_article') }}" class="dropdown-item btn btn-outline-secondary perso" title="nouvel article"><span class="bi-plus-circle-fill text-danger"></span> nouvel article</a>
                             @endif
                         @endif
                     @endif
@@ -69,9 +69,9 @@
                             <div class="tab-pane fade show active" id="orders-all" role="tabpanel"
                                  aria-labelledby="orders-all-tab">
                                 <div class="app-card app-card-orders-table shadow-sm mb-5">
-                                    <div class="app-card-body table-responsive p-4">
+                                    <div class="app-card-body p-4">
                                         <div>
-                                            <table class="table-sm table-striped w-100 mb-0 text-left" id="multi-filter-select">
+                                            <table class="table-sm table-striped table-responsive w-100 mb-0 text-left" id="multi-filter-select">
                                                 <thead style="text-transform: uppercase; background-color: #0a5a97; color: whitesmoke">
                                                 <tr>
                                                     <th class="cell" style="font-weight: normal">N°</th>

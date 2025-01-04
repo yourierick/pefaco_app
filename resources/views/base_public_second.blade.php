@@ -139,8 +139,8 @@
                 <div class="col-lg-6 col-md-7 col-12">
                     <!-- Top Contact -->
                     <ul class="top-contact">
-                        <li><i class="fa fa-phone mr-1"></i>{{ $parametres->contacts }}</li>
-                        <li><i class="fa fa-envelope mr-1"></i><a href="mailto:{{ $parametres->email }}"> {{ $parametres->email }}</a>
+                        <li><i class="fa fa-phone mr-1"></i>{{ $parametres ? $parametres->contacts }}</li>
+                        <li><i class="fa fa-envelope mr-1"></i><a href="mailto:{{ $parametres ? $parametres->email }}"> {{ $parametres->email }}</a>
                         </li>
                     </ul>
                     <!-- End Top Contact -->
@@ -157,7 +157,7 @@
                     <div class="col-lg-3 col-md-3 col-12">
                         <!-- Start Logo -->
                         <div class="logo">
-                            <a href="{{ route('home') }}"><img style="width: 130px; height: 100px;" src="/storage/{{ $parametre_logo }}" alt="#"></a>
+                            <a href="{{ route('home') }}"><img style="width: 130px; height: 100px;" src="/storage/{{ $parametre_logo ? $parametre_logo : "" }}" alt="#"></a>
                         </div>
                         <!-- End Logo -->
                         <!-- Mobile Nav -->
@@ -243,17 +243,19 @@
                         <h2>Programme de culte</h2>
                         <p>Calendrier hebdomadaire des cultes</p>
                         <ul class="time-sidual">
-                            @for ($i = 0 ; $i < $programmedeculte->count(); $i++)
-                                @php
-                                    $programme = $programmedeculte->get($i);
-                                @endphp
-                                <div>
-                                    <li style="color: whitesmoke">
-                                        - {{ $programme->programme }}
-                                        <p class="ml-2">{{ $programme->jour }} : {{ $programme->interval_de_temps }}</p>
-                                    </li>
-                                </div>
-                            @endfor
+                            @if ($programmedeculte)
+                                @for ($i = 0 ; $i < $programmedeculte->count(); $i++)
+                                    @php
+                                        $programme = $programmedeculte->get($i);
+                                    @endphp
+                                    <div>
+                                        <li style="color: whitesmoke">
+                                            - {{ $programme->programme }}
+                                            <p class="ml-2">{{ $programme->jour }} : {{ $programme->interval_de_temps }}</p>
+                                        </li>
+                                    </div>
+                                @endfor
+                            @endif
                         </ul>
                     </div>
                 </div>

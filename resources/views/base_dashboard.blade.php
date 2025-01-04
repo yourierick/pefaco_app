@@ -55,6 +55,7 @@
     $autorisation_baptises = \App\Models\AutorisationSpeciale::where('table_name', 'baptemes')->where('user_id', $current_user->id)->first();
     $autorisation_boite = \App\Models\AutorisationSpeciale::where('table_name', 'message_et_commentaires')->where('user_id', $current_user->id)->first();
     $autorisation_parametre = \App\Models\AutorisationSpeciale::where('table_name', 'paramètres généraux')->where('user_id', $current_user->id)->first();
+    $autorisation_gestion_utilisateurs = \App\Models\AutorisationSpeciale::where('table_name', 'gestion des utilisateurs')->where('user_id', $current_user->id)->first();
 @endphp
 <header class="app-header fixed-top">
     <div class="app-header-inner">
@@ -292,46 +293,45 @@
                             </li><!--//nav-item-->
                         @endif
                     @endif
-                    @php
-                        $group = \App\Models\GroupesUtilisateurs::find($current_user->groupe_utilisateur_id);
-                    @endphp
-                    @if ($group)
-                        @if($group->groupe == 'A0')
-                            <li class="nav-item has-submenu">
-                                <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                                <a @class(['nav-link', 'submenu-toggle', 'active'=>str_starts_with($routename, "profile.") || str_starts_with($routename, "manageprofile.")]) href="#"
-                                   data-bs-toggle="collapse" data-bs-target="#submenu-1" aria-expanded="true"
-                                   aria-controls="submenu-1">
-                                    <span class="nav-icon">
-                                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-files"
-                                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd"
-                                                  d="M4 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4z"/>
-                                            <path
-                                                d="M6 0h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2v-1a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1H4a2 2 0 0 1 2-2z"/>
-                                        </svg>
-                                    </span>
-                                        <span class="nav-link-text">Utilisateurs</span>
-                                        <span class="submenu-arrow">
-                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down"
-                                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd"
-                                                  d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                        </svg>
-                                    </span><!--//submenu-arrow-->
-                                </a><!--//nav-link-->
-                                <div
-                                    @class(['collapse', 'submenu', 'submenu-1', 'show'=>str_starts_with($routename, 'profile.') || str_starts_with($routename, 'manageprofile.') || str_starts_with($routename, 'register')])  id="submenu-1"
-                                    data-bs-parent="#menu-accordion">
-                                    <ul class="submenu-list list-unstyled">
-                                        <li class="submenu-item">
-                                            <a @class(['submenu-link', 'active'=>str_starts_with($routename, 'manageprofile.')]) href="{{ route('manageprofile.list_users') }}">Gestion
-                                                des utilisateurs</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li><!--//nav-item-->
+                    @if(!is_null($autorisation_gestion_utilisateurs))
+                        @if($autorisation_gestion_utilisateurs->autorisation_speciale)
+                            @if(in_array('peux gerer les utilisateurs', json_decode($autorisation_gestion_utilisateurs->autorisation_speciale, true)))
+                                <li class="nav-item has-submenu">
+                                    <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                                    <a @class(['nav-link', 'submenu-toggle', 'active'=>str_starts_with($routename, "profile.") || str_starts_with($routename, "manageprofile.")]) href="#"
+                                    data-bs-toggle="collapse" data-bs-target="#submenu-1" aria-expanded="true"
+                                    aria-controls="submenu-1">
+                                        <span class="nav-icon">
+                                            <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-files"
+                                                fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                    d="M4 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4z"/>
+                                                <path
+                                                    d="M6 0h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2v-1a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1H4a2 2 0 0 1 2-2z"/>
+                                            </svg>
+                                        </span>
+                                            <span class="nav-link-text">Utilisateurs</span>
+                                            <span class="submenu-arrow">
+                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down"
+                                                fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                    d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+                                        </span><!--//submenu-arrow-->
+                                    </a><!--//nav-link-->
+                                    <div
+                                        @class(['collapse', 'submenu', 'submenu-1', 'show'=>str_starts_with($routename, 'profile.') || str_starts_with($routename, 'manageprofile.') || str_starts_with($routename, 'register')])  id="submenu-1"
+                                        data-bs-parent="#menu-accordion">
+                                        <ul class="submenu-list list-unstyled">
+                                            <li class="submenu-item">
+                                                <a @class(['submenu-link', 'active'=>str_starts_with($routename, 'manageprofile.')]) href="{{ route('manageprofile.list_users') }}">Gestion
+                                                    des utilisateurs</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li><!--//nav-item-->
+                            @endif
                         @endif
                     @endif
                     <li class="nav-item has-submenu">

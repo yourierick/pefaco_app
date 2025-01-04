@@ -67,9 +67,9 @@
                             <div class="tab-pane fade show active" id="orders-all" role="tabpanel"
                                  aria-labelledby="orders-all-tab">
                                 <div class="app-card app-card-orders-table shadow-sm mb-5">
-                                    <div class="app-card-body p-2 table-responsive">
+                                    <div class="app-card-body p-2">
                                         <div>
-                                            <table class="table table-striped w-100 mb-0 text-left" id="multi-filter-select">
+                                            <table class="table table-striped table-responsive w-100 mb-0 text-left" id="multi-filter-select">
                                                 <thead style="text-transform: uppercase; background-color: #0a5a97; color: whitesmoke">
                                                     <tr>
                                                         <th class="cell" style="color: whitesmoke; font-weight: normal">N°</th>

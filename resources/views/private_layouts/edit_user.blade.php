@@ -604,6 +604,22 @@
                                                 </div>
                                             </div><!--//app-card-->
                                         </div>
+                                    @elseif($autorisation->table_name === 'gestion des utilisateurs')
+                                        <div class="col-12 col-md-8">
+                                            <div class="app-card app-card-settings p-4">
+                                                <div class="app-card-body">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" value="peux gerer les utilisateurs" name="autorisation_speciale[]" id="rpt_checkbox-1-{{ $autorisation->id }}" @if($autorisation->autorisation_speciale !== null) @if(in_array('peux gerer les utilisateurs', json_decode($autorisation->autorisation_speciale, true))) checked @endif @endif>
+                                                        <label class="form-check-label" for="rpt_checkbox-1-{{ $autorisation->id }}">
+                                                            peux gérer les utilisateurs
+                                                        </label>
+                                                    </div><!--//form-check-->
+                                                </div><!--//app-card-body-->
+                                                <div class="mt-3">
+                                                    <button type="submit" class="btn btn-primary text-light" >Enregistrer</button>
+                                                </div>
+                                            </div><!--//app-card-->
+                                        </div>
                                     @else
                                         <div class="col-12 col-md-8">
                                             <div class="app-card app-card-settings p-4">

@@ -20,9 +20,9 @@
                             <div class="tab-pane fade show active" id="orders-all" role="tabpanel"
                                  aria-labelledby="orders-all-tab">
                                 <div class="app-card app-card-orders-table shadow-sm mb-5">
-                                    <div class="app-card-body table-responsive p-4">
+                                    <div class="app-card-body p-4">
                                         <div>
-                                            <table class="table table-striped w-100" id="multi-filter-select">
+                                            <table class="table table-striped table-responsive w-100" id="multi-filter-select">
                                                 <thead style="text-transform: uppercase; background-color: #0a5a97; color: whitesmoke">
                                                 <tr>
                                                     <th style="color: whitesmoke; font-weight: normal">Nom</th>
