@@ -16,4 +16,9 @@ class Programme extends Model
         'programme',
     ];
 
+    public function horaire()
+    {
+        return $this->belongsTo(HoraireHebdo::class, "horaire_id");
+    }
+
 }

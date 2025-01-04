@@ -40,17 +40,17 @@ class ParametresController extends Controller
         $configuration_generale = ConfigurationGenerale::first();
         $current_user = $request->user();
         $autorisation_parametre = AutorisationSpeciale::where('table_name', 'paramètres généraux')->where('user_id', $current_user->id)->first();
-        return view('private_layouts.parametres.parametres', compact('users_group', 'configuration_generale', 'autorisation_parametre', 
+        return view('private_layouts.parametres.parametres', compact('users_group', 'configuration_generale', 'autorisation_parametre',
         'current_user', 'departements', 'qualites', 'zones', 'paroisses', 'programmedeculte', 'programmedupasteur'));
     }
 
     public function add_users_group(Request $request)
     {
         $request->validate([
-            'groupe'=>['required', Rule::unique(GroupesUtilisateurs::class)], [
-                'groupe.required'=>"Ce champs est obligatoire",
-                'groupe.unique'=>"Ce groupe existe déjà",
-            ],
+            'groupe'=>['required', Rule::unique(GroupesUtilisateurs::class)],
+        ], [
+            'groupe.required'=>"Ce champs est obligatoire",
+            'groupe.unique'=>"Ce groupe existe déjà",
         ]);
         $groupe = GroupesUtilisateurs::create([
             'groupe' => $request->get('groupe'),
@@ -72,10 +72,10 @@ class ParametresController extends Controller
         $tablesAIgnorer = ['cache', 'jobs', 'failed_jobs', 'cache_locks', 'contenu_agendas', 'cotisation_accounts',
             'job_batches', 'migrations', 'password_reset_tokens', 'sessions', 'qualites', 'permissions',
         'livre_grande_caisses', 'groupes_utilisateurs', 'departements', 'paroisses', 'caisse_accounts', 'autorisations',
-            'serviteurs', 'zones', 'communiques', 'users', 'autorisation_speciales', 'custom_notifications', 'membres', 'invites', 'baptises', 
-            'configuration_generales'];
+            'serviteurs', 'zones', 'communiques', 'users', 'autorisation_speciales', 'custom_notifications', 'membres', 'invites', 'baptises',
+            'configuration_generales', 'notifications', 'programmes', 'comment_enseigns', 'commentaire_articles', 'commentaire_articles_children', 'child_commentens'];
 
-        
+
         foreach ($tableNames as $tableName) {
             if (!in_array($tableName, $tablesAIgnorer)) {
                 Autorisations::create([
@@ -243,7 +243,7 @@ class ParametresController extends Controller
     //---------------ZONES---------- QUALITES------------DEPARTEMENTS----------------PAROISSES-----------------------//
     public function ajouter_departement(Request $request) {
         $request->validate([
-            'designation',
+            'designation' => ['required', 'string', 'lowercase', 'max:255', Rule::unique(Departements::class)],
         ]);
 
         $departement = Departements::create([
@@ -255,11 +255,13 @@ class ParametresController extends Controller
 
     public function editer_departement(Request $request) {
         $request->validate([
-            'designation',
-            'id',
+            'id' => 'required',
+        ]);
+        $departement = Departements::find($request->get('id'));
+        $request->validate([
+            'designation' => ['required', 'string', 'lowercase', 'max:255', Rule::unique(Departements::class)->ignore($departement->id)],
         ]);
 
-        $departement = Departements::find($request->get('id'));
         $departement->designation = $request->get('designation');
         $departement->update();
 
@@ -277,7 +279,7 @@ class ParametresController extends Controller
 
     public function ajouter_zone(Request $request) {
         $request->validate([
-            'designation',
+            'designation' => ['required', 'string', 'max:255', Rule::unique(Zones::class)],
         ]);
 
         $zone = Zones::create([
@@ -290,11 +292,15 @@ class ParametresController extends Controller
 
     public function editer_zone(Request $request) {
         $request->validate([
-            'designation',
-            'id',
+            'id' => 'required',
         ]);
 
         $zone = Zones::find($request->get('id'));
+
+        $request->validate([
+            'designation' => ['required', 'string', 'max:255', Rule::unique(Zones::class)->ignore($zone->id)],
+        ]);
+
         $zone->designation = $request->get('designation');
         $zone->update();
 
@@ -311,10 +317,11 @@ class ParametresController extends Controller
 
 
     public function ajouter_paroisse(Request $request) {
+
         $request->validate([
-            'designation',
-            'localisation',
-            'zone_id',
+            'designation' => ['required', 'string', 'max:255', Rule::unique(Paroisses::class)],
+            'localisation' => 'required',
+            'zone_id' => 'required',
         ]);
 
         $paroisse = Paroisses::create([
@@ -328,12 +335,17 @@ class ParametresController extends Controller
 
     public function editer_paroisse(Request $request) {
         $request->validate([
-            'designation',
-            'localisation',
-            'zone_id',
+            'id' => 'required',
         ]);
 
         $paroisse = Paroisses::find($request->get('id'));
+
+        $request->validate([
+            'designation' => ['required', 'string', 'max:255', Rule::unique(Paroisses::class)->ignore($paroisse->id)],
+            'localisation' => 'required',
+            'zone_id' => 'required',
+        ]);
+
         $paroisse->zones_id = $request->get('zone_id');
         $paroisse->designation = $request->get('designation');
         $paroisse->localisation = $request->get('localisation');
@@ -352,8 +364,8 @@ class ParametresController extends Controller
 
     public function ajouter_qualite(Request $request) {
         $request->validate([
-            'departement_id',
-            'designation',
+            'departement_id' => 'required',
+            'designation' => 'required',
         ]);
 
         $qualite = Qualites::create([
@@ -366,8 +378,8 @@ class ParametresController extends Controller
 
     public function editer_qualite(Request $request) {
         $request->validate([
-            'departement_id',
-            'designation',
+            'departement_id' => 'required',
+            'designation' => 'required',
         ]);
 
         $qualite = Qualites::find($request->get('id'));
@@ -389,9 +401,9 @@ class ParametresController extends Controller
 
     public function ajouter_programmeculte(Request $request) {
         $request->validate([
-            'jour',
-            'interval_de_temps',
-            'programme',
+            'jour' => 'required',
+            'interval_de_temps' => 'required',
+            'programme' => 'required',
         ]);
 
         $programmeculte = ProgrammeDeCulte::create([
@@ -405,9 +417,9 @@ class ParametresController extends Controller
 
     public function editer_programmeculte(Request $request) {
         $request->validate([
-            'jour',
-            'interval_de_temps',
-            'programme',
+            'jour' => 'required',
+            'interval_de_temps' => 'required',
+            'programme' => 'required',
         ]);
 
         $programmeculte = ProgrammeDeCulte::find($request->get('id'));
@@ -429,8 +441,8 @@ class ParametresController extends Controller
 
     public function ajouter_programmedupasteur(Request $request) {
         $request->validate([
-            'jour',
-            'interval_de_temps',
+            'jour' => 'required',
+            'interval_de_temps' => 'required',
         ]);
 
         $programmedupasteur = ProgrammeDuPasteur::create([
@@ -443,8 +455,8 @@ class ParametresController extends Controller
 
     public function editer_programmedupasteur(Request $request) {
         $request->validate([
-            'jour',
-            'interval_de_temps',
+            'jour' => 'required',
+            'interval_de_temps' => 'required',
         ]);
 
         $programmedupasteur = ProgrammeDuPasteur::find($request->get('id'));
@@ -483,7 +495,7 @@ class ParametresController extends Controller
             $attachmentPath = $request->file('piece_jointe')->store('attachments', 'public');
         }
         PrincipalSendMailJob::dispatch($destinataires, $details, $attachmentPath);
-        
+
         return redirect()->back()->with("success", "le message a été diffusé");
     }
 }

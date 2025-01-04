@@ -557,12 +557,24 @@
             @yield('content')
         </div><!--//container-fluid-->
     </div><!--//app-content-->
-    <footer class="app-footer">
+    <hr>
+    <footer class="app-footer mt-3">
         <div class="container text-center py-3">
-            <!--/* This template is free as long as you keep the footer attribution link. If you'd like to use the template without the attribution link, you can buy the commercial license via our website: themes.3rdwavemedia.com Thank you for your support. :) */-->
-            <small class="copyright">Crée avec <span class="sr-only">love</span><i class="fas fa-heart"
-                                                                                   style="color: #fb866a;"></i> par
-                <a class="app-link" href="#" target="_blank">yourierick00@gmail.com</a> pour pefaco universelle</small>
+            <div class="row">
+                <div class="col-md-4 col-xs-12 text-dark">
+                    <a class="text-dark bi-bank2" href="#">
+                        Digital Development Vision Enterprise(DDVE)
+                    </a>
+                </div>
+                <div class="col-md-4 col-xs-12 text-dark">
+                    2025, <i class="fa fa-copyright text-dark"></i> by
+                        <a href="#">yourierick@yahoo.com</a>
+                </div>
+                <div class="col-md-4 col-xs-12 text-dark">
+                    Distribuée par
+                    <a target="_blank" href="https://www.linkedin.com/in/Erick-Bitangalo"><span class="bi-linkedin"></span>Ir Erick BITANGALO</a>.
+                </div>
+            </div>
         </div>
     </footer><!--//app-footer-->
 </div><!--//app-wrapper-->

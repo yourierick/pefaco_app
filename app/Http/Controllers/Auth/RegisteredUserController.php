@@ -86,20 +86,21 @@ class RegisteredUserController extends Controller
             'qualite_id'=>$request->qualite_id,
             'groupe_utilisateur_id'=>$request->groupe_utilisateur_id,
         ]);
-        
+
         $tables = DB::select('SHOW TABLES');
         $tableNames = array_map('current', $tables);
         $tablesAIgnorer = ['cache', 'jobs', 'failed_jobs', 'cache_locks', 'contenu_agendas', 'cotisation_accounts',
             'job_batches', 'migrations', 'password_reset_tokens', 'sessions', 'qualites', 'permissions',
             'livre_grande_caisses', 'groupes_utilisateurs', 'departements', 'paroisses', 'caisse_accounts', 'autorisations',
             'serviteurs', 'zones', 'users', 'cotisations', 'inventaires', 'message_et_commentaires',
-            'don_specials', 'caisses', 'bulletin_infos', 'autorisation_speciales', 'agendas'];
+            'don_specials', 'caisses', 'bulletin_infos', 'autorisation_speciales', 'agendas', 'programmes', 'comment_enseigns',
+            'commentaire_articles', 'commentaire_articles_children', 'child_commentens'];
 
         AutorisationSpeciale::create([
-            'user_id' => $user_id,
+            'user_id' => $user->id,
             'table_name' => 'paramètres généraux'
         ]);
-        
+
         foreach ($tableNames as $tableName) {
             if (!in_array($tableName, $tablesAIgnorer)) {
                 AutorisationSpeciale::create([

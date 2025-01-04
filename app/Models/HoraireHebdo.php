@@ -21,4 +21,9 @@ class HoraireHebdo extends Model
             'date_fin' => 'datetime',
         ];
     }
+
+    public function programmes()
+    {
+        return $this->hasMany(Programme::class, 'horaire_id');
+    }
 }

@@ -21,7 +21,7 @@ class HoraireHebdoController extends Controller
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
             ['url'=>url('/horairehebdo/list'), 'label'=>"Programmes", 'icon'=>'bi-list fs-5']
         ];
-        return view('private_layouts.horairehebdo_folder.list_des_horaires', ['current_user'=>$request->user(), 
+        return view('private_layouts.horairehebdo_folder.list_des_horaires', ['current_user'=>$request->user(),
         'horaires'=>$horaires, 'autorisation'=>$autorisation, "breadcrumbs"=>$breadcrumbs]);
     }
 
@@ -61,7 +61,7 @@ class HoraireHebdoController extends Controller
             ['url'=>url('/horairehebdo/list'), 'label'=>"Programmes", 'icon'=>'bi-list fs-5'],
             ['url'=>url('/horairehebdo/programmer'), 'label'=>"Programmation Hebdo", 'icon'=>'bi-calendar fs-5'],
         ];
-        return view('private_layouts.horairehebdo_folder.programmation_horaire', ['current_user' => $request->user(), 
+        return view('private_layouts.horairehebdo_folder.programmation_horaire', ['current_user' => $request->user(),
         'horaire'=>$horaire, 'programmes'=>$programmation, "departements"=>$departements, "breadcrumbs"=>$breadcrumbs]);
     }
 
@@ -120,8 +120,8 @@ class HoraireHebdoController extends Controller
             ['url'=>url('/horairehebdo/list'), 'label'=>"Programmes", 'icon'=>'bi-list fs-5'],
             ['url'=>url('/horairehebdo/afficher_un_horaire'), 'label'=>"Afficher", 'icon'=>'bi-eye fs-5'],
         ];
-        return view('private_layouts.horairehebdo_folder.afficher_horaire', ['horaire'=>$horaire, 
-        'programmes'=>$programmation, 'current_user'=>$request->user(), 'autorisation'=>$autorisation, 
+        return view('private_layouts.horairehebdo_folder.afficher_horaire', ['horaire'=>$horaire,
+        'programmes'=>$programmation, 'current_user'=>$request->user(), 'autorisation'=>$autorisation,
         "breadcrumbs"=>$breadcrumbs]);
     }
 
@@ -171,7 +171,7 @@ class HoraireHebdoController extends Controller
             ['url'=>url('/horairehebdo/list'), 'label'=>"Programmes", 'icon'=>'bi-list fs-5'],
             ['url'=>url('/horairehebdo/editer_programme'), 'label'=>"Editer", 'icon'=>'bi-pencil-square fs-5'],
         ];
-        return view('private_layouts.horairehebdo_folder.editer_programme', ['current_user'=>$request->user(), 
+        return view('private_layouts.horairehebdo_folder.editer_programme', ['current_user'=>$request->user(),
         'programme'=>$programme, "breadcrumbs"=>$breadcrumbs, "departements"=>$departements]);
     }
 
@@ -205,7 +205,9 @@ class HoraireHebdoController extends Controller
             $programme->programme = $programmes;
             $programme->departement = $request->departement;
             $programme->update();
+        }else {
+            return redirect()->route('horairehebdo.afficher_un_horaire', $programme->horaire_id)->with('error', "la mise à jour n'a pas été effectué car ce jour a déjà été programmer pour ce département");
         }
-        return redirect()->route('horairehebdo.afficher_un_horaire', $programme->horaire_id);
+        return redirect()->route('horairehebdo.afficher_un_horaire', $programme->horaire_id)->with('success', "la mise à jour a été effectué");
     }
 }

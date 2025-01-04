@@ -278,11 +278,18 @@
     <div class="copyright">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-12">
-                    <div class="copyright-content">
-                        <p>© Copyright 2024 | Tous droits reservés par <a href="#"
-                                                                        target="_blank">yourierick00@gmail.com</a></p>
-                    </div>
+                <div class="col-md-4 col-xs-12 text-light">
+                    <a class="text-light bi-bank2" href="#">
+                        Digital Development Vision Enterprise(DDVE)
+                    </a>
+                </div>
+                <div class="col-md-4 col-xs-12 text-light">
+                    2025, <i class="fa fa-copyright text-light"></i> by
+                        <a href="#">yourierick@yahoo.com</a>
+                </div>
+                <div class="col-md-4 col-xs-12 text-light">
+                    Distribuée par
+                    <a target="_blank" href="https://www.linkedin.com/in/Erick-Bitangalo"><span class="bi-linkedin"></span>Ir Erick BITANGALO</a>.
                 </div>
             </div>
         </div>

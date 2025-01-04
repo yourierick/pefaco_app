@@ -28,7 +28,7 @@ class UserController extends Controller
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
             ['url'=>url('/manage_user'), 'label'=>"Profiles", 'icon'=>'bi-people fs-5'],
         ];
-        return view('private_layouts.list_users', ['users' => $users, 'current_user'=>$current_user, 
+        return view('private_layouts.list_users', ['users' => $users, 'current_user'=>$current_user,
         "breadcrumbs"=>$breadcrumbs]);
     }
 
@@ -136,7 +136,7 @@ class UserController extends Controller
             'job_batches', 'migrations', 'password_reset_tokens', 'sessions', 'qualites', 'permissions',
             'livre_grande_caisses', 'groupes_utilisateurs', 'departements', 'paroisses', 'caisse_accounts', 'autorisations',
             'serviteurs', 'zones', 'users', 'cotisations', 'inventaires',
-            'don_specials', 'caisses', 'bulletin_infos', 'autorisation_speciales', 'agendas', 'programmes'];
+            'don_specials', 'caisses', 'bulletin_infos', 'autorisation_speciales', 'agendas', 'programmes', 'comment_enseigns', 'commentaire_articles', 'commentaire_articles_children', 'child_commentens'];
 
         AutorisationSpeciale::create([
             'user_id' => $user_id,

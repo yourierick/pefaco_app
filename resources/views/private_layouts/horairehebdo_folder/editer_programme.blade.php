@@ -14,7 +14,7 @@
                                 <label for="id_dept" style="color: #818183">département</label>
                                 <select name="departement" class="form-control" required>
                                     @foreach($departements as $departement)
-                                        <option @if(old('departement', $departement->designation) === $departement->designation) selected @endif value="{{ $departement->designation }}">{{ $departement->designation }}</option>
+                                        <option @if(old('departement', $departement->designation) === $programme->departement) selected @endif value="{{ $departement->designation }}">{{ $departement->designation }}</option>
                                     @endforeach
                                 </select>
                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('departement')"/>

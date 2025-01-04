@@ -26,7 +26,7 @@
     <!-- Slider Area -->
     <section class="mt-3" id="accueil">
         <div class="slider">
-            <div class="single-slider" style="background-image:url('{{ asset('css/images/home_0.jpg') }}')">
+            <div class="single-slider" style="background-image:url('{{ asset("assets/images/photo1.jpg") }}')">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-7">
@@ -466,16 +466,16 @@
                             <h2>Enseignements et prédications</h2>
                             <p class="small" style="font-style: italic">
                                 <i class="bx bxs-quote-alt-left quote-icon-left fs-2 mt-2"></i>
-                                Que ce livre de la loi ne s'éloigne point de ta bouche; médite-le 
-                                jour et nuit, pour agir fidèlement selon tout ce qui y est écrit; 
-                                car c'est alors que tu auras du succès dans tes entreprises, 
+                                Que ce livre de la loi ne s'éloigne point de ta bouche; médite-le
+                                jour et nuit, pour agir fidèlement selon tout ce qui y est écrit;
+                                car c'est alors que tu auras du succès dans tes entreprises,
                                 c'est alors que tu réussiras. Josué 1:8
                                 <i class="bx bxs-quote-alt-right quote-icon-right fs-2 mt-2"></i>
                             </p>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <section class="articles">
                         @foreach($enseignements as $enseignement)

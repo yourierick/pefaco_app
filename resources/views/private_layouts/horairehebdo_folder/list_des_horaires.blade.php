@@ -24,7 +24,7 @@
                                             <input type="date" name="date_debut" class="form-control mb-2" id="input_date_debut" required>
                                             <x-input-error class="mt-2 text-danger" :messages="$errors->get('date_debut')"/>
                                             <label>date de fin</label>
-                                            <input type="date" name="date_fin" onchange="checkDateDifference()" class="form-control" id="input_date_fin" required>
+                                            <input type="date" name="date_fin" class="form-control" id="input_date_fin" required>
                                             <x-input-error class="mt-2 text-danger" :messages="$errors->get('date_fin')"/>
                                             <br>
                                             <button type="submit" class="btn btn-success text-light" style="font-weight: normal">
