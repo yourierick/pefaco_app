@@ -24,7 +24,6 @@
     <link rel="stylesheet" href="{{ asset("new_styles_and_scripts/css/plugins.min.css") }}"/>
     <link rel="stylesheet" href="{{ asset("new_styles_and_scripts/css/kaiadmin.css") }}"/>
     <link rel="icon" href="/storage/{{ $parametre_logo }}">
-    @vite(['resources/js/app.js'])
     @yield('style')
 </head>
 <style>
