@@ -17,9 +17,11 @@ class Enseignement extends Model
         'enseignement',
         'affiche_photo',
         'audio',
-        'video',
+        'lien_acces_youtube',
         'statut',
         'audience',
+        'like',
+        'dislike'
     ];
 
     protected function casts(): array
@@ -34,9 +36,6 @@ class Enseignement extends Model
     }
 
     public function delete() {
-        if ($this->video && Storage::disk('public')->exists($this->video)) {
-            Storage::disk('public')->delete($this->video);
-        }
         if ($this->audio && Storage::disk('public')->exists($this->audio)) {
             Storage::disk('public')->delete($this->audio);
         }

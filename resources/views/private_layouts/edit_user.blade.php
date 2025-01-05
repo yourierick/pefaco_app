@@ -153,18 +153,18 @@
                             <div class="mb-3 mt-2">
                                 <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                     <label for="id_paroisse">Paroisse</label>
-                                    <select id="id_paroisse" name="paroisses_id" class="form-control p-2">
+                                    <select id="id_paroisse" name="paroisse_id" class="form-control p-2">
                                         @php
                                             $paroisses = App\Models\Paroisses::all()
                                         @endphp
                                         <option value=""></option>
                                         @foreach($paroisses as $paroisse)
                                             <option
-                                                @if( old('paroisse', $user->paroisses_id) == $paroisse->id ) selected
+                                                @if( old('paroisse_id', $user->paroisse_id) == $paroisse->id ) selected
                                                 @endif value="{{ $paroisse->id }}">{{ $paroisse->designation }}</option>
                                         @endforeach
                                     </select>
-                                    <x-input-error class="mt-2 text-danger" :messages="$errors->get('paroisses_id')"/>
+                                    <x-input-error class="mt-2 text-danger" :messages="$errors->get('paroisse_id')"/>
                                 </div>
                             </div>
                             <div class="mb-3 mt-2">
@@ -177,7 +177,7 @@
                                         <option value=""></option>
                                         @foreach($departements as $departement)
                                             <option
-                                                @if( old('departement', $user->departement_id) === $departement->id ) selected
+                                                @if( old('departement_id', $user->departement_id) === $departement->id ) selected
                                                 @endif value="{{ $departement->id }}">{{ $departement->designation }}</option>
                                         @endforeach
                                     </select>

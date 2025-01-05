@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
     <head>
         <title>Connexion</title>
-
         <!-- Meta -->
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <meta name="description" content="Portal - Bootstrap 5 Admin Dashboard Template For Developers">
-        <meta name="author" content="Xiaoying Riley at 3rd Wave Media">
+        <meta name="author" content="Ir Erick Bitangalo">
         <link rel="shortcut icon" href="favicon.ico">
         <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
 
@@ -30,7 +28,7 @@
         <div class="wrapper shadow" style="background-image: url('{{ asset('login_css/images/bg-registration-form-2.jpg') }}');">
             <div class="inner">
                 <form action="{{ route('login') }}" method="post">
-                    <div class="app-auth-branding mb-4"><a class="app-logo" href="{{ route('home') }}"><img class="logo-icon me-2" style="width: 130px; height: 80px" src="/storage/{{ $parametre_logo }}" alt="logo"></a></div>
+                    <div class="app-auth-branding mb-4 text-center"><a class="app-logo" href="{{ route('home') }}"><img class="logo-icon me-2" style="width: 130px; height: 80px" src="/storage/{{ $parametre_logo }}" alt="logo"></a></div>
                     <h3 class="auth-heading text-center mb-5">Connectez vous à votre compte</h3>
                     <div class="form-wrapper">
                         @csrf

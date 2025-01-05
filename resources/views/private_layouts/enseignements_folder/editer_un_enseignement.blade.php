@@ -1,13 +1,15 @@
 @extends('base_dashboard')
-@section('page_title', 'Pefaco Universelle')
-@section('titre', "#Editer un enseignement")
+@section('style')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/add_enseignement.css') }}">
+@endsection
 @section('content')
     <div class="py-12 mt-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg shadow mb-3">
                 <div class="max-w-xl">
                     <section>
-                        <form method="post" action="{{ route('enseignement.save_edition_enseignement', $enseignement->id) }}" class="mt-6 space-y-6" enctype="multipart/form-data">
+                        <form method="post" id="my_form" action="{{ route('enseignement.save_edition_enseignement', $enseignement->id) }}" class="mt-6 space-y-6" enctype="multipart/form-data">
                             @csrf
                             @method('put')
                             <div class="form-group-kaiadmin form-group-default-kaiadmin">
@@ -20,23 +22,15 @@
                                 <input class="form-control" type="text" name="reference" id="id_reference" value="{{ $enseignement->reference }}">
                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('reference')"/>
                             </div>
-                            <div class="form-group-kaiadmin form-group-default-kaiadmin">
-                                <label for="id_enseignement" style="color: #818183">enseignement</label>
-                                <textarea class="form-control mb-4" type="text" name="enseignement" id="id_enseignement">{{ $enseignement->enseignement }}</textarea>
-                                <x-input-error class="mt-2 text-danger" :messages="$errors->get('enseignement')"/>
+                            <label for="editor" style="color: #818183">Enseignement (ou synthèse de la prédication)</label>
+                            <div id="editor">
+                                {!! $enseignement->enseignement !!}
                             </div>
+                            <textarea id="enseignement" style="visibility: hidden" name="enseignement"></textarea>
+                            <x-input-error class="mt-2 text-danger" :messages="$errors->get('enseignement')" />
                             <div class="form-group-kaiadmin form-group-default-kaiadmin">
                                 <label for="id_photo" style="color: #818183">Photo Affiche</label>
                                 <input class="form-control" accept=".jpeg, .jpg, .png, .jfif" type="file" onchange="validateImageFileType(this)" name="affiche_photo" id="id_photo">
-                                @if($enseignement->affiche_photo)
-                                    <div>
-                                        <span>Actuellement: {{ $enseignement->affiche_photo }}</span>
-                                        <div class="d-flex">
-                                            <input type="checkbox" class="mr-2" name="delete_affiche_photo" id="id_delete_affiche_photo">
-                                            <label for="id_delete_affiche_photo" class="text-danger">Supprimer la photo</label>
-                                        </div>
-                                    </div>
-                                @endif
                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('affiche_photo')"/>
                             </div>
                             <div class="form-group-kaiadmin form-group-default-kaiadmin">
@@ -54,21 +48,15 @@
                                 <x-input-error class="mt-2 text-danger" :messages="$errors->get('audio')"/>
                             </div>
                             <div class="form-group-kaiadmin form-group-default-kaiadmin">
-                                <label for="id_video" style="color: #818183">fichier vidéo</label>
-                                <input class="form-control" type="file" onchange="validateVideoFileType(this)" name="video" id="id_video">
-                                @if($enseignement->video)
-                                    <div>
-                                        <span>Actuellement: {{ $enseignement->video }}</span>
-                                        <div class="d-flex">
-                                            <input type="checkbox" class="mr-2" name="delete_video" id="id_delete_video">
-                                            <label for="id_delete_video" class="text-danger">Supprimer la vidéo</label>
-                                        </div>
-                                    </div>
-                                @endif
-                                <x-input-error class="mt-2 text-danger" :messages="$errors->get('video')"/>
+                                <label for="id_link" style="color: #818183">Lien youtube</label>
+                                <textarea class="form-control mb-4" type="text" name="link_youtube" id="id_link">{{ $enseignement->lien_acces_youtube }}</textarea>
+                                <x-input-error class="mt-2 text-danger" :messages="$errors->get('link_youtube')"/>
+                            </div>
+                            <div id="progress-container" class="text-center" style="display: none; align-items:center; justify-content:center; align-content:center">
+                                <div role="progressbar" class="text-center" id="progress-bar" aria-valuenow="67" aria-valuemin="0" aria-valuemax="100" style="--value:  0"></div>
                             </div>
                             <hr>
-                            <button type="submit" class="btn btn-primary mt-2 text-light">Enregistrer</button>
+                            <button type="button" onclick="axiosprogressbar()" class="btn btn-primary mt-2 text-light">Enregistrer</button>
                         </form>
                     </section>
                 </div>
@@ -78,5 +66,66 @@
 @endsection
 @section('scripts')
     <script src="{{ asset('assets/js/enseignements_folder/enseignement.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <script>
+        const quill = new Quill('#editor', {
+                theme: 'snow'
+            });
+
+            function axiosprogressbar() {
+                var content = quill.root.innerHTML;
+                document.querySelector('#enseignement').value = content;
+                let form = document.getElementById('my_form');
+                let formData = new FormData(form);
+                let progressBar = document.getElementById('progress-bar');
+                let progressContainer = document.getElementById('progress-container');
+
+                progressContainer.style.display = "flex";
+                axios.post('/enseignement/save_edition_enseignement/'+ {{ $enseignement->id }}, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    onUploadProgress: function (progressEvent) {
+                        if (progressEvent.lengthComputable) {
+                            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                            progressBar.style.setProperty('--value', percentCompleted);
+                            if (percentCompleted == 100) {
+                                progressContainer.style.display = "none";
+                            }
+                        }
+                    },
+                }).then(response => {
+                    $.notify({
+                        icon: 'bi-bell',
+                        title: 'Pefaco APP',
+                        message: "enregistré",
+                    }, {
+                        type: 'primary',
+                        placement: {
+                            from: "bottom",
+                            align: "right"
+                        },
+                        time: 1000,
+                    });
+
+                    if (response.data.redirect) {
+                        window.location.href = response.data.redirect;
+                    }
+                }).catch(error => {
+                    $.notify({
+                        icon: 'bi-bell',
+                        title: 'Pefaco APP',
+                        message: error,
+                    }, {
+                        type: 'danger',
+                        placement: {
+                            from: "bottom",
+                            align: "right"
+                        },
+                        time: 1000,
+                    });
+                })
+            }
+    </script>
 @endsection
 

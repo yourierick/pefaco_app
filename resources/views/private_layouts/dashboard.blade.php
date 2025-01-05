@@ -59,7 +59,7 @@
         </div>
     @endif
     @if (isset($rapports_de_culte))
-        @if ($rapports_de_culte)
+        @if ($rapports_de_culte->count() != 0)
             <h5 class="fst-italic text-muted">Rapport de culte</h5>
             @foreach($rapports_de_culte as $rapport_de_culte)
                 <div class="row g-4 mb-4">

@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="{{ asset("new_styles_and_scripts/css/plugins.min.css") }}"/>
     <link rel="stylesheet" href="{{ asset("new_styles_and_scripts/css/kaiadmin.css") }}"/>
     <link rel="icon" href="/storage/{{ $parametre_logo }}">
+    @vite(['resources/js/app.js'])
     @yield('style')
 </head>
 <style>
@@ -145,7 +146,6 @@
                                 <p class="text-center">MENU</p>
                                 <div class="dropdown-divider"></div>
                                 <li><a class="dropdown-item text-secondary bi-person fs-5" href="{{ route('profile.edit') }}"><span style="color: black"> Mon compte</span></a></li>
-                                <li><a class="dropdown-item text-secondary bi-calendar fs-5" href="#"><span style="color: black"> Mon agenda</span></a></li>
                                 <li>
                                     <div class="dropdown-divider"></div>
                                 </li>

@@ -139,8 +139,8 @@
                 <div class="col-lg-6 col-md-7 col-12">
                     <!-- Top Contact -->
                     <ul class="top-contact">
-                        <li><i class="fa fa-phone mr-1"></i>{{ $parametres ? $parametres->contacts }}</li>
-                        <li><i class="fa fa-envelope mr-1"></i><a href="mailto:{{ $parametres ? $parametres->email }}"> {{ $parametres->email }}</a>
+                        <li><i class="fa fa-phone mr-1"></i>{{ $parametres ? $parametres->contacts : "" }}</li>
+                        <li><i class="fa fa-envelope mr-1"></i><a href="mailto:{{ $parametres ? $parametres->email : "" }}"> {{ $parametres->email }}</a>
                         </li>
                     </ul>
                     <!-- End Top Contact -->

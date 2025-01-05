@@ -88,7 +88,7 @@
         }
 
         /*---------------------------------------------------------------------*/
-     
+
 
         .audio-container {
             position: relative;
@@ -125,7 +125,7 @@
         .audio-container audio::webkit-media-controls-volume-slider {
             background: transparent;
             color: white;
-        },
+        }
     </style>
 @endsection
 @section('content')
@@ -141,33 +141,30 @@
                         <h1 class="fw-bolder mb-1">Thème: {{ $enseignement->titre }}</h1>
                         <!-- Post meta content-->
                         <div class="text-muted fst-italic mb-2">Publié le {{ $enseignement->created_at->format("d/m/Y") }}, par {{ $enseignement->auteur->nom }} {{ $enseignement->auteur->postnom }} {{ $enseignement->auteur->prenom }}</div>
+                        @if ($enseignement->lien_acces_youtube)
+                            <a id="youtube" href="{{ $enseignement->lien_acces_youtube }}" target="_blank">
+                                <span class="bi-youtube text-danger fs-1 bx-flashing"></span>
+                            </a>
+                        @endif
                     </header>
 
                     <!-- Preview image figure-->
-                    <div class="audio-container">
-                        <audio controls>
-                            <source src="/storage/{{ $enseignement->audio }}" preload="metadata" type="audio/mpeg">
-                            Votre navigateur ne supporte pas la balise audio.
-                        </audio>
+                    <div style="background-color: rgb(238, 237, 236)" class="m-0 p-0">
+                        <div class="audio-container">
+                            <audio controls>
+                                <source src="/storage/{{ $enseignement->audio }}" preload="metadata" type="audio/mpeg">
+                                Votre navigateur ne supporte pas la balise audio.
+                            </audio>
+                        </div>
+                        <section class="mb-5 p-4"  style="background-color: rgb(238, 237, 236)">
+                            <p class="mb-4" style="text-align: justify">{!! $enseignement->enseignement !!}</p>
+                        </section>
                     </div>
-                    <!-- Post content-->
-                    <section class="mb-5 p-2" style="background-color: rgb(238, 236, 236)">
-                        <p class="mb-4 mt-4" style="text-align: justify">{{ $enseignement->enseignement }}</p>
-                        <h2 class="fw-bolder mb-4 mt-5">Related</h2>
-                        <hr>
-                        @if ($enseignement->video)
-                            <div class="col-lg-12 col-md-8 col-sm-12 p-0">
-                                <video class="w-100" loop controls style="max-height: 500px">
-                                <source src="/storage/{{ $enseignement->video }}" type="video/mp4" />
-                                </video>
-                            </div>
-                        @endif
-                    </section>
+
                 </article>
             </div>
-        </div> 
-        <hr>
-    </div> 
+        </div>
+    </div>
 @endsection
 @section('scripts')
     <script src="{{ asset('assets/js/enseignements_scripts/afficher_enseignement.js') }}"></script>

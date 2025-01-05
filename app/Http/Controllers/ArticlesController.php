@@ -94,20 +94,20 @@ class ArticlesController extends Controller
             'date'=>['required'],
             'titre'=>['required'],
             'description'=>['required'],
-            'bibliotheque'=>['required'],
+            'galerie'=>['required'],
         ],
         [
             'departement_id.required'=>'ce champs est obligatoire',
             'date.required'=>'ce champs est obligatoire',
             'titre.required'=>'ce champs est obligatoire',
             'description.required'=>'ce champs est obligatoire',
-            'bibliotheque.required'=>"Aucune photo n'a été renseigné",
+            'galerie.required'=>"ce champs est obligatoire",
         ]);
 
         $bibliotheque = [];
 
-        if ($request->hasFile('bibliotheque')) {
-            foreach ($request->file('bibliotheque') as $file) {
+        if ($request->hasFile('galerie')) {
+            foreach ($request->file('galerie') as $file) {
                 $path = $file->store('medias', 'public');
                 $bibliotheque[] = $path;
             }
@@ -142,6 +142,7 @@ class ArticlesController extends Controller
             'description'=>$request->get('description'),
             'bibliotheque'=>json_encode($bibliotheque),
             'video'=>$video,
+            'lien_acces_youtube'=>$request->get('link_youtube'),
             'statut'=>$statut,
         ]);
 
@@ -169,7 +170,9 @@ class ArticlesController extends Controller
             }
         }
 
-        return redirect()->route('article.list_des_articles')->with('success', $message);
+        return response()->json([
+            'redirect' => route('article.list_des_articles'),
+        ]);
     }
 
     public function afficher_article($article_id, Request $request):View
@@ -294,6 +297,7 @@ class ArticlesController extends Controller
         $breadcrumbs = [
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
             ['url'=>url('/article/list'), 'label'=>"Articles", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/article/afficher_article/'.$article_id), 'label'=>"Afficher", 'icon'=>'bi-eye fs-5'],
             ['url'=>url('/article/edit_article'), 'label'=>"Editer", 'icon'=>'bi-pencil-square fs-5'],
         ];
         return view('private_layouts.articles_folder.editer_un_article', ['article'=>$article,
@@ -312,7 +316,6 @@ class ArticlesController extends Controller
             'departement_id'=>'Ce champs est obligatoire',
             'date.required'=>'ce champs est obligatoire',
             'titre.required'=>'ce champs est obligatoire',
-            'orateur.required'=>'ce champs est obligatoire',
             'description.required'=>'ce champs est obligatoire',
         ]);
 
@@ -321,24 +324,19 @@ class ArticlesController extends Controller
         $bibliotheque = [];
 
         $existing_photos = json_decode($article->bibliotheque, true) ?? [];
-        $submitted_photos = $request->input('bibliotheque', []);
 
-        $deleted_photos = array_diff($existing_photos, $submitted_photos);
-
-        foreach ($deleted_photos as $photo) {
-            if (Storage::disk('public')->exists($photo)) {
-                Storage::disk('public')->delete($photo);
+        if ($request->hasFile('galerie')) {
+            foreach ($existing_photos as $photo) {
+                if (Storage::disk('public')->exists($photo)) {
+                    Storage::disk('public')->delete($photo);
+                }
             }
-        }
-
-        $updated_photos = array_diff($existing_photos, $deleted_photos);
-
-
-        if ($request->hasFile('bibliotheque')) {
-            foreach ($request->file('bibliotheque') as $file) {
+            foreach ($request->file('galerie') as $file) {
                 $path = $file->store('medias', 'public');
                 $bibliotheque[] = $path;
             }
+
+            $article->bibliotheque = json_encode($bibliotheque);
         }
 
         if ($request->hasFile('video')) {
@@ -354,16 +352,15 @@ class ArticlesController extends Controller
             }
         }
 
-        $all_photos = array_merge($updated_photos, $bibliotheque);
-
         $article->date = $request->get('date');
         $article->departement_id = $request->get('departement_id');
         $article->titre = $request->get('titre');
         $article->description = $request->get('description');
-        $article->bibliotheque = json_encode($all_photos);
 
         $article->update();
 
-        return redirect()->route('article.afficher_article', $article_id)->with('success', 'les mises à jours ont été appliqués');
+        return response()->json([
+            'redirect' => route('article.afficher_article', $article_id),
+        ]);
     }
 }

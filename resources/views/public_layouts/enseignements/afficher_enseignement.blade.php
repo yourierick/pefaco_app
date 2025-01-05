@@ -38,7 +38,7 @@
         .audio-container {
             position: relative;
             height: 500px;
-            background: url('/storage/{{ $enseignement->affiche_photo }}') no-repeat center center;
+            background: url('/storage/{{ $enseignement? $enseignement->affiche_photo : "" }}') no-repeat center center;
             background-size: cover;
             overflow: hidden;
             display: flex;
@@ -77,8 +77,15 @@
     <div class="mt-5 p-2">
         <hr>
         <div class="row">
-            <div class="col-lg-8 p-3">
+            <div class="col-lg-8 p-3" style="background-color: rgb(248, 246, 244)">
                 <!-- Post content-->
+                @if ($enseignement->lien_acces_youtube)
+                    <div class="p-3">
+                        <a id="youtube" href="{{ $enseignement->lien_acces_youtube }}" target="_blank">
+                            <span class="bi-youtube text-danger fs-1 bx-flashing"></span>
+                        </a>
+                    </div>
+                @endif
                 <article>
                     <!-- Post header-->
                     <header class="mb-4 p-2">
@@ -86,6 +93,11 @@
                         <h1 class="fw-bolder mb-1">Thème: {{ $enseignement->titre }}</h1>
                         <!-- Post meta content-->
                         <div class="text-muted fst-italic mb-2">Publié le {{ $enseignement->created_at->format("d/m/Y") }}, par {{ $enseignement->auteur->nom }} {{ $enseignement->auteur->postnom }} {{ $enseignement->auteur->prenom }}</div>
+                        @if ($enseignement->lien_acces_youtube)
+                            <a id="youtube" href="{{ $enseignement->lien_acces_youtube }}" target="_blank">
+                                <span class="bi-youtube text-danger fs-1"></span>
+                            </a>
+                        @endif
                         <form id="formlikeordislike" action="{{ route('public.likeordislikeenseignement', $enseignement->id) }}" method="post">
                             @csrf
                             <input type="hidden" name="action" id="input_action">
@@ -95,7 +107,6 @@
                             </div>
                         </form>
                     </header>
-
                     <!-- Preview image figure-->
                     <div class="audio-container">
                         <audio controls>
@@ -103,21 +114,12 @@
                             Votre navigateur ne supporte pas la balise audio.
                         </audio>
                     </div>
-                    <!-- Post content-->
-                    <section class="mb-5 p-2 mt-3">
-                        <p class="mb-4" style="text-align: justify">{{ $enseignement->enseignement }}</p>
 
-                        <h2 class="fw-bolder mb-4 mt-5">Related</h2>
-                        <hr>
-                        @if ($enseignement->video)
-                            <div class="col-lg-12 col-md-8 col-sm-12 p-0">
-                                <video class="w-100" loop controls style="max-height: 500px">
-                                <source src="/storage/{{ $enseignement->video }}" type="video/mp4" />
-                                </video>
-                            </div>
-                        @endif
-                    </section>
                 </article>
+                <!-- Post content-->
+                <section class="mb-5 p-2 mt-3">
+                    <p class="mb-4" style="text-align: justify">{!! $enseignement->enseignement !!}</p>
+                </section>
             </div>
             <!-- Side widgets-->
             <div class="col-lg-4 p-3">

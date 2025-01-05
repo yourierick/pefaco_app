@@ -56,7 +56,7 @@ class UserController extends Controller
                 'postnom' => ['required', 'string', 'max:255'],
                 'sexe' => ['required'],
                 'etat_civil' => ['required'],
-                'paroisses_id' => ['required'],
+                'paroisse_id' => ['required'],
                 'departement_id' => ['required'],
                 'qualite_id' => ['required'],
                 'groupe_utilisateur_id' => ['required'],
@@ -88,13 +88,13 @@ class UserController extends Controller
         $user->date_de_naissance = $request->get('date_de_naissance');
         $user->etat_civil = $request->get('etat_civil');
         $user->adresse = $request->get('adresse');
-        $user->paroisses_id = $request->get('paroisses_id');
+        $user->paroisse_id = $request->get('paroisse_id');
         $user->departement_id = $request->get('departement_id');
         $user->qualite_id = $request->get('qualite_id');
         $user->groupe_utilisateur_id = $request->get('groupe_utilisateur_id');
         $user->update();
 
-        return Redirect::route('manageprofile.edit_user', $user->id)->with('status', 'profile-updated');
+        return Redirect::route('manageprofile.edit_user', $user->id)->with('success', 'le profile a été mis à jour');
     }
 
     public function update_user_password(Request $request, User $user): RedirectResponse

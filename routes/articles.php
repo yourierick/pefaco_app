@@ -12,7 +12,7 @@ Route::middleware('auth')->name('article.')->group(function () {
         'voir_mes_drafts_articles'])->name('voir_mes_drafts_articles');
     Route::get('/article/voir_les_attentes_en_validation', [ArticlesController::class,
         'voir_les_attentes_en_validation'])->name('voir_les_attentes_en_validation');
-    Route::post('article/save_article', [ArticlesController::class,
+    Route::post('/article/save_article', [ArticlesController::class,
         'save_article'])->name('save_article');
     Route::get('/article/afficher_article/{article_id}/{notification_id?}', [ArticlesController::class,
         'afficher_article'])->name('afficher_article');

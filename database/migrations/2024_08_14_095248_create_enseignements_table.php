@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('enseignement')->nullable();
             $table->string('affiche_photo', '255')->nullable();
             $table->string('audio', '255')->nullable();
-            $table->string('video', '255')->nullable();
+            $table->text('lien_acces_youtube')->nullable();
             $table->string('statut')->default('draft');
             $table->string('audience')->default('privé');
             $table->integer('like')->default(0);

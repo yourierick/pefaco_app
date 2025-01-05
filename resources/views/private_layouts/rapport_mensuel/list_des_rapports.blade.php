@@ -85,8 +85,8 @@
                                  aria-labelledby="orders-all-tab">
                                 <div class="app-card app-card-orders-table shadow-sm mb-5">
                                     <div class="app-card-body">
-                                        <div>
-                                            <table class="table-sm table-responsive table-striped w-100" id="multi-filter-select">
+                                        <div class="table-responsive">
+                                            <table class="table-sm table-striped w-100" id="multi-filter-select">
                                                 <thead style="text-transform: uppercase; background-color: #0a5a97; color: whitesmoke">
                                                     <tr>
                                                         <th class="cell" style="font-weight: normal; color: whitesmoke">N°</th>

@@ -115,17 +115,17 @@
             <div class="email mb-3">
                 <div class="form-group-kaiadmin form-group-default-kaiadmin">
                     <label for="id_paroisse">paroisse</label>
-                    <select id="id_paroisse" name="paroisses_id" class="form-control p-1" required>
+                    <select id="id_paroisse" name="paroisse_id" class="form-control p-1" required>
                         @php
                             $paroisses = App\Models\Paroisses::all()
                         @endphp
                         <option value=""></option>
                         @foreach($paroisses as $paroisse)
-                            <option @if( old('paroisses_id') == $paroisse->id ) selected
+                            <option @if( old('paroisse_id') == $paroisse->id ) selected
                                     @endif value="{{ $paroisse->id }}">{{ $paroisse->designation }}</option>
                         @endforeach
                     </select>
-                    <x-input-error :messages="$errors->get('paroisses_id')" class="mt-2 text-danger"/>
+                    <x-input-error :messages="$errors->get('paroisse_id')" class="mt-2 text-danger"/>
                 </div>
             </div>
             <div class="email mb-3">

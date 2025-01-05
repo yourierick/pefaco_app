@@ -47,8 +47,8 @@
                                  aria-labelledby="orders-all-tab">
                                 <div class="app-card app-card-orders-table shadow-sm mb-5">
                                     <div class="app-card-body">
-                                        <div class="p-3">
-                                            <table class="table-sm mb-0 table-responsive w-100 text-left" id="multi-filter-select">
+                                        <div class="p-3 table-responsive">
+                                            <table class="table-sm mb-0 w-100 text-left" id="multi-filter-select">
                                                 <thead style="text-transform: uppercase; background-color: #0a5a97; color: whitesmoke">
                                                 <tr>
                                                     <th class="cell" style="font-weight: normal">ID</th>

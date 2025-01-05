@@ -1,83 +1,102 @@
-$(document).ready(function () {
-    let count = 1;
-    $('#btn_add_bibliotheque').click(function () {
-        let input_file = document.createElement('input');
-        let btn_sup = document.createElement('button');
-        let divcontainer = document.createElement('div');
-        input_file.setAttribute('name', 'bibliotheque[]');
-        input_file.setAttribute('type', 'file');
-        input_file.setAttribute('class', 'form-control mb-2');
-        input_file.setAttribute('onchange', 'validateImageFileType(this)');
-        input_file.setAttribute('accept', '.jpeg, .png, .jpg, .jfif');
-        input_file.required = true;
-        input_file.style.width = "60%";
-        btn_sup.setAttribute('type', 'button');
-        btn_sup.setAttribute('class', 'btn btn-danger');
-        btn_sup.style.height = '80%';
-        btn_sup.style.color = 'white';
-        btn_sup.innerHTML = "supprimer";
-
-        divcontainer.setAttribute("class", "d-flex");
-        divcontainer.setAttribute('id', 'div_' + count);
-
-        btn_sup.setAttribute('id', 'btn_remove_' + divcontainer.id);
-
-        divcontainer.style.gap = "5px";
-        divcontainer.appendChild(input_file);
-        divcontainer.appendChild(btn_sup);
-
-        let div = document.getElementById('bibliotheque');
-        div.appendChild(divcontainer);
-
-        function deleteinput() {
-            divcontainer.remove();
-        }
-
-        var element = "btn_remove_" + divcontainer.id;
-        var btnsup = document.getElementById(element);
-        btnsup.addEventListener("click", deleteinput);
-
-        count++;
-    })
-})
-
-
 function validateImageFileType(element) {
     var filePath = element.value;
-    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.jfif)$/i;
+    var allowedExtensions = ['image/jpeg', 'image/png', 'image/jpg', 'image/jfif'];
 
-    if (!allowedExtensions.exec(filePath)) {
+
+    const maxFiles = 10;
+    const maxSize = 1024 * 1024 * 2; // 2 Mo
+
+    if (element.files.length > maxFiles) {
         element.value = '';
-        alert("Le type de fichier n'est pas autorisé. ces fichiers sont autorisés: (.jpg, .jpeg, .png, .jfif)");
+        $.notify({
+            icon: 'bi-bell',
+            title: 'Pefaco APP',
+            message: "Le nombre des fichiers autorisé est dépassé (Seulement 10 éléments)",
+        }, {
+            type: 'danger',
+            placement: {
+                from: "bottom",
+                align: "right"
+            },
+            time: 1000,
+        });
         return false;
-    } else {
-        const file = element.files[0];
-        const maxSize = 2048 * 2048; // 2 Mo
-        if (file && file.size > maxSize) {
-            element.value = '';
-            alert('Le fichier est trop grand. La taille maximale autorisée est de 2 Mo.');
-            return false;
-        }else{
-            return true;
+    }else {
+        for (const file of element.files) {
+            if (!allowedExtensions.includes(file.type)) {
+                element.value = '';
+                $.notify({
+                    icon: 'bi-bell',
+                    title: 'Pefaco APP',
+                    message: `Le fichier "${file.name}" n'est pas autorisé.`
+                }, {
+                    type: 'danger',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    },
+                    time: 1000,
+                });
+                return;
+            }
+
+            if (file.size > maxSize) {
+                element.value = '';
+                $.notify({
+                    icon: 'bi-bell',
+                    title: 'Pefaco APP',
+                    message: `Le fichier "${file.name}" dépasse la taille autorisée.`,
+                }, {
+                    type: 'danger',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    },
+                    time: 1000,
+                });
+                return false;
+            }
         }
     }
 }
 
 
-function avalidateVideoFileType(element) {
+function validateVideoFileType(element) {
     var filePath = element.value;
     var allowedExtensions = /(\.mp4)$/i;
 
     if (!allowedExtensions.exec(filePath)) {
         element.value = '';
-        alert("Le type de fichier n'est pas autorisé. ces fichiers sont autorisés: (.mp4)");
+        $.notify({
+            icon: 'bi-bell',
+            title: 'Pefaco APP',
+            message: "Le type de fichier n'est pas autorisé. ces fichiers sont autorisés: (.mp4)",
+        }, {
+            type: 'danger',
+            placement: {
+                from: "bottom",
+                align: "right"
+            },
+            time: 1000,
+        });
         return false;
     } else {
         const file = element.files[0];
         const maxSize = (1024 * 1024) * 5; // 5 Mo
         if (file && file.size > maxSize) {
             element.value = '';
-            alert('Le fichier est trop grand. La taille maximale autorisée est de 5 Mo.');
+            $.notify({
+                icon: 'bi-bell',
+                title: 'Pefaco APP',
+                message: "Le fichier est trop grand. La taille maximale autorisée est de 5 Mo."
+            }, {
+                type: 'danger',
+                placement: {
+                    from: "bottom",
+                    align: "right"
+                },
+                time: 1000,
+            });
             return false;
         }else{
             return true;

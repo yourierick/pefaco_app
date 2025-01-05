@@ -34,6 +34,13 @@
         <div class="row">
             <div class="col-lg-8 p-3">
                 <!-- Post content-->
+                @if ($article->lien_acces_youtube)
+                    <div class="p-3">
+                        <a id="youtube" href="{{ $article->lien_acces_youtube }}" target="_blank">
+                            <span class="bi-youtube text-danger fs-1 bx-flashing"></span>
+                        </a>
+                    </div>
+                @endif
                 <article>
                     <!-- Post header-->
                     <header class="mb-4 p-2">
@@ -49,6 +56,7 @@
                                 <button class="btn likeaction p-0 m-0" onclick="setActionValueForLikeorDislike(this)" value="disliker" type="submit" style="border: none; box-shadow: none"><span id="count_dislikes">{{ $article->dislike }} </span><i style="font-size: 13pt" class='bx bx-dislike text-danger'></i></button>
                             </div>
                         </form>
+
                     </header>
                     <!-- Preview image figure-->
                     <figure class="mb-4 w-100"><img class="img-fluid rounded w-100" style="height: 100%!important" src="/storage/{{ $bibliothequephoto[0] }}" alt="..." /></figure>
@@ -74,6 +82,7 @@
                                             <div class="d-block">
                                                 <video class="shadow-sm" loop controls style="height: 140px; width: 100%">
                                                     <source src="/storage/{{ $article->video }}" type="video/mp4" />
+                                                    Votre navigateur ne peut pas lire cette vidéo.
                                                 </video>
                                                 <div class="details">
                                                 </div>

@@ -15,7 +15,10 @@
                 <div class="article-body">
                     <h2>{{ $enseignement->titre }}</h2>
                     <p class="mb-2" style="text-align: justify">
-                        {{ Str::limit($enseignement->enseignement, 200) }}
+                        @php
+                            $cleanData = strip_tags($enseignement->enseignement)
+                        @endphp
+                        {{ Str::limit($cleanData, 200) }}
                     </p>
                     <span class="mb-2" style="font-style: italic; color: black">{{ $enseignement->created_at->diffForHumans() }}</span><br>
                     <a href="{{ route('public.afficher_enseignement', $enseignement->id) }}" class="read-more">

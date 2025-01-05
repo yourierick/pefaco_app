@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use App\CustomSystemNotificationTrait;
+use Stevebauman\Purify\Facades\Purify;
 
 class EnseignementController extends Controller
 {
@@ -77,8 +78,8 @@ class EnseignementController extends Controller
 
         $breadcrumbs = [
             ['url'=>url('dashboard'), 'label'=>'Dashboard', 'icon'=>'bi-house fs-5'],
-            ['url'=>url('/enseignement/list'), 'label'=>"Liste d'enseignements", 'icon'=>'bi-list fs-5'],
-            ['url'=>url('/enseignement/voir_les_attentes_en_validation'), 'label'=>"Rapports en attente", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/enseignement/list'), 'label'=>"Liste", 'icon'=>'bi-list fs-5'],
+            ['url'=>url('/enseignement/voir_les_attentes_en_validation'), 'label'=>"Liste d'attente", 'icon'=>'bi-list fs-5'],
         ];
         return view('private_layouts.enseignements_folder.list_des_enseignements', ['current_user'=>$request->user(),
         'enseignements'=>$enseignements, 'autorisation'=>$autorisation,
@@ -87,7 +88,7 @@ class EnseignementController extends Controller
 
     public function save_enseignement(Request $request)
     {
-        $request->validate(
+        $validated = $request->validate(
             [
                 'titre'=>['required'],
                 'reference'=>['required'],
@@ -106,19 +107,13 @@ class EnseignementController extends Controller
             $photo = $path;
         }
 
-
+        $audio = "";
         if ($request->hasFile('audio')) {
             $path = $request->audio->store('medias', 'public');
             $audio = $path;
         }
 
-        if ($request->hasFile('video')) {
-            $path = $request->video->store('medias', 'public');
-            $video = $path;
-        }
-
-
-        $action = $request->input('action');
+        $action = $request->get('action');
         $message = '';
         $statut = 'draft';
         if ($action == 'soumission') {
@@ -130,15 +125,17 @@ class EnseignementController extends Controller
             $message = "L'enseignement a été enregistré en tant que draft";
         }
 
+        $cleanContent = $this->cleanContent($validated["enseignement"]);
 
-        $enseignement = Enseignement::create([
+
+        $enseignement = Enseignement::create(attributes: [
             'auteur_id'=>$request->user()->id,
             'titre'=>$request->get('titre'),
             'reference'=>$request->get('reference'),
-            'enseignement'=>$request->get('enseignement'),
+            'enseignement'=>$cleanContent,
             'affiche_photo'=>$photo,
             'audio'=>$audio,
-            'video'=>$video,
+            'lien_acces_youtube'=>$request->get('link_youtube'),
             'statut'=>$statut,
         ]);
 
@@ -163,7 +160,14 @@ class EnseignementController extends Controller
             }
         }
 
-        return redirect()->route('enseignement.list_des_enseignements')->with('success', $message);
+        return response()->json([
+            'redirect' => route('enseignement.list_des_enseignements'),
+        ]);
+    }
+
+    private function cleanContent($content)
+    {
+        return Purify::clean($content);
     }
 
     public function afficher_un_enseignement($enseignement_id, Request $request):View
@@ -290,9 +294,11 @@ class EnseignementController extends Controller
         $request->validate([
             'titre'=>['required'],
             'reference'=>['required'],
+            'enseignement'=>['required'],
         ], [
             'titre.required'=>'ce champs est obligatoire',
             'reference.required'=>'ce champs est obligatoire',
+            'enseignement.required'=>'ce champs est obligatoire',
         ]);
 
         $enseignement = Enseignement::find($enseignement_id);
@@ -303,11 +309,6 @@ class EnseignementController extends Controller
                 Storage::disk('public')->delete($enseignement->affiche_photo);
             }
             $enseignement->affiche_photo = $path;
-        }else {
-            if ($request->has("delete_affiche_photo")) {
-                Storage::disk('public')->delete($enseignement->affiche_photo);
-                $enseignement->affiche_photo = null;
-            }
         }
 
 
@@ -324,26 +325,15 @@ class EnseignementController extends Controller
             }
         }
 
-        if ($request->hasFile('video')) {
-            $path = $request->file('video')->store('medias', 'public');
-            if ($enseignement->video){
-                Storage::disk('public')->delete($enseignement->video);
-            }
-            $enseignement->video = $path;
-        }else {
-            if ($request->has("delete_video")) {
-                Storage::disk('public')->delete($enseignement->video);
-                $enseignement->video = null;
-            }
-        }
-
-
         $enseignement->titre = $request->get('titre');
         $enseignement->reference = $request->get('reference');
         $enseignement->enseignement = $request->get('enseignement');
+        $enseignement->lien_acces_youtube = $request->get('link_youtube');
 
         $enseignement->update();
 
-        return redirect()->route('enseignement.afficher_un_enseignement', $enseignement_id )->with('success', 'les mises à jours ont été appliqués');
+        return response()->json([
+            'redirect' => route('enseignement.afficher_un_enseignement', $enseignement_id),
+        ]);
     }
 }

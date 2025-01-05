@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('description');
             $table->json('bibliotheque')->nullable();
             $table->string('video', '255')->nullable();
+            $table->string('lien_acces_youtube')->nullable();
             $table->string('statut')->default('draft');
             $table->string('audience')->default('privé');
             $table->integer('like')->default(0);

@@ -19,6 +19,9 @@ class Articles extends Model
         'description',
         'bibliotheque',
         'video',
+        'lien_acces_youtube',
+        'like',
+        'dislike',
         'rapporteur_id',
         'rapporteur',
     ];
