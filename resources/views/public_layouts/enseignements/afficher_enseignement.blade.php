@@ -93,11 +93,6 @@
                         <h1 class="fw-bolder mb-1">Thème: {{ $enseignement->titre }}</h1>
                         <!-- Post meta content-->
                         <div class="text-muted fst-italic mb-2">Publié le {{ $enseignement->created_at->format("d/m/Y") }}, par {{ $enseignement->auteur->nom }} {{ $enseignement->auteur->postnom }} {{ $enseignement->auteur->prenom }}</div>
-                        @if ($enseignement->lien_acces_youtube)
-                            <a id="youtube" href="{{ $enseignement->lien_acces_youtube }}" target="_blank">
-                                <span class="bi-youtube text-danger fs-1"></span>
-                            </a>
-                        @endif
                         <form id="formlikeordislike" action="{{ route('public.likeordislikeenseignement', $enseignement->id) }}" method="post">
                             @csrf
                             <input type="hidden" name="action" id="input_action">

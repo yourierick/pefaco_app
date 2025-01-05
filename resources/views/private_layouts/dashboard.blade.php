@@ -19,8 +19,8 @@
     </div><!--//app-card-->
     <hr>
     @if (!is_null($horairehebdo))
-        <h5 class="fst-italic text-muted mb-3">Horaire Hebdomadaire du Lundi {{ $horairehebdo->date_debut->format('d/m/Y') }} au {{ $horairehebdo->date_fin->format('d/m/Y') }}</h5>
-        <div>
+        <span class="bi-arrow-right-circle fst-normal fs-4 text-muted mb-3" style="font-weight: 500; text-decoration: underline"> Horaire Hebdomadaire du Lundi {{ $horairehebdo->date_debut->format('d/m/Y') }} au Dimanche {{ $horairehebdo->date_fin->format('d/m/Y') }}</span>
+        <div class="mt-1">
             <div class="app-card app-card-orders-table shadow-sm mb-5">
                 <div class="app-card-body table-responsive">
                     <br><table class="table table-striped w-100 mb-0 text-left" id="multi-filter-select">
